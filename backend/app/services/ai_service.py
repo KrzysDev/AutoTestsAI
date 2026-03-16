@@ -6,9 +6,13 @@ load_dotenv()
 
 class AiService:
     def __init__(self):
+        api_key = os.environ.get('OLLAMA_API_KEY')
+        if not api_key:
+            raise RuntimeError("Zmienna środowiskowa OLLAMA_API_KEY jest wymagana, ale jej brakuje!")
+            
         self.client = Client(
             host="https://ollama.com",
-            headers={'Authorization': 'Bearer ' + os.environ.get('OLLAMA_API_KEY')}
+            headers={'Authorization': f'Bearer {api_key}'}
         )
 
     def ask_local(self, text: str):
