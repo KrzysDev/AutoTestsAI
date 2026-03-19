@@ -8,7 +8,7 @@ class AiService:
     def __init__(self):
         api_key = os.environ.get('OLLAMA_API_KEY')
         if not api_key:
-            raise RuntimeError("Zmienna środowiskowa OLLAMA_API_KEY jest wymagana, ale jej brakuje!")
+            raise RuntimeError("brak klucza API")
             
         self.client = Client(
             host="https://ollama.com",
@@ -22,6 +22,19 @@ class AiService:
             'content': text,
         },
         ])
+        return {"message": response['message']['content']}
+
+    def ask_local(self, text:str, photo_path:str):
+        response = self.client.chat(
+        model='qwen3.5',
+        messages=[
+            {
+            'role': 'user',
+            'content': text,
+            'images': [photo_path],
+            }
+        ],
+        )
         return {"message": response['message']['content']}
 
     def ask_cloud(self, text: str):
