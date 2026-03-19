@@ -16,7 +16,7 @@ class AiService:
         )
 
     def ask_local(self, text: str):
-        response = self.client.chat(model='qwen3-coder:30b', messages=[
+        response = self.client.chat(model='qwen3.5', messages=[
         {
             'role': 'user',
             'content': text,
@@ -24,7 +24,7 @@ class AiService:
         ])
         return {"message": response['message']['content']}
 
-    def ask_local(self, text:str, photo_path:str):
+    def ask_local_with_photo(self, text:str, photo_path:str):
         response = self.client.chat(
         model='qwen3.5',
         messages=[

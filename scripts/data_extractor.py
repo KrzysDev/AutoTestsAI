@@ -3,7 +3,6 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend.app.services.ai_service import AiService
 
 class DataExtractor:
@@ -12,7 +11,7 @@ class DataExtractor:
 
     def extract_data(self, file_path):
         prompt = "Co znajduje się na tym zdjęciu? Opisz to krótko."
-        response = self.ai_service.ask_local(prompt, file_path)
+        response = self.ai_service.ask_local_with_photo(prompt, file_path)
         return response.get("message", response)
 
 
