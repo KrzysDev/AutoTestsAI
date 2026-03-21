@@ -4,14 +4,18 @@ import tkinter as tk
 from tkinter import filedialog
 import easyocr
 from backend.app.services.ai_service import AiService
+import time
+
+import json
 
 class DataExtractor:
     def __init__(self):
         self.ai_service = AiService()
+        self.reader = easyocr.Reader(['en', 'pl'])
+        self.previous_sections = []
 
     def extract_data(self, file_path):
-        reader = easyocr.Reader(['en', 'pl'])
-        result = reader.readtext(file_path)
+        result = self.reader.readtext(file_path)
 
         extracted_text = ""
         for _, text, _ in result:
@@ -32,7 +36,7 @@ class DataExtractor:
                 - Odpowiedź musi być w języku polskim.
                 - Odpowiedź musi być w formacie JSON. Struktura przedstawiona poniżej (musi być dokładnie odwzorowana):
                         {{
-                            "id":        " ", #unikalny identyfikator 
+                            "id":        " ", #pozostaw puste 
                             "section":   " ", #nazwa sekcji np. vocabulary lub grammar (tylko te dwie wchodza w grę)
                             "language":  " ", #język                  
                             "level":     " ", #poziom np. B2, B1, C2, C1 itp. UWAGA - Wybierz TYLKO JEDEN. Nie moze byc np. B2/C1.                     
@@ -44,10 +48,35 @@ class DataExtractor:
                             }}
                         }}
                 - Twojej odpowiedzi pod żadnym pozorem nie może być nic poza JSONem. Zarówno przed jak i po strukturze JSONa. Nie dodawaj zadnych komentarzy, nie dodawaj zadnych dodatkowych informacji. Po prostu czysty JSON.
+                - pomiń nagłówki i inne niepotrzebne informacje takie jak numer strony, lub podrozdzialy w tekscie ze slowkami (np. verbs, adjectives, nouns itp.)
+                - zwracaj uwagę na nagłówki, które coś wnoszą do tekstu np. temat słówek, temat gramatyki itp.
+                - Pola sections muszą być konsekwentne. Jeśli słówka dotyczą działu 'nature', ale w liście poprzednich sections pojawiło się słowo 'enviorment' to użyj słowa 'enviorment'. Nie twórz synonimów.
 
+                #LISTA UTWORZONYCH SEKCJI PONIŻEJ 
+                Jeżeli nic sie nie znajduje niżej, pomiń to:
+                {self.previous_sections}
         """
 
-        response = self.ai_service.ask_local_with_photo(prompt, file_path)
+        words = prompt.split()
+
+        tokens = int(len(words) * 2.5)
+
+        start_time = time.time()
+
+        response = self.ai_service.ask_cloud(prompt)
+
+        if response['section'] not in self.previous_sections:
+            self.previous_sections.append(response['section'])
+
+        
+
+        end_time = time.time()
+
+        elapsed_time = end_time - start_time
+        
+        print(f"🤖 Wygenerowano w {elapsed_time} sekund")
+        print(f"🤖 Przetworzono {tokens} tokenów")
+
         return response.get("message", response)
 
 
@@ -59,32 +88,45 @@ def main():
 
     extractor = DataExtractor()
 
-    file_path = filedialog.askopenfilename(
-        title="Wybierz zdjęcie",
-        filetypes=[("Image files", "*.jpg *.jpeg *.png *.bmp *.gif")]
+    directory_path = filedialog.askdirectory(
+        title="Wybierz folder ze zdjęciami"
     )
     
-    if not file_path:
-        print("Nie wybrano pliku.")
+    if not directory_path:
+        print("Nie wybrano folderu.")
         return
 
-    print(f"Wybrano plik: {file_path}")
-    print("Inicjalizacja AiService...")
+    print(f"Wybrano folder: {directory_path}")
     
-    try:
-        ai_service = AiService()
-    except Exception as e:
-        print(f"Błąd inicjalizacji AiService: {e}")
+    image_files = [f for f in os.listdir(directory_path) if f.lower().endswith(('.jpg', '.png'))]
+    
+    if not image_files:
+        print("Nie znaleziono plików .jpg ani .png w wybranym folderze.")
         return
+
+    print(f"Znaleziono {len(image_files)} zdjęć do przetworzenia.")
+
+    images_processed = 0
+    all_responses = []
+
+    for filename in image_files:
+        file_path = os.path.join(directory_path, filename)
+        print(f"\n--- Przetwarzanie pliku: {file_path} ---")
         
-    print("Wysyłanie zapytania do modelu...")
+        try:
+            print(f"processing images... {images_processed}/{len(image_files)}")
+
+            response = extractor.extract_data(file_path)
+            print("Odpowiedź modelu:")
+            all_responses.append(response)
+            images_processed += 1
+            os.system("cls")
+            
+        except Exception as e:
+            print(f"Błąd podczas odpytywania modelu dla pliku {filename}: {e}")
     
-    try:
-        response = extractor.extract_data(file_path)
-        print("\nOdpowiedź modelu:")
-        print(response)
-    except Exception as e:
-        print(f"Błąd podczas odpytywania modelu: {e}")
+    
+        
 
 if __name__ == "__main__":
     main()
