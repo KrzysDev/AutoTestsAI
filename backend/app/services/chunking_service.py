@@ -1,3 +1,5 @@
+import copy
+import hashlib
 from backend.app.models.schemas import FlashcardChunk
 
 class ChunkingService:
@@ -7,12 +9,23 @@ class ChunkingService:
     def chunk_vocabulary(self, extracted_chunk: FlashcardChunk, chunk_size: int = 10):
         chunks = []
         current_string = ""
-        
-        for i in range(1, chunk_size):
-            if(chunks_size['metadata']['content'][i] == "." and i % chunk_size == 0):
-                new_chunk = extracted_chunk
+        content = extracted_chunk['metadata']['content']
+
+        for i in range(len(content)):
+            current_string += content[i]
+            if content[i] == "." and (i + 1) % chunk_size == 0:
+                new_chunk = copy.deepcopy(extracted_chunk)
                 new_chunk['metadata']['content'] = current_string
+                content_hash = hashlib.md5(current_string.encode()).hexdigest()[:8]
+                new_chunk['id'] = f'vocab-{content_hash}'
                 chunks.append(new_chunk)
                 current_string = ""
-            else:
-                current_string += chunks_size['metadata']['content'][i]
+
+        if current_string.strip():
+            new_chunk = copy.deepcopy(extracted_chunk)
+            new_chunk['metadata']['content'] = current_string
+            content_hash = hashlib.md5(current_string.encode()).hexdigest()[:8]
+            new_chunk['id'] = f'vocab-{content_hash}'
+            chunks.append(new_chunk)
+
+        return chunks
