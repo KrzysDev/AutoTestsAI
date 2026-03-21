@@ -5,14 +5,34 @@ from tkinter import filedialog
 import easyocr
 from backend.app.services.ai_service import AiService
 import time
-
+from backend.app.models.schemas import FlashcardChunk
 import json
+import re
 
 class DataExtractor:
     def __init__(self):
         self.ai_service = AiService()
         self.reader = easyocr.Reader(['en', 'pl'])
         self.previous_sections = []
+    
+    def parse_and_validate(self, raw: str) -> FlashcardChunk:
+        match = re.search(r'\{.*\}', raw, re.DOTALL)
+        if not match:
+            raise ValueError(f"Model nie zwrócił JSON. Odpowiedź: {raw[:300]}")
+        
+        data = json.loads(match.group(), strict=False)
+
+        if isinstance(data.get("metadata", {}).get("content"), list):
+            items = data["metadata"]["content"]
+            lines = []
+            for item in items:
+                if isinstance(item, dict):
+                    lines.append(", ".join(f"{k}: {v}" for k, v in item.items()))
+                else:
+                    lines.append(str(item))
+            data["metadata"]["content"] = "\n".join(lines)
+
+        return FlashcardChunk.model_validate(data)
 
     def extract_data(self, file_path):
         result = self.reader.readtext(file_path)
@@ -43,8 +63,8 @@ class DataExtractor:
                             
                             "metadata" : {{
                                 "subject" : "",  #temat np - środowisko, życie w mieście, technologia, zawody i przyszłość, oświata itp. (Temat często podany jest na samej górze strony w podręczniku)
-                                "content": " ", #zawartość chunka - dla gramatyki (grammar) bedzie to część jakiejś definicji (np. Present Simple używamy gdy...) natomiast dla słówek (vocabulary) - fragment listy słówek.
-                                #Dla każdego słówka z listy słówek postaraj się zawrzeć po przykladzie użycia go w zdaniu.
+                                "content": " ", #zawartość chunka - MUSI być stringiem (nie listą, nie obiektem). Dla gramatyki (grammar) bedzie to część jakiejś definicji (np. Present Simple używamy gdy...) natomiast dla słówek (vocabulary) - fragment listy słówek.
+                                #Dla każdego słówka z listy słówek postaraj się zawrzeć po przykladzie użycia go w zdaniu. Zapisz to jako tekst, NIE jako tablicę JSON.
                             }}
                         }}
                 - Twojej odpowiedzi pod żadnym pozorem nie może być nic poza JSONem. Zarówno przed jak i po strukturze JSONa. Nie dodawaj zadnych komentarzy, nie dodawaj zadnych dodatkowych informacji. Po prostu czysty JSON.
@@ -63,21 +83,20 @@ class DataExtractor:
 
         start_time = time.time()
 
-        response = self.ai_service.ask_cloud(prompt)
+        raw_response = self.ai_service.ask_cloud(prompt)
 
-        if response['section'] not in self.previous_sections:
-            self.previous_sections.append(response['section'])
+        try:
+            chunk = self.parse_and_validate(raw_response["message"])
+        except (ValueError, json.JSONDecodeError) as e:
+            raise ValueError(f"Błąd parsowania odpowiedzi dla {file_path}: {e}")
 
-        
+        if chunk.section not in self.previous_sections:
+            self.previous_sections.append(chunk.section)
 
         end_time = time.time()
+        print(f"🤖 Wygenerowano w {end_time - start_time:.2f} sekund")
 
-        elapsed_time = end_time - start_time
-        
-        print(f"🤖 Wygenerowano w {elapsed_time} sekund")
-        print(f"🤖 Przetworzono {tokens} tokenów")
-
-        return response.get("message", response)
+        return chunk
 
 
 
@@ -117,13 +136,15 @@ def main():
             print(f"processing images... {images_processed}/{len(image_files)}")
 
             response = extractor.extract_data(file_path)
-            print("Odpowiedź modelu:")
-            all_responses.append(response)
+            all_responses.append(response.model_dump())
             images_processed += 1
-            os.system("cls")
             
         except Exception as e:
             print(f"Błąd podczas odpytywania modelu dla pliku {filename}: {e}")
+            images_processed += 1
+    
+    with open("C:\\Users\\USER\\Desktop\\moje rzeczy\\projekty\\inne\\TestGenerator\\data\\extracted_data.json", "w", encoding="utf-8") as f:
+        json.dump(all_responses, f, ensure_ascii=False, indent=2)
     
     
         
