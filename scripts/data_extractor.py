@@ -13,7 +13,8 @@ class DataExtractor:
     def __init__(self):
         self.ai_service = AiService()
         self.reader = easyocr.Reader(['en', 'pl'])
-        self.previous_sections = []
+        self.previous_voc_subjects = []
+        self.previous_gram_subjects = []
     
     def parse_and_validate(self, raw: str) -> FlashcardChunk:
         match = re.search(r'\{.*\}', raw, re.DOTALL)
@@ -42,44 +43,55 @@ class DataExtractor:
             extracted_text += text + "\n"
         
         prompt = f"""
+            # ROLA
+            Jesteś ekspertem od przetwarzania danych edukacyjnych z podręczników do języka angielskiego.
 
-                #ZADANIE
-                Musisz wyeksportować i uporzadkowac dane wyciągnięte ze zdjęcia przez silnik OCR. Zdjęcia pochodzą z podreczników z języka angielskiego.
-                Gdy zobaczysz słówka, zapisz je jako listę. Gdy zobaczysz definicję gramatyki (np. czas Present Simple z języka angielskiego) zapisz jej definicję, przykłady oraz 
-                wszystko to co najważniejsze znalazło się w wyeksportowanym ze zdjęcia tekście.
+            # ZADANIE
+            Wyeksportuj i uporządkuj dane wyciągnięte ze zdjęcia przez silnik OCR.
+            - Słówka → zapisz jako listę z przykładami użycia w zdaniu.
+            - Gramatyka → zapisz definicję, zasady, przykłady i wyjątki.
 
-                #KONTEKST
-                Wyeksportowany tekst:
-                {extracted_text}
+            # TEKST Z OCR
+            {extracted_text}
 
-                #WYMAGANIA
-                - Odpowiedź musi być w języku polskim.
-                - Odpowiedź musi być w formacie JSON. Struktura przedstawiona poniżej (musi być dokładnie odwzorowana):
-                        {{
-                            "id":        " ", #pozostaw puste 
-                            "section":   " ", #nazwa sekcji np. vocabulary lub grammar (tylko te dwie wchodza w grę)
-                            "language":  " ", #język                  
-                            "level":     " ", #poziom np. B2, B1, C2, C1 itp. UWAGA - Wybierz TYLKO JEDEN. Nie moze byc np. B2/C1.                     
-                            
-                            "metadata" : {{
-                                "subject" : "",  #temat np - środowisko, życie w mieście, technologia, zawody i przyszłość, oświata itp. (Temat często podany jest na samej górze strony w podręczniku)
-                                "content": " ", #zawartość chunka - MUSI być stringiem (nie listą, nie obiektem). Dla gramatyki (grammar) bedzie to część jakiejś definicji (np. Present Simple używamy gdy...) natomiast dla słówek (vocabulary) - fragment listy słówek.
-                                #Dla każdego słówka z listy słówek postaraj się zawrzeć po przykladzie użycia go w zdaniu. Zapisz to jako tekst, NIE jako tablicę JSON.
-                            }}
-                        }}
-                - Twojej odpowiedzi pod żadnym pozorem nie może być nic poza JSONem. Zarówno przed jak i po strukturze JSONa. Nie dodawaj zadnych komentarzy, nie dodawaj zadnych dodatkowych informacji. Po prostu czysty JSON.
-                - pomiń nagłówki i inne niepotrzebne informacje takie jak numer strony, lub podrozdzialy w tekscie ze slowkami (np. verbs, adjectives, nouns itp.)
-                - zwracaj uwagę na nagłówki, które coś wnoszą do tekstu np. temat słówek, temat gramatyki itp.
-                - Pola sections muszą być konsekwentne. Jeśli słówka dotyczą działu 'nature', ale w liście poprzednich sections pojawiło się słowo 'enviorment' to użyj słowa 'enviorment'. Nie twórz synonimów.
+            # FORMAT ODPOWIEDZI
+            Odpowiedz WYŁĄCZNIE poprawnym JSONem (bez komentarzy, bez tekstu przed/po):
+            {{
+                "id": "",
+                "section": "<vocabulary|grammar>",
+                "language": "<język>",
+                "level": "<A1|A2|B1|B2|C1|C2>",
+                "metadata": {{
+                    "subject": "<temat>",
+                    "content": "<treść jako string>"
+                }}
+            }}
 
-                #LISTA UTWORZONYCH SEKCJI PONIŻEJ 
-                Jeżeli nic sie nie znajduje niżej, pomiń to:
-                {self.previous_sections}
+            # ZASADY
+            1. Odpowiedź w języku polskim.
+            2. Pole "section" to TYLKO "vocabulary" albo "grammar".
+            3. Pole "level" to JEDEN poziom (np. "B2"), nigdy kombinacja typu "B2/C1".
+            4. Pole "content" MUSI być zwykłym stringiem (nie listą, nie obiektem JSON).
+            - Dla słówek: lista słówek, każde z przykładem użycia w zdaniu.
+            - Dla gramatyki: definicja, zasady, przykłady zdań.
+            5. Pomiń: numery stron, podkategorie słówek (verbs, adjectives, nouns), śmieciowe nagłówki.
+            6. Zwracaj uwagę na nagłówki zawierające temat (zwykle na górze strony w podręczniku).
+
+            # KONSEKWENCJA TEMATÓW v1 (KRYTYCZNE)
+            Pole "subject" MUSI być spójne z wcześniej użytymi tematami.
+            Jeśli poniżej znajduje się lista już użytych tematów, MUSISZ wybrać z niej najbardziej pasujący temat zamiast tworzyć nowy synonim.
+            Przykład: jeśli istnieje temat "environment", NIE twórz "nature" ani "ecology" — użyj "environment".
+            Nowy temat twórz TYLKO gdy żaden z istniejących nie pasuje.
+
+            # KONSEKWENCJA TEMATÓW v2 (KRYTYCZNE)
+            Jeżeli tekst dotyczy gramatyki i nie widać wyraźnego nagłówka tematu, to najprawdopodobniej jest to kontynuacja ostatniego tematu gramatycznego. W takim przypadku użyj tego samego tematu.
+
+            ## Dotychczasowe tematy słówek:
+            {self.previous_voc_subjects if self.previous_voc_subjects else "(brak — to pierwszy chunk)"}
+
+            ## Dotychczasowe tematy gramatyki:
+            {self.previous_gram_subjects if self.previous_gram_subjects else "(brak — to pierwszy chunk)"}
         """
-
-        words = prompt.split()
-
-        tokens = int(len(words) * 2.5)
 
         start_time = time.time()
 
@@ -90,8 +102,11 @@ class DataExtractor:
         except (ValueError, json.JSONDecodeError) as e:
             raise ValueError(f"Błąd parsowania odpowiedzi dla {file_path}: {e}")
 
-        if chunk.section not in self.previous_sections:
-            self.previous_sections.append(chunk.section)
+        subject = chunk.metadata.subject
+        if chunk.section == "vocabulary" and subject not in self.previous_voc_subjects:
+            self.previous_voc_subjects.append(subject)
+        elif chunk.section == "grammar" and subject not in self.previous_gram_subjects:
+            self.previous_gram_subjects.append(subject)
 
         end_time = time.time()
         print(f"🤖 Wygenerowano w {end_time - start_time:.2f} sekund")
@@ -116,6 +131,8 @@ def main():
         return
 
     print(f"Wybrano folder: {directory_path}")
+
+    file_name = input("Podaj nazwę pliku: ")
     
     image_files = [f for f in os.listdir(directory_path) if f.lower().endswith(('.jpg', '.png'))]
     
@@ -143,11 +160,10 @@ def main():
             print(f"Błąd podczas odpytywania modelu dla pliku {filename}: {e}")
             images_processed += 1
     
-    with open("C:\\Users\\USER\\Desktop\\moje rzeczy\\projekty\\inne\\TestGenerator\\data\\extracted_data.json", "w", encoding="utf-8") as f:
+    with open(f"C:\\Users\\USER\\Desktop\\moje rzeczy\\projekty\\inne\\TestGenerator\\data\\{file_name}.json", "w", encoding="utf-8") as f:
         json.dump(all_responses, f, ensure_ascii=False, indent=2)
     
     
-        
 
 if __name__ == "__main__":
     main()
