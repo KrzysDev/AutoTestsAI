@@ -11,13 +11,17 @@ def main():
     chunked_data = []
     i = 0
 
+    folder_name = input("Podaj nazwę folderu: ")
+    file_name = input("Podaj nazwę pliku: ")
+
     for chunk in data:
-        chunked_data.extend(chunking_service.chunk_vocabulary(chunk))
-        chunk['id'] = f"vocab-{i}"
+        if chunk['section'] == 'vocabulary':
+            chunked_data.extend(chunking_service.chunk_vocabulary(chunk))
+            chunk['id'] = f"vocab-{i}"
         i+=1
 
     
-    with open("data/chunked_data.json", "w", encoding="utf-8") as f:
+    with open(f"data/{folder_name}/{file_name}.json", "w", encoding="utf-8") as f:
         json.dump(chunked_data, f, indent=2)
 
 if __name__ == "__main__":
