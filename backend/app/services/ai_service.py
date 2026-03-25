@@ -45,6 +45,22 @@ class AiService:
         ]
 
         parts = []
-        for part in self.client.chat('gpt-oss:120b', messages=message, stream=True):
+        for part in self.client.chat('qwen3-vl:235b-cloud', messages=message, stream=True):
+            parts.append(part['message']['content'])
+        return {"message": "".join(parts)}
+    
+    def ask_cloud_with_photo(self, text:str, photo_path:str):
+        with open(photo_path, "rb") as f:
+            photo_data = f.read()
+
+        message = [{
+            'role' : 'user',
+            'content': text,
+            'images': [photo_data],
+        },
+        ]
+
+        parts = []
+        for part in self.client.chat('qwen3-vl:235b-cloud', messages=message, stream=True):
             parts.append(part['message']['content'])
         return {"message": "".join(parts)}

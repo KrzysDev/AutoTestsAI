@@ -1,15 +1,14 @@
-import easyocr
 import json
 from typing import Literal
 from backend.app.services.ai_service import AiService
 from backend.app.services.chunking_service import ChunkingService
 import hashlib
+from backend.app.models.schemas import Chunk, ChunkMetadata
 
 
 class DataExtractionService:
 
     def __init__(self):
-        self.reader = easyocr.Reader(['en', 'pl'])
         self.ai_service = AiService()
         self.chunking_service = ChunkingService()
         self.existing_subjects = []
@@ -25,6 +24,9 @@ class DataExtractionService:
             ##TWOJE ZADANIE
             Jesteś ekspertem w dziedzinie języka {"angielskiego" if language == "en" else "niemieckiego"}
             Twoim zadaniem jest wyciągnięcie z podanego tekstu z podręcznika słownictwa i uporządkowanie go w odpowiednim formacie.
+
+            ##WAŻNE
+            MUSISZ wydobyć ABSOLUTNIE WSZYSTKIE słówka i zwroty, jakie znajdziesz w podanym tekście. Nie pomijaj ani jednego słowa, nie używaj skrótów typu "itd", "itp". To krytyczne dla sukcesu zadania aby niczego nie pominąć!
 
             ##WYMAGANY FORMAT
             Twój wymagany format odpowiedzi to JSON wyglądający w następujący sposób:
@@ -56,14 +58,18 @@ class DataExtractionService:
 
         answer = self.ai_service.ask_cloud(prompt)
 
+        print("Debug Odpowiedz Modelu: ")
+        print(answer['message'])
+        print("\n")
+
         try: 
-            data = json.loads(answer)
+            data = json.loads(answer['message'])
         except json.JSONDecodeError as e:
             raise ValueError(f"Model returned invalid JSON: {e}")
         
         big_chunk = Chunk(
             id=hashlib.md5(data["content"].encode()).hexdigest(),
-            section=section,
+            section="vocab",
             language=language,
             level=level,
             metadata=ChunkMetadata(
@@ -72,7 +78,12 @@ class DataExtractionService:
             )
         )
         
-        return self.chunking_service.chunk_data(big_chunk)
+        chunks = self.chunking_service.chunk_data(big_chunk)
+
+        for chunk in chunks:
+            chunk.id = f"vocab-{hashlib.md5(chunk.metadata.content.encode()).hexdigest()[:8]}"
+
+        return chunks
 
     def __extract_gram(self, text: str):
         pass
