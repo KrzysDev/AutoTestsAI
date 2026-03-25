@@ -1,16 +1,11 @@
 from backend.app.services.data_extraction_service import DataExtractionService
-import easyocr
 import tkinter as tk
 from tkinter import filedialog
 import os
 import json
 from backend.app.models.schemas import Chunk
 
-service = DataExtractionService()
-
 def main():
-    reader = easyocr.Reader(['en', 'pl'])
-
     root = tk.Tk()
     root.withdraw()
 

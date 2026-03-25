@@ -63,6 +63,9 @@ class DataExtractionService:
             data = json.loads(answer)
         except json.JSONDecodeError as e:
             raise ValueError(f"Model returned invalid JSON: {e}")
+
+        if(data[0]["subject"]) not in self.existing_subjects:
+            self.existing_subjects.append(data[0]["subject"])
         
         big_chunk = Chunk(
             id=hashlib.md5(data[0]["content"].encode()).hexdigest(),
