@@ -19,7 +19,7 @@ class DataExtractionService:
         elif section == "gram":
             return self.__extract_gram(text, language, level)
 
-    def __extract_vocab(self, text: str, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]) -> list[Chunk]:
+    def __extract_vocab(self, text: str, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], photo_path: str = None) -> list[Chunk]:
         prompt = f"""
             ##TWOJE ZADANIE
             Jesteś ekspertem w dziedzinie języka {"angielskiego" if language == "en" else "niemieckiego"}
@@ -56,7 +56,7 @@ class DataExtractionService:
 
         """
 
-        answer = self.ai_service.ask_cloud(prompt)
+        answer = self.ai_service.ask_cloud_with_photo(prompt, photo_path)
 
         print("Debug Odpowiedz Modelu: ")
         print(answer['message'])
