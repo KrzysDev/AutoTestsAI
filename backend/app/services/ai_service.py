@@ -63,4 +63,4 @@ class AiService:
         parts = []
         for part in self.client.chat('qwen3-vl:235b-cloud', messages=message, stream=True):
             parts.append(part['message']['content'])
-        return {"message": "".join(parts)}
+        return "".join(parts)

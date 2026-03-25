@@ -46,12 +46,8 @@ def main():
         
         try:
             print(f"processing images... {images_processed}/{len(image_files)}")
-            text = reader.readtext(file_path)
-            extracted_text = ""
-            for _, text, _ in text:
-                extracted_text += text + "\n"
             
-            chunks = extractor.extract_data(extracted_text, "vocab", "en", "B2")
+            chunks = extractor.extract_data("vocab", "en", "B2", file_path)
             
             extracted_data.extend(chunks)
 

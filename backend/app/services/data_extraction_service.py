@@ -13,13 +13,13 @@ class DataExtractionService:
         self.chunking_service = ChunkingService()
         self.existing_subjects = []
 
-    def extract_data(self, text: str, section : Literal["vocab", "gram"], language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]):
+    def extract_data(self, section : Literal["vocab", "gram"], language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], photo_path: str = None):
         if section == "vocab":
-            return self.__extract_vocab(text, language, level)
+            return self.__extract_vocab(language, level, photo_path)
         elif section == "gram":
-            return self.__extract_gram(text, language, level)
+            return self.__extract_gram(language, level, photo_path)
 
-    def __extract_vocab(self, text: str, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], photo_path: str = None) -> list[Chunk]:
+    def __extract_vocab(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], photo_path: str = None) -> list[Chunk]:
         prompt = f"""
             ##TWOJE ZADANIE
             Jesteś ekspertem w dziedzinie języka {"angielskiego" if language == "en" else "niemieckiego"}
@@ -41,13 +41,10 @@ class DataExtractionService:
             - Nie zwracaj uwagi na nagłówki nieodnoszące się do treści słownictwa takie jak "Lista słownictwa".
             - pole subject powinno zawierać identyczne tematy (jeśli się powtarzają). Z tego powodu:
                 - jeżeli poniższa lista NIE jest pusta wykorzystaj stworzone przez ciebie już tematy i nie twórz synonimów. Np dla jeżeli na podanej liście znajduje się "nature" nie pisz "enviorement" tylko "nature".
-                    Lista: {"pusta" if len(self.existing_subjects) == 0 else self.existing_subjects}
+                    Lista: {"pusta - to pierwszy chunk" if len(self.existing_subjects) == 0 else self.existing_subjects}
             - wszystkie pola subject powinny być zapisane małymi literami w WYŁĄCZNIE języku angielskim.
             - pole content to treść słownictwa. Jego format MUSI wyglądać następująco:
                 <słowo po {"ANGIELSKU" if language == "en" else "NIEMIECKU"} - <tłumaczenie słowa w języku POLSKIM (z tekstu)> - <przykładowe zdanie z tym słowem w języku {"ANGIELSKIM" if language == "en" else "NIEMIECKIM"} (stworzone przez Ciebie)>  
-
-            ##TEKST Z PODRECZNIKA
-            {text}
 
             ##WYMAGANY FORMAT ODPOWIEDZI
             - Zwróć wyłącznie JSON. Nie dodawaj żadnych dodatkowych komentarzy ani tekstu. Nic nie może znaleźć się przed ani po JSONIE - zwracasz jedynie czysty JSON.
@@ -59,22 +56,22 @@ class DataExtractionService:
         answer = self.ai_service.ask_cloud_with_photo(prompt, photo_path)
 
         print("Debug Odpowiedz Modelu: ")
-        print(answer['message'])
+        print(answer)
         print("\n")
 
         try: 
-            data = json.loads(answer['message'])
+            data = json.loads(answer)
         except json.JSONDecodeError as e:
             raise ValueError(f"Model returned invalid JSON: {e}")
         
         big_chunk = Chunk(
-            id=hashlib.md5(data["content"].encode()).hexdigest(),
-            section="vocab",
+            id=hashlib.md5(data[0]["content"].encode()).hexdigest(),
+            section="vocabulary",
             language=language,
             level=level,
             metadata=ChunkMetadata(
-                subject=data["subject"],
-                content=data["content"]
+                subject=data[0]["subject"],
+                content=data[0]["content"]
             )
         )
         

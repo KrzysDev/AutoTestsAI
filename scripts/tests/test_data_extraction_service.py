@@ -1,19 +1,26 @@
 from backend.app.services.data_extraction_service import DataExtractionService
-import easyocr
 
-reader = easyocr.Reader(['en', 'pl'])
+import tkinter as tk
+from tkinter import filedialog
 
-text = reader.readtext("C:\\Users\\USER\\Desktop\\Ai Test Generator Dataset-20260321T142317Z-1-001\\Ai Test Generator Dataset\\1.jpg")
+def main():
+    service = DataExtractionService()
 
-extracted_text = ""
-for _, text, _ in text:
-    extracted_text += text + "\n"
+    root = tk.Tk()
+    root.withdraw()
 
-print("OCR text: ")
-print(extracted_text)
-print('\n'*3)
-print("Extracted data: ")
+    path = filedialog.askopenfilename(
+        title="Wybierz plik",
+        filetypes=[
+            ("Obrazy", "*.png *.jpg *.jpeg"),
+            ("Pliki PNG", "*.png"),
+            ("Pliki JPG", "*.jpg *.jpeg"),
+            ("Wszystkie pliki", "*.*")
+        ]
+    )
 
-service = DataExtractionService()
+    print(service.extract_data("vocab", "en", "B2", path))
 
-print(service.extract_data(extracted_text, "vocabulary", "en", "B2"))
+if __name__ == "__main__":
+    main()
+
