@@ -26,7 +26,7 @@ class AiService:
 
     def ask_local_with_photo(self, text:str, photo_path:str):
         response = self.client.chat(
-        model='qwen3.5',
+        model='qwen2.5vl:7b',
         messages=[
             {
             'role': 'user',
