@@ -55,7 +55,7 @@ class DataExtractionService:
 
         answer = self.ai_service.ask_cloud_with_photo(prompt, photo_path)
 
-        print("Debug Odpowiedz Modelu: ")
+        print("Debug Model Response: ")
         print(answer)
         print("\n")
 

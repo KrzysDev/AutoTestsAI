@@ -10,12 +10,12 @@ def main():
     root.withdraw()
 
     path = filedialog.askopenfilename(
-        title="Wybierz plik",
+        title="Select file",
         filetypes=[
-            ("Obrazy", "*.png *.jpg *.jpeg"),
-            ("Pliki PNG", "*.png"),
-            ("Pliki JPG", "*.jpg *.jpeg"),
-            ("Wszystkie pliki", "*.*")
+            ("Images", "*.png *.jpg *.jpeg"),
+            ("PNG files", "*.png"),
+            ("JPG files", "*.jpg *.jpeg"),
+            ("All files", "*.*")
         ]
     )
 
