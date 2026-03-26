@@ -5,6 +5,8 @@ import os
 import json
 from backend.app.models.schemas import Chunk
 
+import sys
+
 def main():
     root = tk.Tk()
     root.withdraw()
@@ -44,12 +46,27 @@ def main():
             
             chunks = extractor.extract_data("vocab", "en", "B2", file_path)
             
-            extracted_data.extend(chunks)
+        except Exception as e:
+            print(f"Error while extracting data from file {filename}: {e}")
+            images_processed += 1
 
+        try:
+            extracted_data.extend([chunk.model_dump() for chunk in chunks])
             images_processed += 1
             
         except Exception as e:
-            print(f"Błąd podczas odpytywania modelu dla pliku {filename}: {e}")
+            print(f"Error while saving data from file {filename}: {e}")
+
+            print(f"Saving current work....")
+
+            try:
+                with open(f"C:\\Users\\USER\\Desktop\\moje rzeczy\\projekty\\inne\\TestGenerator\\data\\{file_name}.json", "w", encoding="utf-8") as f:
+                    json.dump(extracted_data, f, ensure_ascii=False, indent=2)
+            except Exception as e:
+                print(f"CANNOT SAVE - Error while saving data from file {filename}: {e}")
+
+            sys.exit()
+            
             images_processed += 1
     
     with open(f"C:\\Users\\USER\\Desktop\\moje rzeczy\\projekty\\inne\\TestGenerator\\data\\{file_name}.json", "w", encoding="utf-8") as f:
