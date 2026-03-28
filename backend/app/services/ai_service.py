@@ -10,13 +10,17 @@ class AiService:
         if not api_key:
             raise RuntimeError("brak klucza API")
             
-        self.client = Client(
+        self.cloud_client = Client(
             host="https://ollama.com",
             headers={'Authorization': f'Bearer {api_key}'}
         )
 
+        self.local_client = Client(
+            host="http://localhost:11434"
+        )
+
     def ask_local(self, text: str):
-        response = self.client.chat(model='qwen3.5', messages=[
+        response = self.local_client.chat(model='qwen3.5', messages=[
         {
             'role': 'user',
             'content': text,
@@ -25,13 +29,16 @@ class AiService:
         return {"message": response['message']['content']}
 
     def ask_local_with_photo(self, text:str, photo_path:str):
-        response = self.client.chat(
+        with open(photo_path, 'rb') as f:
+            photo_bytes = f.read()
+
+        response = self.local_client.chat(
         model='qwen3.5',
         messages=[
             {
             'role': 'user',
             'content': text,
-            'images': [photo_path],
+            'images': [photo_bytes],
             }
         ],
         )
@@ -45,6 +52,6 @@ class AiService:
         ]
 
         parts = []
-        for part in self.client.chat('gpt-oss:120b', messages=message, stream=True):
+        for part in self.cloud_client.chat('gpt-oss:120b', messages=message, stream=True):
             parts.append(part['message']['content'])
         return {"message": "".join(parts)}
