@@ -8,7 +8,7 @@ class AiService:
     def __init__(self):
         api_key = os.environ.get('OLLAMA_API_KEY')
         if not api_key:
-            raise RuntimeError("brak klucza API")
+            raise RuntimeError("Missing API key")
             
         self.cloud_client = Client(
             host="https://ollama.com",

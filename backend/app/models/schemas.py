@@ -16,5 +16,5 @@ class Chunk(BaseModel):
     @classmethod
     def no_combined_levels(cls, v: str) -> str:
         if "/" in v or "-" in v:
-            raise ValueError(f"Poziom musi być pojedynczy, dostałem: '{v}'")
+            raise ValueError(f"Level must be a single value, received: '{v}'")
         return v
