@@ -1,0 +1,33 @@
+```json
+{
+    "subject": "personal_information",
+    "content": [
+        "address - adres - The address of the person.",
+        "email - adres e-mail - The email address of the person.",
+        "postal - adres pocztowy - The postal address of the person.",
+        "age - wiek - The age of the person.",
+        "birth - narodziny - The date of birth of the person.",
+        "date of - data urodzenia - The date of birth of the person.",
+        "place of - miejsce urodzenia - The place of birth of the person.",
+        "citizen - obywatel - The citizenship of the person.",
+        "divorced - rozwiedziony - The marital status of the person.",
+        "family name - nazwisko - The family name of the person.",
+        "female - kobieta - The gender of the person.",
+        "first name - imię - The first name of the person.",
+        "ID - dokument tożsamości - The identification document of the person.",
+        "ID number - numer dokumentu tożsamości - The number of the identification document.",
+        "male - mężczyzna - The gender of the person.",
+        "marital status - stan cywilny - The marital status of the person.",
+        "married - żonaty, zamężna - The marital status of the person.",
+        "mobile phone number - numer telefonu komórkowego - The mobile phone number of the person.",
+        "nationality - narodowość - The nationality of the person.",
+        "occupation - zawód - The occupation of the person.",
+        "passport number - numer paszportu - The passport number of the person.",
+        "sex - płeć - The gender of the person.",
+        "single - stanu wolnego - The marital status of the person.",
+        "surname - nazwisko - The surname of the person.",
+        "widow - wdowa - The marital status of the person.",
+        "widower - wdowiec - The marital status of the person."
+    ]
+}
+```

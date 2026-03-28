@@ -44,7 +44,7 @@ def main():
         try:
             print(f"processing images... {images_processed}/{len(image_files)}")
             
-            chunks = extractor.extract_data("vocab", "en", "B2", file_path)
+            chunks = extractor.extract_data("vocab", "en", "B2", file_path, ExtractionType.local)
             
         except Exception as e:
             print(f"Error while extracting data from file {filename}: {e}")
@@ -65,7 +65,7 @@ def main():
             except Exception as e:
                 print(f"CANNOT SAVE - Error while saving data from file {filename}: {e}")
 
-            sys.exit()
+            sys.exit(1)
             
             images_processed += 1
     

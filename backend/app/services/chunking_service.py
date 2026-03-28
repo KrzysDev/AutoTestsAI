@@ -3,7 +3,7 @@ class ChunkingService:
     def __init__(self):
         pass
 
-    """Used to chunk one big FlashcardChunk into smaller ones"""
+    """Used to chunk one big VocabularyChunk into smaller ones"""
     def chunk_data(self, data: Chunk, chunk_size: int = 30) -> list[Chunk]:
 
        content = data.metadata.content.split("\n")

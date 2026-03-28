@@ -1,29 +1,29 @@
 import json
+import hashlib
 from typing import Literal
+from enum import Enum
 from backend.app.services.ai_service import AiService
 from backend.app.services.chunking_service import ChunkingService
-import hashlib
 from backend.app.models.schemas import Chunk, ChunkMetadata
+import sys
 
 class ExtractionType(Enum):
     cloud = 1
     local = 2
 
-
 class DataExtractionService:
-
     def __init__(self):
         self.ai_service = AiService()
         self.chunking_service = ChunkingService()
         self.existing_subjects = []
 
-    def extract_data(self, section : Literal["vocab", "gram"], language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], photo_path: str = None, extraction_type: ExtractionType = ExtractionType.cloud):
+    def extract_data(self, section: Literal["vocab", "gram"], language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], photo_path: str = None, extraction_type: ExtractionType = ExtractionType.cloud):
         if section == "vocab":
-            return self.__extract_vocab(language, level, photo_path)
+            return self.__extract_vocab(language, level, photo_path, extraction_type)
         elif section == "gram":
             return self.__extract_gram(language, level, photo_path)
 
-    def __extract_vocab(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], photo_path: str = None) -> list[Chunk]:
+    def __extract_vocab(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], photo_path: str = None, extraction_type: ExtractionType = ExtractionType.cloud) -> list[Chunk]:
         prompt = f"""
             ##TWOJE ZADANIE
             Jesteś ekspertem w dziedzinie języka {"angielskiego" if language == "en" else "niemieckiego"}
@@ -58,9 +58,9 @@ class DataExtractionService:
         """
 
         if extraction_type == ExtractionType.cloud:
-            answer = self.ai_service.ask_cloud_with_photo(prompt, photo_path)
+            answer = self.ai_service.ask_ollama_cloud_with_photo(prompt, photo_path)
         elif extraction_type == ExtractionType.local:
-            answer = self.ai_service.ask_local_with_photo(prompt, photo_path)
+            answer = self.ai_service.ask_ollama_local_with_photo(prompt, photo_path)
 
         print("Debug Model Response: ")
         print(answer)
@@ -68,8 +68,9 @@ class DataExtractionService:
 
         try: 
             data = json.loads(answer)
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Model returned invalid JSON: {e}")
+        except json.JSONDecodeError:
+            raise ValueError(f"Model returned invalid JSON")
+            sys.exit(1)
 
         if(data[0]["subject"]) not in self.existing_subjects:
             self.existing_subjects.append(data[0]["subject"])
