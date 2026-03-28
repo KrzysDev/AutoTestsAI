@@ -5,7 +5,7 @@ class ChunkMetadata(BaseModel):
     subject: str
     content: str
 
-class FlashcardChunk(BaseModel):
+class Chunk(BaseModel):
     id: str
     section: Literal["vocabulary", "grammar"]
     language: str
