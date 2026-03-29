@@ -42,11 +42,7 @@ class AiService:
                     'images': [photo_data],
                 }
             ],
-            options={
-                "temperature": 0,
-                "num_predict": 4096,
-                "num_ctx": 8192
-            }
+            stream=False
         )
         return {"message": response['message']['content']}
 
@@ -75,7 +71,5 @@ class AiService:
             },
         ]
 
-        parts = []
-        for part in self.cloud_client.chat('qwen3-vl:235b-cloud', messages=message, stream=True):
-            parts.append(part['message']['content'])
-        return "".join(parts)
+        response = self.cloud_client.chat('qwen3-vl:235b-cloud', messages=message)
+        return {"message": response['message']['content']}

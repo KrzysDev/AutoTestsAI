@@ -37,7 +37,8 @@ def main():
 
     """
 
-    answer = service.ask_gemini_with_photo(prompt, "C:\\Users\\USER\\Desktop\\Ai Test Generator Dataset-20260321T142317Z-1-001\\Ai Test Generator Dataset\\2.jpg")
+    print("wating for response....")
+    answer = service.ask_ollama_cloud_with_photo(prompt, "C:\\Users\\USER\\Desktop\\Ai Test Generator Dataset-20260321T142317Z-1-001\\Ai Test Generator Dataset\\2.jpg")
 
     print("Model answered: ")
     print("========================================================")
