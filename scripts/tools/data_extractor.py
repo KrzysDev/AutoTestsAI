@@ -52,6 +52,8 @@ def main():
 
         try:
             extracted_data.extend([chunk.model_dump() for chunk in chunks])
+            with open(f"C:\\Users\\USER\\Desktop\\moje rzeczy\\projekty\\inne\\TestGenerator\\data\\checkpoints\\{images_processed}_{file_name}.json", "w", encoding="utf-8") as f:
+                json.dump(extracted_data, f, ensure_ascii=False, indent=2)
             images_processed += 1
 
         except Exception as e:
