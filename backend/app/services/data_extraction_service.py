@@ -21,7 +21,7 @@ class DataExtractionService:
         
 
     """Used to extract vocabulary from OCR text"""
-    def __extract_vocab(self, photo_path: str, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]) -> list[Chunk]:
+    def __extract_vocab(self, photo_path: str, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]):
         image_slicer.slice_image(photo_path, 
         cols=4, 
         rows=4, 
@@ -48,6 +48,6 @@ class DataExtractionService:
        
         
 
-    def __extract_gram(self, photo_path: str, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]) -> list[Chunk]:
+    def __extract_gram(self, photo_path: str, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]):
         pass
         
