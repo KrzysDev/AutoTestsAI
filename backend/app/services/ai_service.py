@@ -21,20 +21,20 @@ class AiService:
         )
 
     def ask_ollama_local(self, text: str):
-        response = self.local_client.chat(model='qwen3.5', messages=[
+        response = self.local_client.chat(model='qwen2.5vl:7b', messages=[
             {
                 'role': 'user',
                 'content': text,
             },
         ])
-        return {"message": response['message']['content']}
+        return response['message']['content']
 
     def ask_ollama_local_with_photo(self, text: str, photo_path: str):
         with open(photo_path, "rb") as f:
             photo_data = f.read()
 
         response = self.local_client.chat(
-            model='qwen2.5vl:7b',
+            model='qwen3.5',
             messages=[
                 {
                     'role': 'user',

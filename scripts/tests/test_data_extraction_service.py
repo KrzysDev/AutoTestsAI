@@ -18,8 +18,9 @@ def main():
             ("All files", "*.*")
         ]
     )
-
-    print(service.extract_data("vocab", "en", "B2", path))
+    
+    print("extracting data.....")
+    print(service.extract_data(path, "vocab", "en", "B2"))
 
 if __name__ == "__main__":
     main()
