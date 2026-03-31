@@ -21,7 +21,7 @@ class AiService:
         )
 
     def ask_ollama_local(self, text: str):
-        response = self.local_client.chat(model='qwen2.5vl:7b', messages=[
+        response = self.local_client.chat(model='qwen3.5', messages=[
             {
                 'role': 'user',
                 'content': text,

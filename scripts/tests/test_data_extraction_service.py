@@ -20,7 +20,7 @@ def main():
     )
     
     print("extracting data.....")
-    print(service.extract_data(path, "vocab", "en", "B2"))
+    print(service.extract_data(path, "vocab", "en"))
 
 if __name__ == "__main__":
     main()
