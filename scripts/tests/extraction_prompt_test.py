@@ -45,13 +45,13 @@ def main():
     print(answer)
 
     with open("answer.txt", "w", encoding="utf-8") as f:
-        f.write(answer["message"])
+        f.write(answer)
 
     print("========================================================")
     print("\n")
 
     try:
-        data = json.loads(answer["message"])
+        data = json.loads(answer)
 
         with open("test.json", "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)

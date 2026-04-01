@@ -10,6 +10,7 @@ class SystemPrompts:
 
                 ##POPRAWNY FORMAT JSON
                 {{
+                "subject": temat, który twoim zdaniem najlepiej pasuje wybrany z tych: human being, place of residence, education, work, private life, nutrition, shopping and services, travel and tourism, culture, sport, health, science and technology, state and society.  
                 "content": [
                 {{
                     "word" : ({"angielskie" if language == "en" else "niemieckie"} słowo),
@@ -31,6 +32,7 @@ class SystemPrompts:
 
             ##POPRAWNY FORMAT JSON
             {{
+                "subject": temat, który twoim zdaniem najlepiej pasuje wybrany z tych: human being, place of residence, education, work, private life, nutrition, shopping and services, travel and tourism, culture, sport, health, science and technology, state and society.  
                 "content": [
                 {{
                     "word" : ({"angielskie" if language == "en" else "niemieckie"} słowo),

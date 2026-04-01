@@ -24,9 +24,11 @@ class DataExtractionService:
     def __extract_vocab(self, photo_path: str, language: Literal["en", "de"]):
 
         #deleting sliced photos from previous extractions
-        for filename in os.listdir(rf"C:\Users\USER\Desktop\Ai Test Generator Dataset-20260321T142317Z-1-001\vocabulary_dataset\tiles_{self.count}"):
-            if filename.endswith(".jpg") or filename.endswith(".png"):
-                os.remove(rf"C:\Users\USER\Desktop\Ai Test Generator Dataset-20260321T142317Z-1-001\vocabulary_dataset\tiles_{self.count}\\{filename}")
+
+        if os.path.exists(rf"C:\Users\USER\Desktop\Ai Test Generator Dataset-20260321T142317Z-1-001\vocabulary_dataset\tiles_{self.count}"):
+            for filename in os.listdir(rf"C:\Users\USER\Desktop\Ai Test Generator Dataset-20260321T142317Z-1-001\vocabulary_dataset\tiles_{self.count}"):
+                if filename.endswith(".jpg") or filename.endswith(".png"):
+                    os.remove(rf"C:\Users\USER\Desktop\Ai Test Generator Dataset-20260321T142317Z-1-001\vocabulary_dataset\tiles_{self.count}\\{filename}")
 
         image_slicer.slice_image(photo_path, 
         cols=2, 
@@ -43,14 +45,17 @@ class DataExtractionService:
                     path = rf"C:\Users\USER\Desktop\Ai Test Generator Dataset-20260321T142317Z-1-001\vocabulary_dataset\tiles_{self.count}\\{filename}"
                     answer = self.ai_service.ask_ollama_local_with_photo(prompts.get_data_extraction_prompt(language), path)
                     files_elapsed += 1
-                    print("current answer: ", answer, f"({files_elapsed}/{all_files})")
-                    all_answers.append(answer)
+                    corrected_answer = self.ai_service.ask_ollama_cloud(prompts.get_data_correction_prompt(language, answer))
+                    os.system("cls")
+                    print("current answer: ", corrected_answer)
+                    print('\n')
+                    bar = f"[{'#' * files_elapsed}{' ' * (all_files - files_elapsed)}]"
+                    print(f"\n{bar} {files_elapsed}/{all_files}\n")
+                    all_answers.append(corrected_answer)
 
         self.count += 1
-
-        correction_answer = self.ai_service.ask_ollama_cloud(prompts.get_data_correction_prompt(language, all_answers))
         
-        return correction_answer
+        return all_answers
        
         
 

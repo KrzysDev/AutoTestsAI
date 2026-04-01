@@ -44,7 +44,7 @@ class AiService:
             ],
             stream=False
         )
-        return {"message": response['message']['content']}
+        return response['message']['content']
 
     def ask_ollama_cloud(self, text: str):
         message = [
@@ -57,7 +57,7 @@ class AiService:
         parts = []
         for part in self.cloud_client.chat('qwen3-vl:235b-cloud', messages=message, stream=True):
             parts.append(part['message']['content'])
-        return {"message": "".join(parts)}
+        return "".join(parts)
     
     def ask_ollama_cloud_with_photo(self, text: str, photo_path: str):
         with open(photo_path, "rb") as f:
@@ -72,4 +72,4 @@ class AiService:
         ]
 
         response = self.cloud_client.chat('qwen3-vl:235b-cloud', messages=message)
-        return {"message": response['message']['content']}
+        return response['message']['content']
