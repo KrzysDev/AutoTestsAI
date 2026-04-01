@@ -46,11 +46,6 @@ class DataExtractionService:
                     answer = self.ai_service.ask_ollama_local_with_photo(prompts.get_data_extraction_prompt(language), path)
                     files_elapsed += 1
                     corrected_answer = self.ai_service.ask_ollama_cloud(prompts.get_data_correction_prompt(language, answer))
-                    os.system("cls")
-                    print("current answer: ", corrected_answer)
-                    print('\n')
-                    bar = f"[{'#' * files_elapsed}{' ' * (all_files - files_elapsed)}]"
-                    print(f"\n{bar} {files_elapsed}/{all_files}\n")
                     all_answers.append(corrected_answer)
 
         self.count += 1
