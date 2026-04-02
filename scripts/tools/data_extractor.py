@@ -63,7 +63,6 @@ def main():
             parsed_data = []
             for d in data:
                 try:
-                    # Clean the JSON string from possible markdown blocks
                     clean_str = d.strip()
                     if clean_str.startswith("```json"):
                         clean_str = clean_str[7:]
@@ -80,14 +79,14 @@ def main():
                 console.print(f"[bold red]Error: No valid data extracted from {filename}[/]")
                 continue
 
-            # We can take the subject from the first valid parsed dictionary
             subject = parsed_data[0].get("subject", "Unknown")
             
             content = ""
             for slice_data in parsed_data:
                 for word in slice_data.get("content", []):
                     content += f"{word.get('word', '')} - {word.get('translation', '')}\n"
-
+            #TODO: ADD CHECKPOINT, BECAUSE WORK CAN BE LOST DURING LONG EXTRACTION PROCESS
+            #TODO: OPTIMISE THIS MESS LATER BECAUSE IT TAKES TOO MUCH TIME
             try:
                 chunk_section = "vocabulary" if section == "vocab" else "grammar"
                 chunk = Chunk(
