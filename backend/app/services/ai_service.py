@@ -10,7 +10,6 @@ class AiService:
         
         if not api_key:
             raise RuntimeError("Error: No OLLAMA API key")
-
         self.cloud_client = Client(
             host="https://ollama.com",
             headers={'Authorization': f'Bearer {api_key}'}
