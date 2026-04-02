@@ -7,6 +7,7 @@ import hashlib
 
 from tkinter import filedialog
 import json
+import re
 import questionary
 from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeElapsedColumn
 from rich.console import Console
@@ -35,7 +36,9 @@ def main():
     root.withdraw()
 
     extraction_path: str = filedialog.askdirectory(title="Select folder with photos to extract data from")
+    print(extraction_path)
     save_path: str = filedialog.askdirectory(title="Select folder to save data to")
+    print(save_path)
 
     service = DataExtractionService()
 
@@ -56,15 +59,45 @@ def main():
         for filename in image_files:
             path = os.path.join(extraction_path, filename)
             data = service.extract_data(path, section, language)
+            
+            parsed_data = []
+            for d in data:
+                try:
+                    # Clean the JSON string from possible markdown blocks
+                    clean_str = d.strip()
+                    if clean_str.startswith("```json"):
+                        clean_str = clean_str[7:]
+                    elif clean_str.startswith("```"):
+                        clean_str = clean_str[3:]
+                    if clean_str.endswith("```"):
+                        clean_str = clean_str[:-3]
+                        
+                    parsed_data.append(json.loads(clean_str.strip()))
+                except Exception as e:
+                    console.print(f"[bold red]Warning: Could not parse AI response as JSON:[/] {e}")
+
+            if not parsed_data:
+                console.print(f"[bold red]Error: No valid data extracted from {filename}[/]")
+                continue
+
+            # We can take the subject from the first valid parsed dictionary
+            subject = parsed_data[0].get("subject", "Unknown")
+            
+            content = ""
+            for slice_data in parsed_data:
+                for word in slice_data.get("content", []):
+                    content += f"{word.get('word', '')} - {word.get('translation', '')}\n"
+
             try:
+                chunk_section = "vocabulary" if section == "vocab" else "grammar"
                 chunk = Chunk(
                     id=hashlib.md5(path.encode()).hexdigest(),
-                    section=section,
+                    section=chunk_section,
                     language=language,
                     level=level,
                     metadata=ChunkMetadata(
-                        subject=data["subject"],
-                        content="".join(f"{word['word']} - {word['translation']}\n" for word in data["content"])
+                        subject=subject,
+                        content=content
                     )
                 )
                 all_chunks.append(chunk)
