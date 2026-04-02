@@ -24,6 +24,30 @@ class SystemPrompts:
                 -nie zwracaj nic poza JSON'em. NIc nie moze znajdować się przed ani po nim. Sam czysty json. Nie poprzedzaj go znakami takimi jak ``` lub innymi
                 -uzywaj tlumaczen podanych wylacznie na zdjeciu nie pisz swoich
         """
+    def get_grammar_extraction_prompt(language: Literal["en", "de"]) -> str:
+        return f"""
+            ##ZADANIE
+            Zapoznaj sie z zagadnieniem gramatycznym znajdujacym sie na podanym zdjeciu podrecznika do jezyka {"angielskiego" if language == "en" else "niemieckiego"}. Przenalizuj zasady, wystepowanie oraz przykłady.
+
+            ##POPRAWNY FORMAT JSON
+            {{
+                "subject": temat, który twoim zdaniem najlepiej pasuje (nazwa czasu / kategorii gramatycznej)
+                "content":
+                {{
+                    "description": "opis zagadnienia gramatycznego (po polsku)",
+                    "examples": [
+                        "example 1 (po angielsku)",
+                        "example 2 (po angielsku)",
+                        "example 3 (po angielsku)"
+                    ]
+                }}
+            }}
+
+            ##UWAGI
+            -nie zwracaj nic poza JSON'em. NIc nie moze znajdować się przed ani po nim. Sam czysty json. Nie poprzedzaj go znakami takimi jak ``` lub innymi
+            -jeżeli na podanym zdjęciu znajdują się przykłady użycia danego zagadnienia (np. czasu, gramatycznej struktury) to przepisz je do pola "examples" w JSON'ie
+            -jeżeli na podanym zdjęciu nie znajdują się przykłady użycia danego zagadnienia (np. czasu, gramatycznej struktury) to pole wymyśl własne przykłady.
+        """
 
     def get_data_correction_prompt(language: Literal["en", "de"], extracted_data) -> str:
         return f"""
