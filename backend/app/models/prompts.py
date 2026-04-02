@@ -75,3 +75,30 @@ class SystemPrompts:
             #DANE DO POPRAWY
             {extracted_data}
         """
+    def get_data_grammar_correction_prompt(language: Literal["en", "de"], extracted_data) -> str:
+        return f"""
+            ##ZADANIE
+            Podany JSON (lub zły tekst), popraw tak aby spełniał poniższe warunki.
+
+            ##POPRAWNY FORMAT JSON
+            {{
+                "subject": temat, który twoim zdaniem najlepiej pasuje (nazwa czasu / kategorii gramatycznej)
+                "content":
+                {{
+                    "description": "opis zagadnienia gramatycznego (po polsku)",
+                    "examples": [
+                        "example 1 (po angielsku)",
+                        "example 2 (po angielsku)",
+                        "example 3 (po angielsku)"
+                    ]
+                }}
+            }}
+
+            ##UWAGI
+            -nie zwracaj nic poza JSON'em. NIc nie moze znajdować się przed ani po nim. Sam czysty json. Nie poprzedzaj go znakami takimi jak ``` lub innymi
+            -jeżeli na podanym zdjęciu znajdują się przykłady użycia danego zagadnienia (np. czasu, gramatycznej struktury) to przepisz je do pola "examples" w JSON'ie
+            -jeżeli na podanym zdjęciu nie znajdują się przykłady użycia danego zagadnienia (np. czasu, gramatycznej struktury) to pole wymyśl własne przykłady.
+
+            #DANE DO POPRAWY
+            {extracted_data}
+        """
