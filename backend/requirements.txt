@@ -4,3 +4,4 @@ pydantic==2.12.5
 python-dotenv==1.2.2
 ollama==0.6.1
 easyocr==1.7.2
+image_slicer==3.1.0
