@@ -3,6 +3,7 @@ from ollama import Client
 from dotenv import load_dotenv
 
 from backend.app.models.prompts import SystemPrompts
+from backend.app.models.schemas import TeacherRequestClassification, Question
 
 load_dotenv()
 
@@ -40,10 +41,13 @@ class AiService:
             },
         ]
 
-        parts = []
-        for part in self.cloud_client.chat('gemma3:4b-cloud', messages=message, stream=True):
-            parts.append(part['message']['content'])
-        return "".join(parts)
+        response = self.cloud_client.chat('gemma3:4b-cloud', messages=message)
+        classification = TeacherRequestClassification(
+            text=text,
+            classification=response['message']['content']
+        )
+
+        return classification.classification
 
     def ask_ollama_local_with_photo(self, text: str, photo_path: str):
         with open(photo_path, "rb") as f:
