@@ -113,3 +113,25 @@ class SystemPrompts:
             #ZAPYTANIE DO ANALIZY
             {text}
         """
+
+    def get_test_planning_prompt(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str) -> str:
+        return f"""
+            ##ZADANIE
+            Na odstawie podanego zapytania nauczyciela, zaplanuj test.
+
+            ##CO ZWRACASZ
+            Czytelny, prosty do zrozumienia plan, który będzie instrukcją skoonstruowania testu krok po kroku tak jak nauczyciel prawdopodobnie sobie tego zyczy.
+            Napisz liste kroków, przez która model językowy przechodząc, będzie tworzył odpowiedni dla nauczyciela test.
+
+            ##ZAPYTANIE NAUCZYCIELA:
+            {topic}
+
+            ##DANE
+            Język: {"angielski" if language == "en" else "niemiecki"}
+            Poziom: {level}
+
+            ##UWAGI
+            -nie zwracaj nic poza planem. NIC POZA TYM.
+            -plan ma być czytelny i prosty do zrozumienia.
+            -plan ma być listą kroków, przez która model językowy przechodząc, będzie tworzył odpowiedni dla nauczyciela test.
+        """
