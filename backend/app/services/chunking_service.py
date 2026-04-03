@@ -3,42 +3,51 @@ class ChunkingService:
     def __init__(self):
         pass
 
-    """Used to chunk one big VocabularyChunk into smaller ones"""
-    def chunk_data(self, data: Chunk, chunk_size: int = 30) -> list[Chunk]:
+    def chuk_vocabulary(self, data: Chunk, chunk_size: int = 30) -> list[Chunk]:
+        content = data.metadata.content.split("\n")
+        chunks = []
 
-       content = data.metadata.content.split("\n")
-       chunks = []
-       current_words = []
+        current_chunk: Chunk = Chunk(
+            id=data.id,
+            section=data.section,
+            language=data.language,
+            level=data.level,
+            metadata=ChunkMetadata(
+                subject=data.metadata.subject,
+                content=""
+            )
+        )
 
-       for word in content:
-        if not word.strip(): 
-            continue
-        
-        current_words.append(word)  
-        
-        if len(current_words) == chunk_size:  
-            chunks.append(Chunk(
-                id=data.id,
-                section=data.section,
-                language=data.language,
-                level=data.level,
-                metadata=ChunkMetadata(
-                    subject=data.metadata.subject,
-                    content="\n".join(current_words)
+        chunks_elapsed = 0
+
+        for word in content:
+            if not word.strip():
+                continue
+
+            if chunks_elapsed % chunk_size == 0 and chunks_elapsed != 0:
+                chunks.append(current_chunk)
+                current_chunk = Chunk(
+                    id=data.id,
+                    section=data.section,
+                    language=data.language,
+                    level=data.level,
+                    metadata=ChunkMetadata(
+                        subject=data.metadata.subject,
+                        content=""
+                    )
                 )
-            ))
-            current_words = [] 
+            
+            current_chunk.metadata.content += word + "\n"
+            chunks_elapsed += 1
 
-       if current_words:
-            chunks.append(Chunk(
-                id=data.id,
-                section=data.section,
-                language=data.language,
-                level=data.level,
-                metadata=ChunkMetadata(
-                    subject=data.metadata.subject,
-                    content="\n".join(current_words)
-                )
-            ))
+        
+        return chunks
 
-       return chunks
+        
+
+       
+        
+
+       
+
+       
