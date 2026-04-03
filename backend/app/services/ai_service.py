@@ -2,6 +2,8 @@ import os
 from ollama import Client
 from dotenv import load_dotenv
 
+from backend.app.models.prompts import SystemPrompts
+
 load_dotenv()
 
 class AiService:
@@ -15,6 +17,8 @@ class AiService:
             headers={'Authorization': f'Bearer {api_key}'}
         )
 
+        self.prompts = SystemPrompts()
+
         self.local_client = Client(
             host="http://localhost:11434",
         )
@@ -27,6 +31,19 @@ class AiService:
             },
         ])
         return response['message']['content']
+
+    def classify_text(self, text: str):
+        message = [
+            {
+                'role': 'user',
+                'content': self.prompts.get_classification_prompt(text)
+            },
+        ]
+
+        parts = []
+        for part in self.cloud_client.chat('gemma3:4b-cloud', messages=message, stream=True):
+            parts.append(part['message']['content'])
+        return "".join(parts)
 
     def ask_ollama_local_with_photo(self, text: str, photo_path: str):
         with open(photo_path, "rb") as f:

@@ -3,7 +3,7 @@ from typing import Literal
 
 class SystemPrompts:
 
-    def get_data_extraction_prompt(language: Literal["en", "de"]) -> str:
+    def get_data_extraction_prompt(self, language: Literal["en", "de"]) -> str:
         return f"""
                 ##ZADANIE
                 Z podanego zdjecia podrecznika do jezyka {"angielskiego" if language == "en" else "niemieckiego"} wypisz WSZYSTKIE wystepujace tam slowka w podanym formacie JSON:
@@ -24,7 +24,7 @@ class SystemPrompts:
                 -nie zwracaj nic poza JSON'em. NIc nie moze znajdować się przed ani po nim. Sam czysty json. Nie poprzedzaj go znakami takimi jak ``` lub innymi
                 -uzywaj tlumaczen podanych wylacznie na zdjeciu nie pisz swoich
         """
-    def get_grammar_extraction_prompt(language: Literal["en", "de"]) -> str:
+    def get_grammar_extraction_prompt(self, language: Literal["en", "de"]) -> str:
         return f"""
             ##ZADANIE
             Zapoznaj sie z zagadnieniem gramatycznym znajdujacym sie na podanym zdjeciu podrecznika do jezyka {"angielskiego" if language == "en" else "niemieckiego"}. Przenalizuj zasady, wystepowanie oraz przykłady.
@@ -49,7 +49,7 @@ class SystemPrompts:
             -jeżeli na podanym zdjęciu nie znajdują się przykłady użycia danego zagadnienia (np. czasu, gramatycznej struktury) to pole wymyśl własne przykłady.
         """
 
-    def get_data_correction_prompt(language: Literal["en", "de"], extracted_data) -> str:
+    def get_data_correction_prompt(self, language: Literal["en", "de"], extracted_data) -> str:
         return f"""
             ##ZADANIE
             Podany JSON, popraw tak aby spełniał poniższe warunki. 
@@ -75,7 +75,7 @@ class SystemPrompts:
             #DANE DO POPRAWY
             {extracted_data}
         """
-    def get_data_grammar_correction_prompt(language: Literal["en", "de"], extracted_data) -> str:
+    def get_data_grammar_correction_prompt(self, language: Literal["en", "de"], extracted_data) -> str:
         return f"""
             ##ZADANIE
             Podany JSON (lub zły tekst), popraw tak aby spełniał poniższe warunki.
@@ -101,4 +101,15 @@ class SystemPrompts:
 
             #DANE DO POPRAWY
             {extracted_data}
+        """
+    def get_classification_prompt(self, text: str) -> str:
+        return f"""
+            ##ZADANIE
+            Na podstawie podanego tekstu musisz okreslic czy jest to ogólne zapytanie czy prośba o utworzenie testu/sprawdzianu/kartkowki.
+
+            #CO ZWRACASSZ
+            -JEDYNIE - 'general' lub 'test'. NIC POZA TYM.
+
+            #ZAPYTANIE DO ANALIZY
+            {text}
         """
