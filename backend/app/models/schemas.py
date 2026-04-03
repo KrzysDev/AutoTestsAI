@@ -31,8 +31,13 @@ class Question(BaseModel):
     type : Literal["multiple_choice", "open_ended"]
     correct_answer : str
 
-class Test(BaseModel):
+class Group(BaseModel):
     questions : list[Question]
+    answers : list[str]
+
+class Test(BaseModel):
+    groups : list[Group]
+
 
 class TeacherRequestClassification(BaseModel):
     text: str

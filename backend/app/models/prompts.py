@@ -1,5 +1,7 @@
 
 from typing import Literal
+import json
+from backend.app.models.schemas import Test, Chunk
 
 class SystemPrompts:
 
@@ -134,4 +136,54 @@ class SystemPrompts:
             -nie zwracaj nic poza planem. NIC POZA TYM.
             -plan ma być czytelny i prosty do zrozumienia.
             -plan ma być listą kroków, przez która model językowy przechodząc, będzie tworzył odpowiedni dla nauczyciela test.
+        """
+    def get_query_requests_prompt(self, plan: str) -> str:
+        return f"""
+            ##ZADANIE
+            Na podstawie podanego planu, wygeneruj zapytania do modelu językowego.
+
+            ##CO ZWRACASZ
+            Liste zapytan do systemu wyszukujacego materialy do testu. Niech zapytania beda sformulowane tak aby jak najwieksza szansa byla na odnalezienie przydatnych chunków.
+            Kazde zapytanie powinno byc wlasnym zdaniem w nowej linii.
+
+            ##Przyklad Odpowiedzi:
+                ' - Present Simple
+                  - czlowiek słówka / człowiek
+                  - dom i rodzina '
+            
+
+            ##PLAN:
+            {plan}
+
+            ##UWAGI
+            -zauwaz ze "zdania" w przykladzie to same proste hasla, nie zdania poprawne skladniowo. takie wlasnie hasla, najlepiej pojedyczne slowa chce zebys wypisal pod soba
+            -nie zwracaj nic poza listą zapytań. NIC POZA TYM.
+            -lista zapytań ma być czytelna i prosta do zrozumienia.
+            -lista zapytań ma byc zdaniami (MAKSYMALNIE 4)
+            -kazde zdanie musi byc oddzielone znakiem nowej linii (innymi slowy kazde ma byc w innej linii)
+        """
+    def get_test_generation_prompt(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], data: list[Chunk], plan :str, teachers_request: str, group_count: int) -> str:
+        return f"""
+            ##CECHY
+            Jesteś specjalistą od układania testów językowych z języka {"angielskiego" if language == "en" else "niemieckiego"} na poziomie {level}. Będziesz zajmowaniem się układaniem testów na podstawie przesłanego ci kontekstu oraz prośby nauczyciela w odpowiednim formacie JSON.
+
+            ##PROŚBA NAUCZYCIELA
+            {teachers_request}
+
+            ##ULOZONY PRZEZ CIEBIE PLAN DZIALANIA W UKLADANIU TESTU
+            {plan}
+
+            ##DANE WYCIAGNIETE Z JEZYKOWEJ BAZY DANYCH
+            {data}
+
+            ##ILOSC GRUP DO STWORZENIA
+            {group_count}
+
+            ##WYMAGANA STRUKTURA JSON
+            {json.dumps(Test.model_json_schema(), indent=2)}
+
+
+
+
+            
         """
