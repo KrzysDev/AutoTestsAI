@@ -3,7 +3,7 @@ from backend.app.services.ai_service import AiService
 service = AiService()
 
 def main():
-    print(service.ask_ollama_cloud_with_photo("describe what you see in the image", "C:\\Users\\USER\\Desktop\\tapeta.png"))
+    print(service.ask_ollama_local("Zaplanuj test z gramatyki jezyka angielskiegona temat czasu przeszłego dla uczniów na poziomie B2."))
 
 if __name__ == "__main__":
     main()

@@ -1,12 +1,12 @@
 from pydantic import BaseModel, field_validator
 
 from typing import Literal
-
+from typing import Union
 
 class ChunkMetadata(BaseModel):
 
     subject: str
-    content: str
+    content: Union[str, dict]
 
 class Chunk(BaseModel):
     id: str
@@ -25,6 +25,10 @@ class Chunk(BaseModel):
         if "/" in v or "-" in v:
             raise ValueError(f"Level must be a single value, received: '{v}'")
         return v
+
+class RetrivedChunk(BaseModel):
+    payload: Chunk
+    score: float
 
 class Question(BaseModel):
     text : str

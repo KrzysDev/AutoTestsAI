@@ -1,7 +1,7 @@
 import os
 from ollama import Client
 from dotenv import load_dotenv
-
+import json
 from backend.app.models.prompts import SystemPrompts
 from backend.app.models.schemas import TeacherRequestClassification, Question
 
@@ -25,7 +25,7 @@ class AiService:
         )
 
     def ask_ollama_local(self, text: str):
-        response = self.local_client.chat(model='qwen3-vl:8b', messages=[
+        response = self.local_client.chat(model='qwen2.5:14b-instruct', messages=[
             {
                 'role': 'user',
                 'content': text,

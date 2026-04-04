@@ -181,9 +181,21 @@ class SystemPrompts:
 
             ##WYMAGANA STRUKTURA JSON
             {json.dumps(Test.model_json_schema(), indent=2)}
+ 
+        """
 
+    def get_test_validation_prompt(self, s: str) -> str:
+        return f"""
+            ##ZADANIE
+            Sprawdz poprawnosc testu. 
 
+            ##TEST DO SPRAWDZENIA
+            {s}
 
+            ##UWAGI
+            -nie zwracaj nic poza poprawnym testem. NIC POZA TYM.
+            -test ma byc poprawny i spelniac wszystkie wymagania takie jak odpowiednia struktura json:
+            {json.dumps(Test.model_json_schema(), indent=2)}
 
-            
+            -ZWROC JEDYNIE TEST W POPRAWNEJ WERSJI JSON ZADEN TEKST NIC POZA TYM.
         """
