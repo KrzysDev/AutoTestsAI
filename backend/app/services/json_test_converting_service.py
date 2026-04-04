@@ -3,7 +3,7 @@ from fpdf import FPDF
 from backend.app.models.schemas import Test
 
 class JsonTestConvertingService:
-    def convert_to_pdf(self, test_data: Test | dict, output_filename: str = "test.pdf") -> None:
+    def convert_to_pdf(self, test_data: Test | dict) -> bytearray:
         pdf = FPDF()
         pdf.set_auto_page_break(auto=True, margin=15)
 
@@ -54,4 +54,4 @@ class JsonTestConvertingService:
                 pdf.multi_cell(0, 10, f"Ex{i}:\n{answer}")
                 pdf.ln(5)
 
-        pdf.output(output_filename)
+        return pdf.output()

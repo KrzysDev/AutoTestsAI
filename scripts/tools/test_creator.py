@@ -4,9 +4,11 @@ import json
 import tkinter as tk
 from tkinter import filedialog
 from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeElapsedColumn
+from backend.app.services.json_test_converting_service import JsonTestConvertingService
 
 def main():
     service = TestGeneratorService()
+    converting_service = JsonTestConvertingService()
     
     language = questionary.select(
         "Select language",
@@ -40,23 +42,27 @@ def main():
         TimeElapsedColumn()
     ) as progress:
         task = progress.add_task("Generating test...", total=1)
-        test = service.generate_test(language, level, topic, group_count)
+        test = service.generate_test(language, level, topic, group_count, question_count)
         progress.update(task, advance=1)
 
     root = tk.Tk()
     root.withdraw()
 
+    pdf_data = converting_service.convert_to_pdf(test)
+    
     path = filedialog.asksaveasfilename(
-        title="Save test",
-        defaultextension=".json",
+        title="Save test as PDF",
+        defaultextension=".pdf",
         filetypes=[
-            ("JSON files", "*.json"),
+            ("PDF files", "*.pdf"),
             ("All files", "*.*")
         ]
     )
 
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(test, f, ensure_ascii=False, indent=4)
+    if path:
+        with open(path, "wb") as f:
+            f.write(pdf_data)
+
 
 if __name__ == "__main__":
     main()

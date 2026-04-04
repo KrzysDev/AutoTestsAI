@@ -34,7 +34,7 @@ class TestGeneratorService:
             
         return unique_chunks
 
-    def generate_test(self, language: Literal["en", "de"] = "en", level: Literal["A1", "A2", "B1", "B2", "C1", "C2"] = "B2", topic: str = "-", group_count: Literal[1,2,3,4] = 2):
+    def generate_test(self, language: Literal["en", "de"] = "en", level: Literal["A1", "A2", "B1", "B2", "C1", "C2"] = "B2", topic: str = "-", group_count: Literal[1,2,3,4] = 2, question_count: Literal[1,2,3,4,5,6,7,8,9,15] = 10):
         classification = self.ai_service.classify_text(topic)
 
         if classification == "test":
@@ -45,7 +45,7 @@ class TestGeneratorService:
             data = self.__retrive_data(query_requests)
             print(f"data: {data[:10]}...")
 
-            prompt = self.prompts.get_test_generation_prompt(language, level, data, plan, topic, group_count)
+            prompt = self.prompts.get_test_generation_prompt(language, level, data, plan, topic, group_count, question_count)
             
             answer = self.ai_service.ask_ollama_cloud(prompt, model='gpt-oss:120b')
 

@@ -1,0 +1,455 @@
+{
+    "$defs": {
+        "Group": {
+            "properties": {
+                "questions": {
+                    "items": {
+                        "$ref": "#/$defs/Question"
+                    },
+                    "title": "Questions",
+                    "type": "array"
+                },
+                "answers": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Answers",
+                    "type": "array"
+                }
+            },
+            "required": [
+                "questions",
+                "answers"
+            ],
+            "title": "Group",
+            "type": "object"
+        },
+        "Question": {
+            "properties": {
+                "text": {
+                    "title": "Text",
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "multiple_choice",
+                        "open_ended"
+                    ],
+                    "title": "Type",
+                    "type": "string"
+                },
+                "correct_answer": {
+                    "title": "Correct Answer",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "text",
+                "type",
+                "correct_answer"
+            ],
+            "title": "Question",
+            "type": "object"
+        }
+    },
+    "properties": {
+        "groups": {
+            "items": {
+                "$ref": "#/$defs/Group"
+            },
+            "title": "Groups",
+            "type": "array"
+        }
+    },
+    "required": [
+        "groups"
+    ],
+    "title": "Test",
+    "type": "object",
+    "groups": [
+        {
+            "questions": [
+                {
+                    "text": "She __________ (go) to the gym every morning.",
+                    "type": "open_ended",
+                    "correct_answer": "goes"
+                },
+                {
+                    "text": "What time __________ (the train / leave) from platform 5?",
+                    "type": "open_ended",
+                    "correct_answer": "does the train leave"
+                },
+                {
+                    "text": "We __________ (not / eat) meat on Fridays.",
+                    "type": "open_ended",
+                    "correct_answer": "do not eat"
+                },
+                {
+                    "text": "The river _________ (flow) through the forest.",
+                    "type": "open_ended",
+                    "correct_answer": "flows"
+                },
+                {
+                    "text": "_____ you __________ (like) coffee or tea?",
+                    "type": "open_ended",
+                    "correct_answer": "Do you like"
+                },
+                {
+                    "text": "Every summer, the park __________ (host) a community clean‑up day.",
+                    "type": "open_ended",
+                    "correct_answer": "hosts"
+                },
+                {
+                    "text": "My brother __________ (study) biology at university.",
+                    "type": "open_ended",
+                    "correct_answer": "studies"
+                },
+                {
+                    "text": "The sun __________ (rise) in the east and __________ (set) in the west.",
+                    "type": "open_ended",
+                    "correct_answer": "rises, sets"
+                },
+                {
+                    "text": "Birds __________ (migrate) south when winter arrives.",
+                    "type": "open_ended",
+                    "correct_answer": "migrate"
+                },
+                {
+                    "text": "How often __________ (you / recycle) plastic bottles?",
+                    "type": "open_ended",
+                    "correct_answer": "do you recycle"
+                },
+                {
+                    "text": "The company __________ (produce) solar panels in this factory.",
+                    "type": "open_ended",
+                    "correct_answer": "produces"
+                },
+                {
+                    "text": "She never __________ (forget) to water the garden.",
+                    "type": "open_ended",
+                    "correct_answer": "forgets"
+                },
+                {
+                    "text": "_____ the earth __________ (rotate) around the sun?",
+                    "type": "open_ended",
+                    "correct_answer": "Does the earth rotate"
+                },
+                {
+                    "text": "Kids usually __________ (play) outside after school.",
+                    "type": "open_ended",
+                    "correct_answer": "play"
+                },
+                {
+                    "text": "Our city __________ (have) a new recycling centre since 2022.",
+                    "type": "open_ended",
+                    "correct_answer": "has"
+                }
+            ],
+            "answers": [
+                "goes",
+                "does the train leave",
+                "do not eat",
+                "flows",
+                "Do you like",
+                "hosts",
+                "studies",
+                "rises, sets",
+                "migrate",
+                "do you recycle",
+                "produces",
+                "forgets",
+                "Does the earth rotate",
+                "play",
+                "has"
+            ]
+        },
+        {
+            "questions": [
+                {
+                    "text": "I __________ (just / finish) my report on renewable energy.",
+                    "type": "open_ended",
+                    "correct_answer": "have just finished"
+                },
+                {
+                    "text": "She __________ (live) in this town since 2010.",
+                    "type": "open_ended",
+                    "correct_answer": "has lived"
+                },
+                {
+                    "text": "We __________ (already / plant) 200 new trees this year.",
+                    "type": "open_ended",
+                    "correct_answer": "have already planted"
+                },
+                {
+                    "text": "_____ you __________ (ever / see) a glacier up close?",
+                    "type": "open_ended",
+                    "correct_answer": "Have you ever seen"
+                },
+                {
+                    "text": "The scientists __________ (discover) several micro‑plastics in the river.",
+                    "type": "open_ended",
+                    "correct_answer": "have discovered"
+                },
+                {
+                    "text": "He __________ (not / recycle) any paper for months.",
+                    "type": "open_ended",
+                    "correct_answer": "has not recycled"
+                },
+                {
+                    "text": "How long __________ (you / work) on the conservation project?",
+                    "type": "open_ended",
+                    "correct_answer": "have you worked"
+                },
+                {
+                    "text": "_____ she __________ (be) the first person to climb that mountain?",
+                    "type": "open_ended",
+                    "correct_answer": "Has she been"
+                },
+                {
+                    "text": "The forest __________ (lose) 15% of its area over the past decade.",
+                    "type": "open_ended",
+                    "correct_answer": "has lost"
+                },
+                {
+                    "text": "I __________ (never / hear) such a clear description of biodiversity.",
+                    "type": "open_ended",
+                    "correct_answer": "have never heard"
+                },
+                {
+                    "text": "They __________ (just / start) a community garden in the city centre.",
+                    "type": "open_ended",
+                    "correct_answer": "have just started"
+                },
+                {
+                    "text": "_____ you __________ (already / read) the latest IPCC report?",
+                    "type": "open_ended",
+                    "correct_answer": "Have you already read"
+                },
+                {
+                    "text": "The local council __________ (approve) the new green‑energy plan.",
+                    "type": "open_ended",
+                    "correct_answer": "has approved"
+                },
+                {
+                    "text": "We __________ (be) aware of the problem for so long that no one is surprised now.",
+                    "type": "open_ended",
+                    "correct_answer": "have been"
+                },
+                {
+                    "text": "She __________ (just / submit) her thesis on coastal erosion.",
+                    "type": "open_ended",
+                    "correct_answer": "has just submitted"
+                }
+            ],
+            "answers": [
+                "have just finished",
+                "has lived",
+                "have already planted",
+                "Have you ever seen",
+                "have discovered",
+                "has not recycled",
+                "have you worked",
+                "Has she been",
+                "has lost",
+                "have never heard",
+                "have just started",
+                "Have you already read",
+                "has approved",
+                "have been",
+                "has just submitted"
+            ]
+        },
+        {
+            "questions": [
+                {
+                    "text": "Reading passage: \n\"The Amazon rainforest, often called the planet's lungs, absorbs massive amounts of carbon dioxide. Over the last 50 years, however, deforestation for agriculture has reduced its area by 17%. Scientists warn that this loss reduces the forest's ability to regulate the climate and threatens countless species. Local communities are now involved in re‑planting programmes, aiming to restore 1 million hectares by 2030.\"\n\nQuestion 1: According to the passage, what percentage of the Amazon has been lost in the last 50 years?\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "17%"
+                },
+                {
+                    "text": "Question 2: The phrase \"planet's lungs\" most likely means that the rainforest:\nA) is a place where people can breathe fresh air.\nB) produces oxygen and absorbs carbon dioxide.\nC) looks like a pair of lungs from above.\nD) is a medical research centre.\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "B"
+                },
+                {
+                    "text": "Question 3: Which activity is mentioned as a main cause of deforestation?\nA) Urban development\nB) Mining\nC) Agriculture\nD) Tourism\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "C"
+                },
+                {
+                    "text": "Question 4: What is the main environmental risk caused by the loss of the Amazon?\nA) Increased snowfall\nB) Reduced climate regulation\nC) Desertification of Europe\nD) Higher ocean tides\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "B"
+                },
+                {
+                    "text": "Question 5: The re‑planting programmes aim to restore how many hectares by 2030?\nA) 500,000\nB) 1 million\nC) 2 million\nD) 10 million\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "B"
+                },
+                {
+                    "text": "Question 6: Which word best describes the tone of the passage?\nA) Alarmist\nB) Indifferent\nC) Optimistic\nD) Sarcastic\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "C"
+                },
+                {
+                    "text": "Question 7: What does the term \"biodiversity\" refer to in the context?\nA) Variety of plant and animal species\nB) Number of tourists visiting the forest\nC) Different types of soil\nD) Amount of rainfall\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "A"
+                },
+                {
+                    "text": "Question 8: Which of the following is NOT mentioned as a consequence of deforestation?\nA) Climate change acceleration\nB) Loss of species habitat\nC) Increase in carbon sequestration\nD) Threat to local communities\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "C"
+                },
+                {
+                    "text": "Question 9: The phrase \"over the last 50 years\" indicates that the information is:\nA) Future‑oriented\nB) Historical\nC) Hypothetical\nD) Imaginary\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "B"
+                },
+                {
+                    "text": "Question 10: Which verb best fits the blank? \"Scientists _____ that this loss reduces the forest's ability to regulate the climate.\"\nA) ignore\nB) promise\nC) warn\nD) celebrate\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "C"
+                },
+                {
+                    "text": "Question 11: What is the primary purpose of the passage?\nA) To persuade readers to travel to the Amazon.\nB) To inform about environmental challenges and solutions.\nC) To describe the history of the Amazon peoples.\nD) To advertise a new documentary series.\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "B"
+                },
+                {
+                    "text": "Question 12: Which grammatical tense is used most often in the passage?\nA) Present Simple\nB) Present Continuous\nC) Past Simple\nD) Present Perfect\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "A"
+                },
+                {
+                    "text": "Question 13: Choose the word that is a synonym of \"regulate\" as used in the text.\nA) Destroy\nB) Control\nC) Celebrate\nD) Ignore\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "B"
+                },
+                {
+                    "text": "Question 14: In the sentence \"Local communities are now involved in re‑planting programmes...\", the verb \"are involved\" is in which voice?\nA) Active\nB) Passive\nC) Subjunctive\nD) Imperative\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "B"
+                },
+                {
+                    "text": "Question 15: Which of the following best summarizes the passage?\nA) Deforestation has no impact on climate.\nB) The Amazon rainforest is thriving without human help.\nC) Deforestation threatens the climate, but re‑planting offers hope.\nD) Local communities oppose any kind of forest restoration.\n",
+                    "type": "multiple_choice",
+                    "correct_answer": "C"
+                }
+            ],
+            "answers": [
+                "17%",
+                "B",
+                "C",
+                "B",
+                "B",
+                "C",
+                "A",
+                "C",
+                "B",
+                "C",
+                "B",
+                "A",
+                "B",
+                "B",
+                "C"
+            ]
+        },
+        {
+            "questions": [
+                {
+                    "text": "Open‑ended: Explain why using the Present Perfect with \"since\" is appropriate when talking about an action that started in the past and continues to now. (Give an example related to ecology.)",
+                    "type": "open_ended",
+                    "correct_answer": "Because \"since\" introduces the specific point in time when the action began; the Present Perfect shows it started then and still applies. Example: \"Scientists have studied coral bleaching since 1995.\""
+                },
+                {
+                    "text": "Open‑ended: Write a short paragraph (3‑4 sentences) describing a daily habit that helps the environment, using at least three Present Simple verbs.",
+                    "type": "open_ended",
+                    "correct_answer": "A suitable answer may be: \"Every morning I walk to work instead of driving. I bring my own reusable water bottle and I always turn off lights when I leave a room. These small actions reduce waste and save energy.\""
+                },
+                {
+                    "text": "Open‑ended: Using the vocabulary list (forest, carbon footprint, wildlife, sustainable, pollution), compose a sentence in the Present Perfect describing a recent achievement in your town.",
+                    "type": "open_ended",
+                    "correct_answer": "Our town has reduced its carbon footprint by 20% through sustainable transport initiatives."
+                },
+                {
+                    "text": "Open‑ended: Provide a Present Simple sentence that states a general fact about the relationship between trees and air quality.",
+                    "type": "open_ended",
+                    "correct_answer": "Trees filter pollutants and produce oxygen, improving air quality."
+                },
+                {
+                    "text": "Open‑ended: Convert the following Present Simple sentence into Present Perfect: \"The government invests in renewable energy projects.\"",
+                    "type": "open_ended",
+                    "correct_answer": "The government has invested in renewable energy projects."
+                },
+                {
+                    "text": "Open‑ended: Give an example of a negative Present Perfect sentence about pollution.",
+                    "type": "open_ended",
+                    "correct_answer": "The river has not been cleaned of plastic waste yet."
+                },
+                {
+                    "text": "Open‑ended: Write a Present Simple question asking someone about their recycling habits.",
+                    "type": "open_ended",
+                    "correct_answer": "Do you recycle paper and glass at home?"
+                },
+                {
+                    "text": "Open‑ended: Using the word \"habitat\", write a Present Perfect sentence about an endangered species.",
+                    "type": "open_ended",
+                    "correct_answer": "The giant panda's natural habitat has dwindled dramatically over the past decades."
+                },
+                {
+                    "text": "Open‑ended: State a Present Simple fact about the Earth's water cycle.",
+                    "type": "open_ended",
+                    "correct_answer": "Water evaporates from oceans, forms clouds, and falls as precipitation."
+                },
+                {
+                    "text": "Open‑ended: Create a Present Perfect sentence that includes the adverb \"already\" and refers to a community garden.",
+                    "type": "open_ended",
+                    "correct_answer": "The neighbourhood has already planted a community garden on the vacant lot."
+                },
+                {
+                    "text": "Open‑ended: Provide a Present Simple sentence describing what a solar panel does.",
+                    "type": "open_ended",
+                    "correct_answer": "A solar panel converts sunlight into electricity."
+                },
+                {
+                    "text": "Open‑ended: Write a Present Perfect sentence using \"ever\" to talk about experiencing nature.",
+                    "type": "open_ended",
+                    "correct_answer": "I have never ever seen a forest fire up close."
+                },
+                {
+                    "text": "Open‑ended: Formulate a Present Simple negative sentence about using disposable plastic bags.",
+                    "type": "open_ended",
+                    "correct_answer": "People do not use disposable plastic bags as often as they used to."
+                },
+                {
+                    "text": "Open‑ended: Using \"for\" and the Present Perfect, say how long your city has been promoting recycling.",
+                    "type": "open_ended",
+                    "correct_answer": "Our city has been promoting recycling for ten years."
+                },
+                {
+                    "text": "Open‑ended: Write a short description (2‑3 sentences) of a protected area, using at least two vocabulary words and a mix of Present Simple and Present Perfect.",
+                    "type": "open_ended",
+                    "correct_answer": "The wildlife reserve protects dozens of endangered species. It has preserved the forest ecosystem for generations, and it continues to attract researchers."
+                }
+            ],
+            "answers": [
+                "Because \"since\" introduces the specific point in time when the action began; the Present Perfect shows it started then and still applies. Example: \"Scientists have studied coral bleaching since 1995.\"",
+                "A suitable answer may be: \"Every morning I walk to work instead of driving. I bring my own reusable water bottle and I always turn off lights when I leave a room. These small actions reduce waste and save energy.\"",
+                "Our town has reduced its carbon footprint by 20% through sustainable transport initiatives.",
+                "Trees filter pollutants and produce oxygen, improving air quality.",
+                "The government has invested in renewable energy projects.",
+                "The river has not been cleaned of plastic waste yet.",
+                "Do you recycle paper and glass at home?",
+                "The giant panda's natural habitat has dwindled dramatically over the past decades.",
+                "Water evaporates from oceans, forms clouds, and falls as precipitation.",
+                "The neighbourhood has already planted a community garden on the vacant lot.",
+                "A solar panel converts sunlight into electricity.",
+                "I have never ever seen a forest fire up close.",
+                "People do not use disposable plastic bags as often as they used to.",
+                "Our city has been promoting recycling for ten years.",
+                "The wildlife reserve protects dozens of endangered species. It has preserved the forest ecosystem for generations, and it continues to attract researchers."
+            ]
+        }
+    ]
+}
