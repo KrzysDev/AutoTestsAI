@@ -31,6 +31,7 @@ class RetrivedChunk(BaseModel):
     score: float
 
 class Question(BaseModel):
+    instruction : str
     text : str
     type : Literal["multiple_choice", "open_ended"]
     correct_answer : str

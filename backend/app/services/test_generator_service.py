@@ -30,20 +30,21 @@ class TestGeneratorService:
             
         return unique_chunks
     
-    def __generate_plan(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, retrieved_chunks: list[RetrivedChunk]) -> str:
-        return self.ai_service.ask_ollama_cloud(self.prompts.get_plan_test_creation_prompt(language, level, topic, retrieved_chunks), 'gpt-oss:120b')
+    def generate_plan(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, retrieved_chunks: list[RetrivedChunk], group_count: int) -> str:
+        return self.ai_service.ask_ollama_cloud(self.prompts.get_plan_test_creation_prompt(language, level, topic, retrieved_chunks, group_count), 'gpt-oss:120b')
     
-    def __generate_group(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, plan: str) -> str:
+    def generate_group(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, plan: str) -> str:
         return self.ai_service.ask_ollama_cloud(self.prompts.get_test_creation_prompt(language, level, topic, plan), 'gpt-oss:120b')
 
-    def __generate_another_group(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, previous_group: Group) -> str:
-        return self.ai_service.ask_ollama_cloud(self.prompts.get_another_group_prompt(language, level, previous_group.model_dump_json(), topic), 'gpt-oss:120b')
+    def generate_another_group(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, plan: str, previous_group: Group) -> str:
+        return self.ai_service.ask_ollama_cloud(self.prompts.get_another_group_prompt(language, level, topic, plan, previous_group), 'gpt-oss:120b')
 
-    def generate_all_groups(self, 
+    def generate_all_groups(
+        self, 
         language: str, 
         level: str, 
         topic: str,
-        group_count: int = 2) -> Test:
+        group_count: int = 2 ) -> Test:
 
         queries = self.__generate_query_requests(language, level, topic)
         print("queries:", queries)
@@ -53,11 +54,11 @@ class TestGeneratorService:
         print("retrieved chunks:", retrieved_chunks)
         print("========================================================")
 
-        plan = self.__generate_plan(language, level, topic, retrieved_chunks)
+        plan = self.generate_plan(language, level, topic, retrieved_chunks, group_count)
         print("plan:", plan)
         print("========================================================")
 
-        first_group_raw = self.__generate_group(language, level, topic, plan)
+        first_group_raw = self.generate_group(language, level, topic, plan)
         print("first group raw:", first_group_raw)
         print("========================================================")
 
@@ -71,7 +72,7 @@ class TestGeneratorService:
                 if count == 0:
                     group = Group.model_validate_json(first_group_raw)
                 else:
-                    raw = self.__generate_another_group(language, level, topic, all_groups[-1])
+                    raw = self.generate_another_group(language, level, topic, plan, all_groups[-1])
                     group = Group.model_validate_json(raw)
 
                 all_groups.append(group)

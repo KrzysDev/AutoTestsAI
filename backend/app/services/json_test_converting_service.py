@@ -38,10 +38,16 @@ class JsonTestConvertingService:
             for i, question in enumerate(questions, start=1):
                 if isinstance(question, dict):
                     q_text = question.get("text", "")
+                    q_instruction = question.get("instruction", "")
                 else:
                     q_text = getattr(question, "text", "")
+                    q_instruction = getattr(question, "instruction", "")
 
-                pdf.multi_cell(0, 10, f"Ex{i}:\n{q_text}")
+                if q_instruction:
+                    pdf.multi_cell(0, 10, f"Ex{i}. {q_instruction}\n{q_text}")
+                else:
+                    pdf.multi_cell(0, 10, f"Ex{i}:\n{q_text}")
+                
                 pdf.ln(5)
 
             pdf.add_page()

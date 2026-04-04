@@ -42,7 +42,7 @@ def main():
         TimeElapsedColumn()
     ) as progress:
         task = progress.add_task("Generating test...", total=1)
-        test = service.generate_test(language, level, topic, group_count, question_count)
+        test = service.generate_all_groups(language, level, topic, group_count)
         progress.update(task, advance=1)
 
     root = tk.Tk()
