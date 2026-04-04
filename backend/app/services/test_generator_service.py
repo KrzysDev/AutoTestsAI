@@ -34,7 +34,7 @@ class TestGeneratorService:
             
         return unique_chunks
 
-    def generate_test(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, group_count: Literal[1,2,3,4] = 2) -> Test:
+    def generate_test(self, language: Literal["en", "de"] = "en", level: Literal["A1", "A2", "B1", "B2", "C1", "C2"] = "B2", topic: str = "-", group_count: Literal[1,2,3,4] = 2):
         classification = self.ai_service.classify_text(topic)
 
         if classification == "test":
@@ -76,7 +76,7 @@ class TestGeneratorService:
             return json_answer
             
         else:
-            print("no plan, because question is general")
+            return self.ai_service.ask_ollama_cloud(self.prompts.get_general_question_prompt(topic))
         
     def test_planning(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str) -> Test:
         plan = self.__plan_test(language, level, topic)
