@@ -1,7 +1,7 @@
-from backend.app.services.ai_service import AiService
-from backend.app.models.prompts_v2 import SystemPrompts
-from backend.app.models.schemas import RetrivedChunk, Group, Test
-from backend.app.services.search_service import SearchService
+from app.services.ai_service import AiService
+from app.models.prompts_v2 import SystemPrompts
+from app.models.schemas import RetrivedChunk, Group, Test
+from app.services.search_service import SearchService
 from typing import Literal
 import json
 
