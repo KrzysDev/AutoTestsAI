@@ -46,7 +46,7 @@ class DataExtractionService:
                     path = rf"C:\Users\USER\Desktop\Ai Test Generator Dataset-20260321T142317Z-1-001\vocabulary_dataset\tiles_{self.vocab_count}\\{filename}"
                     answer = self.ai_service.ask_ollama_local_with_photo(prompts.get_data_extraction_prompt(language), path)
                     files_elapsed += 1
-                    corrected_answer = self.ai_service.ask_ollama_cloud(prompts.get_data_correction_prompt(language, answer))
+                    corrected_answer = self.ai_service.ask_ollama_cloud(prompts.get_data_correction_prompt(language, answer), model='gpt-oss:120b')
                     all_answers.append(corrected_answer)
 
         self.vocab_count += 1
@@ -61,7 +61,7 @@ class DataExtractionService:
             if filename.endswith(".jpg") or filename.endswith(".png"):
                 path = rf"{photo_path}\\{filename}"
                 answer = self.ai_service.ask_ollama_local_with_photo(prompts.get_grammar_extraction_prompt(language), path)
-                corrected_answer = self.ai_service.ask_ollama_cloud(prompts.get_data_grammar_correction_prompt(language, answer))
+                corrected_answer = self.ai_service.ask_ollama_cloud(prompts.get_data_grammar_correction_prompt(language, answer), model='gpt-oss:120b')
                 all_answers.append(corrected_answer)
 
         self.gram_count += 1

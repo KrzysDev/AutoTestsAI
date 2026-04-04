@@ -11,9 +11,9 @@ class ChunkMetadata(BaseModel):
 class Chunk(BaseModel):
     id: str
 
-    section: Literal["vocabulary", "grammar"]
+    section: Literal["vocabulary", "grammar", "listening", "reading"]
 
-    language: Literal["en", "de"]
+    language: Literal["en", "de", "eng", "ger"]
 
     level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]
 
@@ -31,6 +31,7 @@ class RetrivedChunk(BaseModel):
     score: float
 
 class Question(BaseModel):
+    instruction : str
     text : str
     type : Literal["multiple_choice", "open_ended"]
     correct_answer : str

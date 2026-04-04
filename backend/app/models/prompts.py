@@ -162,7 +162,7 @@ class SystemPrompts:
             -lista zapytań ma byc zdaniami (MAKSYMALNIE 4)
             -kazde zdanie musi byc oddzielone znakiem nowej linii (innymi slowy kazde ma byc w innej linii)
         """
-    def get_test_generation_prompt(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], data: list[Chunk], plan :str, teachers_request: str, group_count: int) -> str:
+    def get_test_generation_prompt(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], data: list[Chunk], plan :str, teachers_request: str, group_count: int, question_count: int) -> str:
         return f"""
             ##CECHY
             Jesteś specjalistą od układania testów językowych z języka {"angielskiego" if language == "en" else "niemieckiego"} na poziomie {level}. Będziesz zajmowaniem się układaniem testów na podstawie przesłanego ci kontekstu oraz prośby nauczyciela w odpowiednim formacie JSON.
@@ -178,6 +178,9 @@ class SystemPrompts:
 
             ##ILOSC GRUP DO STWORZENIA
             {group_count}
+
+            ##ILE PYTAN W JEDNEJ GRUPIE:
+            {question_count}
 
             ##WYMAGANA STRUKTURA JSON
             {json.dumps(Test.model_json_schema(), indent=2)}

@@ -35,7 +35,7 @@ def ask_ollama_cloud(text: str, request: Request):
     if not text.strip():
         raise HTTPException(status_code=400, detail="Input text cannot be empty")
     try:
-        return ai_service.ask_ollama_cloud(text)
+        return ai_service.ask_ollama_cloud(text, model='gpt-oss:120b')
     except ollama.ResponseError as e:
         raise HTTPException(status_code=e.status_code, detail=f"Ollama error: {e.error}")
     except Exception as e:

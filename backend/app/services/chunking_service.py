@@ -1,4 +1,6 @@
+import re
 from backend.app.models.schemas import Chunk, ChunkMetadata
+
 class ChunkingService:
     def __init__(self):
         pass
@@ -41,13 +43,12 @@ class ChunkingService:
             chunks_elapsed += 1
 
         
-        return chunks
 
+    def chunk_matura(self, text: str) -> list[str]:
+        text = re.sub(r"Więcej arkuszy znajdziesz na stronie: arkusze\.pl", "", text)
+        text = re.sub(r"Strona \d+ z \d+", "", text)
+        text = re.sub(r"[A-Z0-9]+-[A-Z0-9]+-[0-9]+", "", text)
+        chunks = re.split(r"(?i)(?=Zadanie\s+\d+)", text)
+        cleaned_chunks = [chunk.strip() for chunk in chunks if chunk.strip()]
         
-
-       
-        
-
-       
-
-       
+        return cleaned_chunks
