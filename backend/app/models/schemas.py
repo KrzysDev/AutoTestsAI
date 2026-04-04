@@ -11,9 +11,9 @@ class ChunkMetadata(BaseModel):
 class Chunk(BaseModel):
     id: str
 
-    section: Literal["vocabulary", "grammar"]
+    section: Literal["vocabulary", "grammar", "listening", "reading"]
 
-    language: Literal["en", "de"]
+    language: Literal["en", "de", "eng", "ger"]
 
     level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]
 
