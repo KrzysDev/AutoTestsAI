@@ -66,7 +66,7 @@ class AiService:
         )
         return response['message']['content']
 
-    def ask_ollama_cloud(self, text: str):
+    def ask_ollama_cloud(self, text: str, model: str):
         message = [
             {
                 'role': 'user',
@@ -75,11 +75,15 @@ class AiService:
         ]
 
         parts = []
-        for part in self.cloud_client.chat('qwen3-vl:235b-cloud', messages=message, stream=True):
-            parts.append(part['message']['content'])
+        try:
+            for part in self.cloud_client.chat(model, messages=message, stream=True):
+                parts.append(part['message']['content'])
+        except Exception as e:
+            print(e)
+            return "Error: Could not connect to Ollama"
         return "".join(parts)
     
-    def ask_ollama_cloud_with_photo(self, text: str, photo_path: str):
+    def ask_ollama_cloud_with_photo(self, text: str, photo_path: str, model: str):
         with open(photo_path, "rb") as f:
             photo_data = f.read()
 
@@ -91,5 +95,5 @@ class AiService:
             },
         ]
 
-        response = self.cloud_client.chat('qwen3-vl:235b-cloud', messages=message)
+        response = self.cloud_client.chat(model, messages=message)
         return response['message']['content']

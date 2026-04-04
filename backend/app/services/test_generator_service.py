@@ -47,7 +47,7 @@ class TestGeneratorService:
 
             prompt = self.prompts.get_test_generation_prompt(language, level, data, plan, topic, group_count)
             
-            answer = self.ai_service.ask_ollama_cloud(prompt)
+            answer = self.ai_service.ask_ollama_cloud(prompt, model='gpt-oss:120b')
 
             attempts = 0
             json_answer = None
@@ -55,7 +55,7 @@ class TestGeneratorService:
             ##TODO: smaller models make planning pretty well, so we can send requests to them in the future.
             
             while attempts < 4:
-                validated_answer = self.ai_service.ask_ollama_cloud(self.prompts.get_test_validation_prompt(answer))    
+                validated_answer = self.ai_service.ask_ollama_cloud(self.prompts.get_test_validation_prompt(answer), model='gpt-oss:120b')    
                 
                 try:
                     json_answer = json.loads(validated_answer)
@@ -69,14 +69,11 @@ class TestGeneratorService:
                     
             if json_answer is None:
                 raise Exception("Nie udało się uzyskać poprawnego formatu JSON po 4 próbach.")
-            
-            with open("test.json", "w", encoding="utf-8") as f:
-                json.dump(json_answer, f, ensure_ascii=False, indent=4)
 
             return json_answer
             
         else:
-            return self.ai_service.ask_ollama_cloud(self.prompts.get_general_question_prompt(topic))
+            return self.ai_service.ask_ollama_cloud(self.prompts.get_general_question_prompt(topic), model='gpt-oss:120b')
         
     def test_planning(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str) -> Test:
         plan = self.__plan_test(language, level, topic)
