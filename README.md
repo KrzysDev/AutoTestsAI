@@ -137,6 +137,12 @@ Contributions are welcome! Feel free to open an issue or submit a pull request.
 
 ---
 
+---
+
+##💫PLANS FOR FUTURE
+- website instead of application with pretty frontend
+- deployment of backend
+
 ## 📜 License
 
 All rights reserved.
