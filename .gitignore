@@ -1,7 +1,6 @@
 venv/*
 */venv/*
 .env
-
 # Python compilation files
 __pycache__/
 *.py[cod]
