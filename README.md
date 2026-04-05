@@ -29,7 +29,7 @@ My sister and my mom are teachers, and I've seen how they prepare tests for thei
 
 **No Python or programming environment required.**
 
-### [⬇️ Download AutoTests AI](./AutoTestsAI.zip)
+### [⬇️ Download AutoTests AI](https://drive.google.com/file/d/1gZA_RZXuiJFlZiKH7dMfKwoCYEyGQfSz/view?usp=sharing)
 
 1. Download and unzip **AutoTestsAI.zip**
 2. Open the extracted folder
