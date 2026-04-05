@@ -1,5 +1,5 @@
 import re
-from backend.app.models.schemas import Chunk, ChunkMetadata
+from app.models.schemas import Chunk, ChunkMetadata
 
 class ChunkingService:
     def __init__(self):

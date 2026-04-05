@@ -60,4 +60,11 @@ class TeacherRequestClassification(BaseModel):
                 raise ValueError(f"Classification must be either 'general' or 'test', received: '{v}'")
         return v.lower()
 
+
+class TestGeneratorRequest(BaseModel):
+    language: Literal["en", "de", "eng", "ger"]
+    level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]
+    topic: str
+    group_count: int = 2
+
     

@@ -17,7 +17,7 @@ def import_data():
     )
     embeddings_service = EmbeddingsService()
     
-    collection_name = "Language Collection"
+    collection_name = "Language Data v2"
 
     base_path = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.abspath(os.path.join(base_path, '..', '..'))

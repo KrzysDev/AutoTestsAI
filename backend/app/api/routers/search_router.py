@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 import ollama
-from app.services.search_service import SearchService
+from backend.app.services.search_service import SearchService
 
 router = APIRouter()
 

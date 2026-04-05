@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 import ollama
-from app.services.ai_service import AiService
+from backend.app.services.ai_service import AiService
 from datetime import datetime
 from collections import defaultdict
 
