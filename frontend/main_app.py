@@ -13,6 +13,8 @@ import requests
 import tkinter as Tk
 from tkinter import filedialog
 
+from backend.app.main import main
+
 console = Console()
 
 # ── Custom questionary style ──────────────────────────────────────────────────
@@ -284,8 +286,13 @@ def navigate_menu() -> None:
         console.print()
         sys.exit(0)
 
+def start_backend():
+    import uvicorn
+    uvicorn.run("backend.app.main:app --reload")
+
 
 def main() -> None:
+    start_backend()
     while True:
         navigate_menu()
 

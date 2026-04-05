@@ -63,11 +63,6 @@ TestGenerator/
 | PDF export | fpdf2 |
 
 ---
-
-## 🚀 Want to try out the app?
-
-
-
 ## 🔍 How to see whats inside...
 
 ### Installation
@@ -93,10 +88,7 @@ uvicorn backend.app.main:app --reload
 
 4. **Start the frontend**
 
-```bash
-# from root directory
-python frontend/main_app.py
-```
+open .exe called "main_app.exe" in frontend/dist folder
 
 ## 📐 How It Works
 
@@ -124,4 +116,6 @@ Krzysztof Sokołowski © 2026
 ## 👤 Author
 
 **KrzysDev** — [github.com/KrzysDev](https://github.com/KrzysDev)
+
+PS. I wanted to make a backend but i had a lot of issues with deployment. So sorry for long way to get here.
 
