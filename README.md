@@ -1,4 +1,4 @@
-# 🧠 AITestGenerator
+# 🧠 AutoTests AI
 
 > AI-powered test generator designed for language teachers
 
@@ -19,7 +19,6 @@ My sister and my mom are teachers, and I’ve seen how they prepare tests for th
 
 - 🤖 AI-generated tests based on teacher prompts (topic, level, number of groups)
 - 📚 RAG (Retrieval-Augmented Generation) using Qdrant vector database and sentence-transformers
-- 🏫 Supports multiple question types: `multiple_choice` and `open_ended`
 - 📄 Exports tests to PDF using fpdf2
 - 🌐 REST API built with FastAPI
 - 🖥️ Frontend interface for test generation and preview
