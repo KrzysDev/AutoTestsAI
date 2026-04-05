@@ -11,7 +11,7 @@
 The system is built around an **agentic pipeline**: the AI first creates a plan of action, retrieves relevant content using semantic search, and then generates questions tailored to the student's proficiency level (e.g. B2).
 
 ## The problem
-My sister and my mom are teachers, and I’ve seen how they prepare tests for their students. It takes a lot of time and is quite boring and repetitive, especially when they need to create multiple versions of the same test to prevent cheating. I realized I could help them by creating a tool that automatically generates such tests. If programmers can vibe-code and then review their code, why can't teachers vibe-create and then review tests?
+My sister and my mom are teachers, and I've seen how they prepare tests for their students. It takes a lot of time and is quite boring and repetitive, especially when they need to create multiple versions of the same test to prevent cheating. I realized I could help them by creating a tool that automatically generates such tests. If programmers can vibe-code and then review their code, why can't teachers vibe-create and then review tests?
 
 ---
 
@@ -21,7 +21,62 @@ My sister and my mom are teachers, and I’ve seen how they prepare tests for th
 - 📚 RAG (Retrieval-Augmented Generation) using Qdrant vector database and sentence-transformers
 - 📄 Exports tests to PDF using fpdf2
 - 🌐 REST API built with FastAPI
-- 🖥️ Mock-Frontend cli interface
+- 🖥️ CLI interface
+
+---
+
+## 🚀 Quick Start — Just want to use the app?
+
+**No Python or programming environment required.**
+
+### [⬇️ Download AutoTests AI](./AutoTestsAI.zip)
+
+1. Download and unzip **AutoTestsAI.zip**
+2. Open the extracted folder
+3. Double-click **main_app.exe**
+4. That's it — the app starts automatically! 🎉
+
+> ✅ Works on Windows without any installation.
+
+---
+
+## 🛠️ Developer Setup — Running from source
+
+For developers who want to run or modify the project locally.
+
+### Requirements
+
+- Python 3.12+
+- Ollama running locally or accessible via API
+- Qdrant instance
+
+### Installation
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/KrzysDev/AITestGenerator.git
+cd AITestGenerator
+```
+
+2. **Install dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+3. **Start the backend**
+
+```bash
+# from root directory
+uvicorn backend.app.main:app --reload
+```
+
+4. **Start the frontend**
+
+```bash
+python frontend/main_app.py
+```
 
 ---
 
@@ -38,17 +93,29 @@ TestGenerator/
 │       └── main.py         # Entry point of the backend application
 ├── frontend/               # Frontend 
 │   ├── main_app.py         # Main file of the frontend application
-│   └── main_app.spec       # PyInstaller configuration (to build execa)
-├── frontend_mock/          # Mock/CLI version of the frontend (according to the project history)
+│   └── main_app.spec       # PyInstaller configuration (to build exe)
+├── frontend_mock/          # Mock/CLI version of the frontend
 ├── scripts/                # Helper scripts
 │   ├── tests/              # Tests for scripts
 │   └── tools/              # Utility tools
+├── AutoTestsAI.zip         # Ready-to-use compiled application
 ├── venv/                   # Python virtual environment
-├── .gitignore              # Files ignored by Git
-├── README.md               # Project documentation
-└── requirements.txt        # List of Python dependencies
-
+├── .gitignore              
+├── README.md               
+└── requirements.txt        
 ```
+
+---
+
+## 📐 How It Works
+
+1. The **teacher** submits a request via the UI (e.g. *"Generate a grammar test on past tenses for B2 students"*).
+2. The **backend** uses sentence-transformers to embed the query and retrieves relevant grammar rules from the **Qdrant** vector database (RAG).
+3. The retrieved chunks and teacher's request are passed to the **LLM** (Ollama) with a structured prompt.
+4. The LLM generates a test in a defined **JSON schema**:
+   - Groups of questions
+   - Each question has: `text`, `type` (`multiple_choice` / `open_ended`), `correct_answer`
+5. The system converts the JSON into a **.pdf** file.
 
 ---
 
@@ -62,43 +129,6 @@ TestGenerator/
 | Vector DB | Qdrant |
 | PDF export | fpdf2 |
 
----
-## 🔍 How to see whats inside...
-
-### Installation
-
-1. **Clone the repository**
-
-```bash
-git clone https://github.com/KrzysDev/AITestGenerator.git
-cd AITestGenerator
-```
-
-2. **Install dependencies**
-
-```bash
-pip install -r requirements.txt
-```
-3. **Start the backend**
-
-```bash
-# from root directory
-uvicorn backend.app.main:app --reload
-```
-
-4. **Start the frontend**
-
-open .exe called "main_app.exe" in frontend/dist folder
-
-## 📐 How It Works
-
-1. The **teacher** submits a request via the UI (e.g. *"Generate a grammar test on past tenses for B2 students"*).
-2. The **backend** uses sentence-transformers to embed the query and retrieves relevant grammar rules from the **Qdrant** vector database (RAG).
-3. The retrieved chunks and teacher's request are passed to the **LLM** (Ollama) with a structured prompt.
-4. The LLM generates a test in a defined **JSON schema**:
-   - Groups of questions
-   - Each question has: `text`, `type` (`multiple_choice` / `open_ended`), `correct_answer`
-5. Then the system converts json into .pdf file.
 ---
 
 ## 🤝 Contributing
@@ -116,6 +146,3 @@ Krzysztof Sokołowski © 2026
 ## 👤 Author
 
 **KrzysDev** — [github.com/KrzysDev](https://github.com/KrzysDev)
-
-PS. I wanted to make a backend but i had a lot of issues with deployment. So sorry for long way to get here.
-
