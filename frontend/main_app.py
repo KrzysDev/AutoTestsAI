@@ -13,9 +13,15 @@ import requests
 import tkinter as Tk
 from tkinter import filedialog
 
-from backend.app.main import main
+from backend.app.main import app
+
+import uvicorn
+import threading
 
 console = Console()
+
+server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=8000, log_level="critical"))
+
 
 # ── Custom questionary style ──────────────────────────────────────────────────
 QSTYLE = Style(
@@ -277,6 +283,7 @@ def navigate_menu() -> None:
     elif choice == "guide":
         print_guide()
     elif choice == "exit" or choice is None:
+        server.should_exit = True
         console.print()
         console.print(Panel(
             "[bold white]Thank you for using [magenta]AutoTests AI[/magenta]! 👋[/]",
@@ -286,13 +293,11 @@ def navigate_menu() -> None:
         console.print()
         sys.exit(0)
 
-def start_backend():
-    import uvicorn
-    uvicorn.run("backend.app.main:app --reload")
 
 
 def main() -> None:
-    start_backend()
+    thread = threading.Thread(target=server.run, daemon=True)
+    thread.start()
     while True:
         navigate_menu()
 

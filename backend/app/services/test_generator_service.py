@@ -47,20 +47,20 @@ class TestGeneratorService:
         group_count: int = 2 ) -> Test:
 
         queries = self.__generate_query_requests(language, level, topic)
-        print("queries:", queries)
-        print("========================================================")
+        #print("queries:", queries)
+        #print("========================================================")
 
         retrieved_chunks = self.__retrive_data(queries)
-        print("retrieved chunks:", retrieved_chunks)
-        print("========================================================")
+        #print("retrieved chunks:", retrieved_chunks)
+        #print("========================================================")
 
         plan = self.generate_plan(language, level, topic, retrieved_chunks, group_count)
-        print("plan:", plan)
-        print("========================================================")
+        #print("plan:", plan)
+        #print("========================================================")
 
         first_group_raw = self.generate_group(language, level, topic, plan)
-        print("first group raw:", first_group_raw)
-        print("========================================================")
+        #print("first group raw:", first_group_raw)
+        #print("========================================================")
 
 
 
