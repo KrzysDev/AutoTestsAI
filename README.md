@@ -65,13 +65,11 @@ TestGenerator/
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Want to try out the app?
 
-### Prerequisites
 
-- Python 3.10+
-- [Ollama](https://ollama.com/) installed and running locally
-- [Qdrant](https://qdrant.tech/) instance (local or cloud)
+
+## 🔍 How to see whats inside...
 
 ### Installation
 
