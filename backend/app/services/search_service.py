@@ -18,7 +18,7 @@ class SearchService:
         query_vector = self.embeddings_service.embed_text(query)
 
         hits = self.client.query_points(
-            collection_name="Language Collection",
+            collection_name="Language Data v2",
             query=query_vector,
             limit=top_k,
         ).points
