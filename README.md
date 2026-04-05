@@ -122,27 +122,6 @@ Follow instructions inside the `frontend/` directory.
 
 ---
 
-## 📄 JSON Output Schema
-
-```json
-{
-  "groups": [
-    {
-      "questions": [
-        {
-          "text": "When ___ you last visit your grandparents?",
-          "type": "multiple_choice",
-          "correct_answer": "did"
-        }
-      ],
-      "answers": ["did", "have", "were", "had"]
-    }
-  ]
-}
-```
-
----
-
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to open an issue or submit a pull request.
