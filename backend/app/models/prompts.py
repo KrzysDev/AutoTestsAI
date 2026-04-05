@@ -1,7 +1,7 @@
 
 from typing import Literal
 import json
-from app.models.schemas import Test, Chunk
+from backend.app.models.schemas import Test, Chunk
 
 class SystemPrompts:
 

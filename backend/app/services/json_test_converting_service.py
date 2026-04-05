@@ -1,6 +1,6 @@
 import os
 from fpdf import FPDF
-from app.models.schemas import Test
+from backend.app.models.schemas import Test
 
 class JsonTestConvertingService:
     def convert_to_pdf(self, test_data: Test | dict) -> bytearray:

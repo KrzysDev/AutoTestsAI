@@ -1,4 +1,4 @@
-from app.models.schemas import RetrivedChunk, Group, Question
+from backend.app.models.schemas import RetrivedChunk, Group, Question
 from typing import Literal
 
 

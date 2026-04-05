@@ -2,8 +2,8 @@ import os
 from ollama import Client
 from dotenv import load_dotenv
 import json
-from app.models.prompts import SystemPrompts
-from app.models.schemas import TeacherRequestClassification, Question
+from backend.app.models.prompts import SystemPrompts
+from backend.app.models.schemas import TeacherRequestClassification, Question
 
 load_dotenv()
 

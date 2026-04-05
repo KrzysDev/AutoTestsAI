@@ -1,8 +1,8 @@
 from qdrant_client import QdrantClient, models
 import os
 from dotenv import load_dotenv
-from app.services.embeddings_service import EmbeddingsService
-from app.models.schemas import RetrivedChunk, Chunk
+from backend.app.services.embeddings_service import EmbeddingsService
+from backend.app.models.schemas import RetrivedChunk, Chunk
 
 load_dotenv()
 
