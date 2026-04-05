@@ -6,7 +6,7 @@
 
 ## 📖 About
 
-**AITestGenerator** is a tool that allows language teachers to automatically generate language tests using AI. Teachers provide a topic or request, and the system retrieves relevant grammar and vocabulary knowledge using RAG system.
+**AutoTests AI** is a tool that allows language teachers to automatically generate language tests using AI. Teachers provide a topic or request, and the system retrieves relevant grammar and vocabulary knowledge using RAG system.
 
 The system is built around an **agentic pipeline**: the AI first creates a plan of action, retrieves relevant content using semantic search, and then generates questions tailored to the student's proficiency level (e.g. B2).
 
