@@ -106,4 +106,22 @@ python frontend/main_app.py
 4. The LLM generates a test in a defined **JSON schema**:
    - Groups of questions
    - Each question has: `text`, `type` (`multiple_choice` / `open_ended`), `correct_answer`
+5. Then the system converts json into .pdf file.
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open an issue or submit a pull request.
+
+---
+
+## 📜 License
+
+All rights reserved.
+
+Krzysztof Sokołowski © 2026
+
+## 👤 Author
+
+**KrzysDev** — [github.com/KrzysDev](https://github.com/KrzysDev)
 
