@@ -44,7 +44,6 @@ TestGenerator/
 │   ├── tests/              # Tests for scripts
 │   └── tools/              # Utility tools
 ├── venv/                   # Python virtual environment
-├── .env                    # Environment variables (e.g. API keys)
 ├── .gitignore              # Files ignored by Git
 ├── README.md               # Project documentation
 └── requirements.txt        # List of Python dependencies
