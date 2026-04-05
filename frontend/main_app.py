@@ -93,10 +93,15 @@ def generate_test() -> None:
         time.sleep(1.5)
         return
 
-    group_count_raw = questionary.text(
+    group_count_raw = questionary.select(
         "How many groups/variants?",
+        choices=[
+            questionary.Choice("1 group",  value="1"),
+            questionary.Choice("2 groups", value="2"),
+            questionary.Choice("3 groups", value="3"),
+            questionary.Choice("4 groups", value="4"),
+        ],
         style=QSTYLE,
-        validate=lambda v: v.isdigit() and int(v) > 0 or "Please enter a positive integer.",
     ).ask()
 
     if group_count_raw is None:

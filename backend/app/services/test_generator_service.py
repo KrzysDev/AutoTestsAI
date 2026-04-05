@@ -64,23 +64,34 @@ class TestGeneratorService:
 
 
 
+        MAX_RETRIES = 3
         count = 0
         all_groups = []
 
         while count < group_count:
-            try:
-                if count == 0:
-                    group = Group.model_validate_json(first_group_raw)
-                else:
-                    raw = self.generate_another_group(language, level, topic, plan, all_groups[-1])
-                    group = Group.model_validate_json(raw)
+            last_error = None
+            for attempt in range(1, MAX_RETRIES + 1):
+                try:
+                    if count == 0:
+                        group = Group.model_validate_json(first_group_raw)
+                    else:
+                        raw = self.generate_another_group(language, level, topic, plan, all_groups[-1])
+                        group = Group.model_validate_json(raw)
 
-                all_groups.append(group)
-                count += 1
-
-            except Exception as e:
-                print(f"Error validating group {count}: {e}")
+                    all_groups.append(group)
+                    count += 1
+                    break
+                except Exception as e:
+                    last_error = e
+                    print(f"Attempt {attempt}/{MAX_RETRIES} for group {count} failed: {e}")
+                    if count == 0 and attempt < MAX_RETRIES:
+                        first_group_raw = self.generate_group(language, level, topic, plan)
+            else:
+                print(f"All {MAX_RETRIES} attempts failed for group {count}. Last error: {last_error}")
                 break
+
+        if not all_groups:
+            raise ValueError("Failed to generate any valid group after multiple retries.")
 
         test = Test(groups=all_groups)
         return test
