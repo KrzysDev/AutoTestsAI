@@ -58,8 +58,8 @@ TestGenerator/
 | Layer | Technology |
 |---|---|
 | Backend | Python, FastAPI, Uvicorn |
-| AI / LLM | Ollama (local LLM) |
-| Embeddings | sentence-transformers, HuggingFace |
+| AI / LLM | Ollama (API) |
+| Embeddings | sentence-transformers |
 | Vector DB | Qdrant |
 | PDF export | fpdf2 |
 
