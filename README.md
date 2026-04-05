@@ -44,7 +44,6 @@ TestGenerator/
 │   ├── tests/              # Tests for scripts
 │   └── tools/              # Utility tools
 ├── venv/                   # Python virtual environment
-├── .env                    # Environment variables (e.g. API keys)
 ├── .gitignore              # Files ignored by Git
 ├── README.md               # Project documentation
 └── requirements.txt        # List of Python dependencies
@@ -103,11 +102,11 @@ python frontend/main_app.py
 
 1. The **teacher** submits a request via the UI (e.g. *"Generate a grammar test on past tenses for B2 students"*).
 2. The **backend** uses sentence-transformers to embed the query and retrieves relevant grammar rules from the **Qdrant** vector database (RAG).
-3. The retrieved chunks and teacher's request are passed to the **local LLM** (Ollama) with a structured prompt.
+3. The retrieved chunks and teacher's request are passed to the **LLM** (Ollama) with a structured prompt.
 4. The LLM generates a test in a defined **JSON schema**:
    - Groups of questions
    - Each question has: `text`, `type` (`multiple_choice` / `open_ended`), `correct_answer`
-5. Then the system converts json into pdf file.
+5. Then the system converts json into .pdf file.
 
 ---
 
