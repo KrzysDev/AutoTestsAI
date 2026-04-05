@@ -21,25 +21,34 @@ My sister and my mom are teachers, and I’ve seen how they prepare tests for th
 - 📚 RAG (Retrieval-Augmented Generation) using Qdrant vector database and sentence-transformers
 - 📄 Exports tests to PDF using fpdf2
 - 🌐 REST API built with FastAPI
-- 🖥️ Frontend interface for test generation and preview
-- 🧩 Modular architecture: `backend/`, `frontend/`, `frontend_mock/`, `scripts/`
+- 🖥️ Mock-Frontend cli interface
 
 ---
 
 ## 🗂️ Project Structure
 
 ```
-AITestGenerator/
-├── backend/          # FastAPI server, RAG pipeline, LLM integration
-├── frontend/         # Main frontend application
-├── frontend_mock/    # Mock frontend for development/testing
-├── scripts/          # Utility scripts (e.g. database seeding)
-├── prompt.txt        # Example system prompt used for test generation
-├── output.txt        # Example LLM output
-├── answer.txt        # Example answer key
-├── test.pdf          # Example generated PDF test
-├── requirements.txt  # Python dependencies
-└── .gitignore
+TestGenerator/
+├── backend/                # Backend (FastAPI)
+│   └── app/
+│       ├── api/            # API endpoints and controllers
+│       ├── core/           # Configuration, settings, security
+│       ├── models/         # Data models (SQLAlchemy/Pydantic)
+│       ├── services/       # Business logic of the project
+│       └── main.py         # Entry point of the backend application
+├── frontend/               # Frontend 
+│   ├── main_app.py         # Main file of the frontend application
+│   └── main_app.spec       # PyInstaller configuration (to build execa)
+├── frontend_mock/          # Mock/CLI version of the frontend (according to the project history)
+├── scripts/                # Helper scripts
+│   ├── tests/              # Tests for scripts
+│   └── tools/              # Utility tools
+├── venv/                   # Python virtual environment
+├── .env                    # Environment variables (e.g. API keys)
+├── .gitignore              # Files ignored by Git
+├── README.md               # Project documentation
+└── requirements.txt        # List of Python dependencies
+
 ```
 
 ---
@@ -53,8 +62,6 @@ AITestGenerator/
 | Embeddings | sentence-transformers, HuggingFace |
 | Vector DB | Qdrant |
 | PDF export | fpdf2 |
-| Data validation | Pydantic v2 |
-| HTTP client | httpx, requests |
 
 ---
 
@@ -80,35 +87,19 @@ cd AITestGenerator
 ```bash
 pip install -r requirements.txt
 ```
-
-3. **Configure environment variables**
-
-Create a `.env` file in the `backend/` directory:
-
-```env
-QDRANT_URL=http://localhost:6333
-OLLAMA_URL=http://localhost:11434
-# Add other config as needed
-```
-
-4. **Seed the vector database** (optional, for first-time setup)
+3. **Start the backend**
 
 ```bash
-python scripts/<seed_script>.py
+# from root directory
+uvicorn backend.app.main:app --reload
 ```
 
-5. **Start the backend**
+4. **Start the frontend**
 
 ```bash
-cd backend
-uvicorn main:app --reload
+# from root directory
+python frontend/main_app.py
 ```
-
-6. **Start the frontend**
-
-Follow instructions inside the `frontend/` directory.
-
----
 
 ## 📐 How It Works
 
@@ -118,28 +109,7 @@ Follow instructions inside the `frontend/` directory.
 4. The LLM generates a test in a defined **JSON schema**:
    - Groups of questions
    - Each question has: `text`, `type` (`multiple_choice` / `open_ended`), `correct_answer`
-5. The test can be **exported to PDF** and distributed to students.
-
----
-
-## 📄 JSON Output Schema
-
-```json
-{
-  "groups": [
-    {
-      "questions": [
-        {
-          "text": "When ___ you last visit your grandparents?",
-          "type": "multiple_choice",
-          "correct_answer": "did"
-        }
-      ],
-      "answers": ["did", "have", "were", "had"]
-    }
-  ]
-}
-```
+5. Then the system converts json into pdf file.
 
 ---
 
@@ -151,7 +121,9 @@ Contributions are welcome! Feel free to open an issue or submit a pull request.
 
 ## 📜 License
 
-This project does not currently specify a license. Please contact the author for usage permissions.
+All rights reserved.
+
+Krzysztof Sokołowski © 2026
 
 ---
 
