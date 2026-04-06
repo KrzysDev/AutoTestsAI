@@ -24,7 +24,14 @@ class AiService:
             host="http://localhost:11434",
         )
 
-    def ask_ollama_local(self, text: str, model: str):
+    def ask(self, text: str):
+        if os.environ.get('AI_CLOUD_MODE') == 'true':
+            return self.ask_ollama_cloud(text)
+        else:
+            return self.ask_ollama_local(text)
+
+
+    def __ask_ollama_local(self, text: str, model: str):
         response = self.local_client.chat(model=model, messages=[
             {
                 'role': 'user',
@@ -33,7 +40,7 @@ class AiService:
         ])
         return response['message']['content']
 
-    def classify_text(self, text: str):
+    def __classify_text(self, text: str):
         message = [
             {
                 'role': 'user',
@@ -49,7 +56,7 @@ class AiService:
 
         return classification.classification
 
-    def ask_ollama_local_with_photo(self, text: str, photo_path: str):
+    def __ask_ollama_local_with_photo(self, text: str, photo_path: str):
         with open(photo_path, "rb") as f:
             photo_data = f.read()
 
@@ -66,7 +73,7 @@ class AiService:
         )
         return response['message']['content']
 
-    def ask_ollama_cloud(self, text: str, model: str):
+    def __ask_ollama_cloud(self, text: str, model: str):
         message = [
             {
                 'role': 'user',
@@ -83,7 +90,7 @@ class AiService:
             return "Error: Could not connect to Ollama"
         return "".join(parts)
     
-    def ask_ollama_cloud_with_photo(self, text: str, photo_path: str, model: str):
+    def __ask_ollama_cloud_with_photo(self, text: str, photo_path: str, model: str):
         with open(photo_path, "rb") as f:
             photo_data = f.read()
 
