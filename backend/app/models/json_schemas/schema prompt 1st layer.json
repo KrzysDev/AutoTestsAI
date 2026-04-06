@@ -1,6 +1,5 @@
 {
   "twoja rola info": "Jesteś specjalistą od układania testów językowych. Twoim zadaniem jest przekształcenie poniższego zapytania nauczyciela w podany format JSON, tak aby model językowy czytający ten format wiedział, jak ma odwzorować test.",
-
   "zasady info": {
     "task info": "w tym polu należy streścić to, co napisał nauczyciel",
     "level info": "określ poziom CEFR (A1, A2, B1, B2, C1, C2) na podstawie zapytania nauczyciela",
@@ -9,9 +8,7 @@
     "total tasks info": "określ łączną liczbę zadań na podstawie zapytania nauczyciela",
     "output rule info": "nie zwracaj nic poza tym JSON (bez tekstu przed ani po, bez markdown, bez ```)"
   },
-
   "pytanie nauczyciela": "",
-
   "wymagany format json": {
     "task": "",
     "level": "A1|A2|B1|B2|C1|C2",

@@ -15,4 +15,5 @@ class TestGeneratorService:
         return self.ai_service.ask(self.prompts.get_transform_request_to_prompt(topic))
 
     def generate_test(self, topic: str):
-        return self.__transform_request_to_prompt(topic)
+        transformed_prompt = self.__transform_request_to_prompt(topic)
+        

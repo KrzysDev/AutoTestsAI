@@ -1,20 +1,14 @@
 {
     "twoja rola": "",
-
-    "dane": [{ "type": "", "subject": "", "amount": 0 }],
-
     "zasady": "",
-
     "dane z retrival": {
         "Present Simple": "",
-
         "Exercise": [
             {
                 "level": "",
                 "age_group": "",
                 "task_type": "",
                 "topic": "",
-
                 "content": {
                     "instruction": "",
                     "body": "",
@@ -23,11 +17,7 @@
             }
         ]
     },
-
-    "Instructions": [
-
-    ],
-
+    "Instructions": [],
     "wymagany format json": {
         "Question": {
             "content": {

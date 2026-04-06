@@ -31,10 +31,10 @@ class RetrivedChunk(BaseModel):
     score: float
 
 class Question(BaseModel):
-    instruction : str
-    text : str
-    type : Literal["multiple_choice", "open_ended"]
-    correct_answer : str
+    content : {
+        "instruction" : str,
+        "body" : str
+    }
 
 class Group(BaseModel):
     questions : list[Question]
@@ -66,5 +66,32 @@ class TestGeneratorRequest(BaseModel):
     level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]
     topic: str
     group_count: int = 2
+
+class Exercise(BaseModel):
+    type : str
+    subject : str
+    amount : int
+
+
+class AgenticPromptFirstLayer(BaseModel):
+    twoja_rola : str
+    zasady : {
+        "task info" : str,
+        "level info" : str,
+        "target age info" : str,
+        "sections info" : str,
+        "total tasks info" : str,
+        "output rule info" : str
+    }
+    dane_z_retrival : dict[str, Union[str, list[Exercise]]]
+    Instructions : list[str]
+    wymagany_format_json : Question
+
+class AgenticPromptSecondLayer(BaseModel):
+    twoja_rola : str
+    zasady : str
+    dane_z_retrival : dict[str, Union[str, list[Exercise]]]
+    Instructions : list[str]
+    wymagany_format_json : Question
 
     
