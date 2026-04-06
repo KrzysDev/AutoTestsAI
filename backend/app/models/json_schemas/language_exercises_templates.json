@@ -1,0 +1,86 @@
+[
+  {
+    "type": "Listening - multiple choice (A/B/C)",
+    "structure": "2–3 nagrania audio, każde składające się z krótkich dialogów, monologów lub wypowiedzi sytuacyjnych. Po każdym nagraniu znajduje się zestaw 3–5 pytań jednokrotnego wyboru (A/B/C). Nagrania są odtwarzane dwukrotnie.",
+    "types_occuring ": "dialogi codzienne (np. w sklepie, szkole, na lotnisku), krótkie monologi, ogłoszenia publiczne, rozmowy telefoniczne",
+    "characteristics ": "zadania sprawdzają ogólne i szczegółowe rozumienie ze słuchu, wymagają wychwycenia informacji mimo parafraz i synonimów. Często zawierają dystraktory, czyli odpowiedzi częściowo prawdziwe, ale niepełne lub mylące. Nagrania trwają zwykle 1–3 minuty i są naturalne językowo.",
+    "how_to_prepare": "twórz realistyczne dialogi osadzone w codziennych sytuacjach, w których kluczowe informacje są rozproszone. Dodawaj parafrazy oraz odpowiedzi zawierające podobne słowa, ale inne znaczenie."
+  },
+  {
+    "type": "Listening - matching information",
+    "structure": "nagranie audio (często kilka wypowiedzi) oraz lista elementów do dopasowania, np. osoba → opinia, miejsce → czynność, problem → rozwiązanie",
+    "types_occuring ": "wywiady, rozmowy kilku osób, dyskusje, wypowiedzi studentów lub pracowników",
+    "characteristics ": "zadanie wymaga identyfikacji głównej myśli wypowiedzi oraz przypisania jej do odpowiedniego elementu. Informacje są często parafrazowane i rozproszone w tekście. Każda wypowiedź zawiera tylko jedną poprawną odpowiedź, ale z wieloma „pułapkami językowymi”.",
+    "how_to_prepare": "twórz dialogi wieloosobowe, gdzie każdy uczestnik wyraża inną opinię lub doświadczenie. Używaj synonimów i zmieniaj strukturę zdań, aby utrudnić bezpośrednie dopasowanie."
+  },
+  {
+    "type": "Listening - uzupełnianie notatek / formularzy",
+    "structure": "nagranie audio oraz notatki, formularz, tabela lub plan z lukami do uzupełnienia (zwykle 4–8 luk). Odpowiedzi są krótkie: jedno słowo, liczba lub krótka fraza.",
+    "types_occuring ": "ogłoszenia, instrukcje, rozmowy informacyjne, zapowiedzi, komunikaty organizacyjne",
+    "characteristics ": "skupienie na szczegółach takich jak daty, godziny, imiona, ceny czy miejsca. Wymaga dokładnego słuchania konkretnych informacji, często literowania lub przeliczania danych.",
+    "how_to_prepare": "twórz uporządkowane struktury (formularze, tabele) i wplataj w nagranie konkretne informacje w sposób naturalny, ale precyzyjny."
+  },
+  {
+    "type": "Reading - multiple choice (A/B/C/D)",
+    "structure": "1–3 teksty o różnej długości, po których następuje zestaw 4 odpowiedzi do każdego pytania (A–D). Łącznie zazwyczaj 6–8 pytań.",
+    "types_occuring ": "artykuły prasowe, blogi, recenzje, e-maile, teksty informacyjne",
+    "characteristics ": "zadanie sprawdza rozumienie globalne i szczegółowe tekstu. Odpowiedzi są silnie parafrazowane, a poprawna odpowiedź nie jest kopiowana dosłownie z tekstu. Często występują dystraktory oparte na częściowej zgodności z treścią.",
+    "how_to_prepare": "pisz spójne teksty z wyraźną strukturą i logicznymi akapitami. Twórz odpowiedzi, które brzmią prawdopodobnie, ale zawierają subtelne różnice znaczeniowe."
+  },
+  {
+    "type": "Reading - dopasowywanie nagłówków",
+    "structure": "tekst podzielony na kilka akapitów (zwykle 5–7) oraz lista nagłówków (A–H), z których każdy opisuje główną ideę akapitu.",
+    "types_occuring ": "artykuły popularnonaukowe, teksty blogowe, reportaże",
+    "characteristics ": "każdy akapit zawiera jedną główną myśl, a nagłówki są jej parafrazą. Zadanie wymaga umiejętności syntezy informacji i rozpoznawania tematu przewodniego.",
+    "how_to_prepare": "twórz teksty z wyraźnie oddzielonymi akapitami, gdzie każdy ma tylko jeden główny temat. Następnie przygotuj nagłówki, które są podobne znaczeniowo, ale nie identyczne."
+  },
+  {
+    "type": "Reading - uzupełnianie luk (zdania)",
+    "structure": "tekst z brakującymi zdaniami (lukami oznaczonymi numerami) oraz lista zdań do wstawienia (A–G). Jedno zdanie jest zbędne.",
+    "types_occuring ": "teksty narracyjne, artykuły informacyjne, opisy wydarzeń",
+    "characteristics ": "zadanie sprawdza spójność logiczną i gramatyczną tekstu. Kluczowe są spójniki, zaimki oraz odniesienia między zdaniami (np. this, they, it).",
+    "how_to_prepare": "twórz teksty z wyraźnymi przerwami logicznymi i zdaniami, które łączą się poprzez odniesienia gramatyczne i semantyczne."
+  },
+  {
+    "type": "Reading - Prawda / Fałsz / Brak informacji",
+    "structure": "tekst oraz zestaw 5–6 zdań, które należy ocenić jako True, False lub Not Given.",
+    "types_occuring ": "artykuły faktograficzne, raporty, wpisy blogowe, teksty informacyjne",
+    "characteristics ": "zadanie wymaga bardzo dokładnego czytania. Kluczowa jest umiejętność rozróżnienia informacji fałszywej od tej, która w ogóle nie została podana. Często pojawiają się subtelne różnice znaczeniowe.",
+    "how_to_prepare": "wprowadzaj do tekstu informacje częściowo sprzeczne lub pomijaj istotne dane, aby wymusić rozróżnienie między False a Not Given."
+  },
+  {
+    "type": "Use of English - uzupełnianie luk (gramatyka/słownictwo)",
+    "structure": "zestaw zdań lub krótki tekst z lukami. Każda luka ma jedną poprawną odpowiedź lub wybór wielokrotny (A–D). Zazwyczaj 8–10 luk.",
+    "types_occuring ": "ćwiczenia gramatyczne w kontekście, teksty użytkowe, mini-artykuły",
+    "characteristics ": "zadanie sprawdza znajomość struktur gramatycznych (czasy, modalne, strony bierne), przyimków oraz kolokacji. Odpowiedzi są często bardzo podobne.",
+    "how_to_prepare": "twórz zdania z jedną brakującą strukturą i przygotuj kilka bardzo podobnych odpowiedzi, aby wymusić dokładną znajomość gramatyki."
+  },
+  {
+    "type": "Use of English - słowotwórstwo",
+    "structure": "tekst z lukami, w których podane są słowa bazowe w nawiasach. Uczeń musi podać poprawnie przekształconą formę słowa.",
+    "types_occuring ": "krótkie teksty informacyjne lub popularnonaukowe",
+    "characteristics ": "zadanie sprawdza znajomość prefiksów, sufiksów oraz zmian części mowy (np. noun → adjective). Wymaga znajomości zaawansowanego słownictwa.",
+    "how_to_prepare": "dobieraj słowa bazowe tak, aby tylko jedna forma była poprawna gramatycznie i znaczeniowo w danym kontekście."
+  },
+  {
+    "type": "Use of English - transformacje zdań",
+    "structure": "para zdań: pierwsze pełne zdanie oraz drugie zdanie z luką i podanym słowem kluczowym. Uczeń musi zachować znaczenie.",
+    "types_occuring ": "zadania gramatyczno-leksykalne wymagające przekształcania struktur",
+    "characteristics ": "zadanie sprawdza znajomość konstrukcji takich jak mowa zależna, tryby warunkowe, inwersje czy strona bierna. Wymaga zachowania identycznego znaczenia przy innej strukturze.",
+    "how_to_prepare": "twórz zdania o tym samym znaczeniu, ale wymagające użycia różnych struktur gramatycznych i jednego słowa kluczowego."
+  },
+  {
+    "type": "Writing - rozprawka (opinion essay / for & against)",
+    "structure": "wypowiedź pisemna 200–250 słów: wstęp, 2–3 akapity rozwinięcia oraz zakończenie. Każdy akapit zawiera jeden główny argument.",
+    "types_occuring ": "formalna wypowiedź argumentacyjna na tematy społeczne, edukacyjne lub technologiczne",
+    "characteristics ": "zadanie sprawdza umiejętność argumentacji, spójności tekstu oraz stosowania języka formalnego. Wymaga użycia linkers (however, moreover, therefore).",
+    "how_to_prepare": "wybieraj tematy dyskusyjne i wymagaj przedstawienia 2–3 argumentów wraz z przykładami oraz wyrażenia własnej opinii."
+  },
+  {
+    "type": "Writing - artykuł / e-mail",
+    "structure": "wypowiedź pisemna 200–250 słów w formie artykułu lub e-maila, dostosowana do odbiorcy i sytuacji.",
+    "types_occuring ": "artykuły do gazet szkolnych, e-maile formalne i nieformalne, wpisy blogowe",
+    "characteristics ": "zadanie sprawdza umiejętność dostosowania stylu do kontekstu oraz realizacji wszystkich punktów polecenia. Ważna jest spójność i odpowiedni rejestr językowy.",
+    "how_to_prepare": "określ kontekst sytuacyjny i wymagaj uwzględnienia wszystkich punktów w odpowiednim stylu (formalnym lub nieformalnym)."
+  }
+]

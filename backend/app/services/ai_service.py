@@ -26,9 +26,9 @@ class AiService:
 
     def ask(self, text: str):
         if os.environ.get('AI_CLOUD_MODE') == 'true':
-            return self.ask_ollama_cloud(text)
+            return self.__ask_ollama_cloud(text, 'gpt-oss:120b')
         else:
-            return self.ask_ollama_local(text)
+            return self.__ask_ollama_local(text, 'gemma3:4b-cloud')
 
 
     def __ask_ollama_local(self, text: str, model: str):

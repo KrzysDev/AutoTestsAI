@@ -9,12 +9,15 @@ import sys
 import requests
 
 from backend.app.main import app
+
 import uvicorn
 import threading
+import time
 
 console = Console()
 
-server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=8000, log_level="critical"))
+server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=8000, log_level="debug"))
+
 
 QSTYLE = Style(
     [
@@ -34,7 +37,7 @@ def _print_success(msg: str) -> None:
     console.print(f"  [bold green]✔[/]  {msg}")
 
 def _print_error(msg: str) -> None:
-    console.print(f"  [bold red]✖[/]  {msg}")
+    print(f"  [bold red]✖[/]  {msg}")
 
 def _section(title: str) -> None:
     console.print()
@@ -85,11 +88,12 @@ def generate_test() -> None:
             spinner_style="magenta",
         ):
             response = requests.post(
-                "http://localhost:8000/v1/rag/test/generate",
-                params={"prompt": topic},
+                f"http://{server.config.host}:{server.config.port}/v1/rag/test/generate",
+                params={"topic": topic},  # ← "topic" nie "prompt"
                 timeout=300,
             )
             response.raise_for_status()
+            
     except requests.exceptions.ConnectionError:
         _print_error("Cannot connect to backend. Is the server running on [bold]localhost:8000[/]?")
         return
@@ -98,6 +102,7 @@ def generate_test() -> None:
         return
     except requests.exceptions.HTTPError as e:
         _print_error(f"Server returned an error: [bold]{e.response.status_code}[/]")
+        print(e.response.text)
         return
 
     _print_success("Done!")
@@ -109,7 +114,20 @@ def generate_test() -> None:
         padding=(1, 2),
     ))
     console.print()
+    data = response.json()
     questionary.press_any_key_to_continue("Press any key to return to the menu…").ask()
+
+
+def shutdown() -> None:
+    server.should_exit = True
+    console.print()
+    console.print(Panel(
+        "[bold white]Thank you for using [magenta]AutoTests AI[/magenta]! 👋[/]",
+        border_style="magenta",
+        padding=(0, 4),
+    ))
+    console.print()
+    sys.exit(0)
 
 
 def navigate_menu() -> None:
@@ -123,28 +141,24 @@ def navigate_menu() -> None:
             questionary.Choice("⚡  Generate Test", value="generate"),
             questionary.Choice("🚪  Exit", value="exit"),
         ],
+        
         style=QSTYLE,
     ).ask()
 
     if choice == "generate":
         generate_test()
     elif choice == "exit" or choice is None:
-        server.should_exit = True
-        console.print()
-        console.print(Panel(
-            "[bold white]Thank you for using [magenta]AutoTests AI[/magenta]! 👋[/]",
-            border_style="magenta",
-            padding=(0, 4),
-        ))
-        console.print()
-        sys.exit(0)
+        shutdown()
 
 
 def main() -> None:
     thread = threading.Thread(target=server.run, daemon=True)
     thread.start()
-    while True:
-        navigate_menu()
+    try:
+        while True:
+            navigate_menu()
+    except (KeyboardInterrupt, SystemExit):
+        shutdown()
 
 
 if __name__ == "__main__":
