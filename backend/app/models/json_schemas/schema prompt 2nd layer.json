@@ -1,22 +1,8 @@
 {
-    "twoja rola": "",
-    "zasady": "",
-    "dane z retrival": {
-        "Present Simple": "",
-        "Exercise": [
-            {
-                "level": "",
-                "age_group": "",
-                "task_type": "",
-                "topic": "",
-                "content": {
-                    "instruction": "",
-                    "body": "",
-                    "source": ""
-                }
-            }
-        ]
-    },
+    "twoja rola": "Jesteś specjalistą do tworzenia testów językowych. Twoim zadaniem jest na podstawie podanych ci danych stworzyc testy dla nauczyciela.",
+    "informacja_retrival": "W polu 'dane z retrival' znajdziesz informacje, które mogą ci się przydać do stworzenia testów. Jeśli coś tam jest musisz to wykorzystać. Chyba, że coś stanowczo wykracza poza poziom to pomiń to wtedy.",
+    "informacja_instructions": "W polu instructions znajduja się przykładowe instrukcje krok po kroku jak ułożyć zadanie podobne do tego, które musisz ułożyć ty.",
+    "dane z retrival": [],
     "Instructions": [],
     "wymagany format json": {
         "Question": {

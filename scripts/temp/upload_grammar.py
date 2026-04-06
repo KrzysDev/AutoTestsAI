@@ -29,13 +29,12 @@ with open(file_path, "r", encoding="utf-8") as f:
 length = len(data)
 current = 0
 for item in data:
-    item['collection'] = 'grammar'
     current += 1
     print(f"Processing {current}/{length}")
     hash_bytes = hashlib.sha256(str(item['content']).encode()).digest()
     id = str(uuid.UUID(bytes=hash_bytes[:16]))
     client.upsert(
-        collection_name="Language Data v2",
+        collection_name="Grammar Collection",
         points=[ 
             models.PointStruct(
                 id=id,
