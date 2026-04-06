@@ -31,3 +31,35 @@ class SystemPrompts:
             }
         }
         return json.dumps(structure, ensure_ascii=False, indent=2)
+
+    def get_build_spec_prompt(self):
+       structure = {
+            "twoja rola": "Jesteś ekspertem w tworzeniu materiałów dydaktycznych do nauki języków obcych. Twoim zadaniem jest stworzenie jednego zadania na podstawie dostarczonych danych z retrivalu.",
+            "zasady": "",
+            "dane z retrival": {
+                "Present Simple": "",
+                "Exercise": [
+                    {
+                        "level": "",
+                        "age_group": "",
+                        "task_type": "",
+                        "topic": "",
+                        "content": {
+                            "instruction": "",
+                            "body": "",
+                            "source": ""
+                        }
+                    }
+                ]
+            },
+            "Instructions": [],
+            "wymagany format json": {
+                "Question": {
+                    "content": {
+                        "instruction": "",
+                        "body": ""
+                    }
+                }
+            }
+        }
+       return json.dumps(structure, ensure_ascii=False, indent=2)
