@@ -1,86 +1,243 @@
 [
   {
-    "type": "Listening - multiple choice (A/B/C)",
-    "structure": "2–3 nagrania audio, każde składające się z krótkich dialogów, monologów lub wypowiedzi sytuacyjnych. Po każdym nagraniu znajduje się zestaw 3–5 pytań jednokrotnego wyboru (A/B/C). Nagrania są odtwarzane dwukrotnie.",
-    "types_occuring ": "dialogi codzienne (np. w sklepie, szkole, na lotnisku), krótkie monologi, ogłoszenia publiczne, rozmowy telefoniczne",
-    "characteristics ": "zadania sprawdzają ogólne i szczegółowe rozumienie ze słuchu, wymagają wychwycenia informacji mimo parafraz i synonimów. Często zawierają dystraktory, czyli odpowiedzi częściowo prawdziwe, ale niepełne lub mylące. Nagrania trwają zwykle 1–3 minuty i są naturalne językowo.",
-    "how_to_prepare": "twórz realistyczne dialogi osadzone w codziennych sytuacjach, w których kluczowe informacje są rozproszone. Dodawaj parafrazy oraz odpowiedzi zawierające podobne słowa, ale inne znaczenie."
+    "id": "listening-mc-7a2b",
+    "language": "en",
+    "subject": "Listening comprehension",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Listening - multiple choice (A/B/C)",
+      "structure": "2–3 nagrania audio, każde składające się z krótkich dialogów, monologów lub wypowiedzi sytuacyjnych. Po każdym nagraniu 3–5 pytań A/B/C. Nagrania odtwarzane 2 razy.",
+      "types_occuring": "dialogi codzienne, monologi, ogłoszenia publiczne, rozmowy telefoniczne",
+      "characteristics": "sprawdza ogólne i szczegółowe rozumienie ze słuchu; zawiera parafrazy i dystraktory; informacje są rozproszone i niejawne",
+      "generation_rules": [
+        "Create 2–3 short recordings per task",
+        "Use natural, everyday spoken language",
+        "Place key information in different parts of the dialogue",
+        "Use paraphrasing between audio and answer options",
+        "Ensure at least one distractor is partially correct but misleading",
+        "Avoid copying exact phrases from audio into correct answers",
+        "Include numbers, times, places or names as comprehension targets"
+      ]
+    }
   },
   {
-    "type": "Listening - matching information",
-    "structure": "nagranie audio (często kilka wypowiedzi) oraz lista elementów do dopasowania, np. osoba → opinia, miejsce → czynność, problem → rozwiązanie",
-    "types_occuring ": "wywiady, rozmowy kilku osób, dyskusje, wypowiedzi studentów lub pracowników",
-    "characteristics ": "zadanie wymaga identyfikacji głównej myśli wypowiedzi oraz przypisania jej do odpowiedniego elementu. Informacje są często parafrazowane i rozproszone w tekście. Każda wypowiedź zawiera tylko jedną poprawną odpowiedź, ale z wieloma „pułapkami językowymi”.",
-    "how_to_prepare": "twórz dialogi wieloosobowe, gdzie każdy uczestnik wyraża inną opinię lub doświadczenie. Używaj synonimów i zmieniaj strukturę zdań, aby utrudnić bezpośrednie dopasowanie."
+    "id": "listening-match-3d9f",
+    "language": "en",
+    "subject": "Listening matching",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Listening - matching information",
+      "structure": "nagranie audio z kilkoma wypowiedziami + lista elementów do dopasowania",
+      "types_occuring": "wywiady, rozmowy kilku osób, dyskusje",
+      "characteristics": "wymaga identyfikacji głównej myśli i dopasowania; silne parafrazy i dystraktory",
+      "generation_rules": [
+        "Include 3–6 speakers or distinct viewpoints",
+        "Each speaker expresses one clear main idea",
+        "Use paraphrasing across options",
+        "Avoid repeating wording from options in audio",
+        "Ensure only one correct match per item",
+        "Include similar opinions to increase difficulty"
+      ]
+    }
   },
   {
-    "type": "Listening - uzupełnianie notatek / formularzy",
-    "structure": "nagranie audio oraz notatki, formularz, tabela lub plan z lukami do uzupełnienia (zwykle 4–8 luk). Odpowiedzi są krótkie: jedno słowo, liczba lub krótka fraza.",
-    "types_occuring ": "ogłoszenia, instrukcje, rozmowy informacyjne, zapowiedzi, komunikaty organizacyjne",
-    "characteristics ": "skupienie na szczegółach takich jak daty, godziny, imiona, ceny czy miejsca. Wymaga dokładnego słuchania konkretnych informacji, często literowania lub przeliczania danych.",
-    "how_to_prepare": "twórz uporządkowane struktury (formularze, tabele) i wplataj w nagranie konkretne informacje w sposób naturalny, ale precyzyjny."
+    "id": "listening-notes-1c8e",
+    "language": "en",
+    "subject": "Listening note completion",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Listening - uzupełnianie notatek / formularzy",
+      "structure": "nagranie + tabela/formularz z 4–8 lukami",
+      "types_occuring": "ogłoszenia, instrukcje, komunikaty informacyjne",
+      "characteristics": "skupienie na detalach: liczby, daty, ceny, miejsca",
+      "generation_rules": [
+        "Use structured formats like tables or forms",
+        "Each gap must correspond to one clear fact",
+        "Spread answers naturally across the audio",
+        "Include numbers, spelling, dates or times",
+        "Avoid clustering all answers in one part",
+        "Keep answers short (1–3 words)"
+      ]
+    }
   },
   {
-    "type": "Reading - multiple choice (A/B/C/D)",
-    "structure": "1–3 teksty o różnej długości, po których następuje zestaw 4 odpowiedzi do każdego pytania (A–D). Łącznie zazwyczaj 6–8 pytań.",
-    "types_occuring ": "artykuły prasowe, blogi, recenzje, e-maile, teksty informacyjne",
-    "characteristics ": "zadanie sprawdza rozumienie globalne i szczegółowe tekstu. Odpowiedzi są silnie parafrazowane, a poprawna odpowiedź nie jest kopiowana dosłownie z tekstu. Często występują dystraktory oparte na częściowej zgodności z treścią.",
-    "how_to_prepare": "pisz spójne teksty z wyraźną strukturą i logicznymi akapitami. Twórz odpowiedzi, które brzmią prawdopodobnie, ale zawierają subtelne różnice znaczeniowe."
+    "id": "reading-mc-9f2a",
+    "language": "en",
+    "subject": "Reading comprehension",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Reading - multiple choice (A/B/C/D)",
+      "structure": "1–3 teksty + 6–8 pytań A–D",
+      "types_occuring": "artykuły, blogi, e-maile, recenzje",
+      "characteristics": "globalne i szczegółowe rozumienie; silne parafrazy",
+      "generation_rules": [
+        "Write coherent multi-paragraph texts",
+        "Ensure correct answers are paraphrased",
+        "Create plausible but incorrect distractors",
+        "Avoid direct keyword matching",
+        "Include subtle semantic differences in options",
+        "Balance difficulty across questions"
+      ]
+    }
   },
   {
-    "type": "Reading - dopasowywanie nagłówków",
-    "structure": "tekst podzielony na kilka akapitów (zwykle 5–7) oraz lista nagłówków (A–H), z których każdy opisuje główną ideę akapitu.",
-    "types_occuring ": "artykuły popularnonaukowe, teksty blogowe, reportaże",
-    "characteristics ": "każdy akapit zawiera jedną główną myśl, a nagłówki są jej parafrazą. Zadanie wymaga umiejętności syntezy informacji i rozpoznawania tematu przewodniego.",
-    "how_to_prepare": "twórz teksty z wyraźnie oddzielonymi akapitami, gdzie każdy ma tylko jeden główny temat. Następnie przygotuj nagłówki, które są podobne znaczeniowo, ale nie identyczne."
+    "id": "reading-headlines-4b6c",
+    "language": "en",
+    "subject": "Reading matching headings",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Reading - dopasowywanie nagłówków",
+      "structure": "5–7 akapitów + lista nagłówków",
+      "types_occuring": "artykuły popularnonaukowe, blogi",
+      "characteristics": "każdy akapit ma jedną główną ideę",
+      "generation_rules": [
+        "Each paragraph must contain one main idea only",
+        "Avoid mixing topics inside paragraphs",
+        "Create paraphrased headings",
+        "Include 1–2 very similar distractor headings",
+        "Keep paragraph structure consistent",
+        "Ensure semantic rather than lexical matching"
+      ]
+    }
   },
   {
-    "type": "Reading - uzupełnianie luk (zdania)",
-    "structure": "tekst z brakującymi zdaniami (lukami oznaczonymi numerami) oraz lista zdań do wstawienia (A–G). Jedno zdanie jest zbędne.",
-    "types_occuring ": "teksty narracyjne, artykuły informacyjne, opisy wydarzeń",
-    "characteristics ": "zadanie sprawdza spójność logiczną i gramatyczną tekstu. Kluczowe są spójniki, zaimki oraz odniesienia między zdaniami (np. this, they, it).",
-    "how_to_prepare": "twórz teksty z wyraźnymi przerwami logicznymi i zdaniami, które łączą się poprzez odniesienia gramatyczne i semantyczne."
+    "id": "reading-gaps-8e1d",
+    "language": "en",
+    "subject": "Reading sentence insertion",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Reading - uzupełnianie luk (zdania)",
+      "structure": "tekst + zdania A–G",
+      "types_occuring": "teksty narracyjne, informacyjne",
+      "characteristics": "spójność logiczna i gramatyczna",
+      "generation_rules": [
+        "Use strong cohesion between sentences",
+        "Include pronouns requiring context resolution",
+        "Create one extra distractor sentence",
+        "Ensure multiple sentences fit partially in each gap",
+        "Avoid obvious keyword matching",
+        "Use linking devices like however, therefore"
+      ]
+    }
   },
   {
-    "type": "Reading - Prawda / Fałsz / Brak informacji",
-    "structure": "tekst oraz zestaw 5–6 zdań, które należy ocenić jako True, False lub Not Given.",
-    "types_occuring ": "artykuły faktograficzne, raporty, wpisy blogowe, teksty informacyjne",
-    "characteristics ": "zadanie wymaga bardzo dokładnego czytania. Kluczowa jest umiejętność rozróżnienia informacji fałszywej od tej, która w ogóle nie została podana. Często pojawiają się subtelne różnice znaczeniowe.",
-    "how_to_prepare": "wprowadzaj do tekstu informacje częściowo sprzeczne lub pomijaj istotne dane, aby wymusić rozróżnienie między False a Not Given."
+    "id": "reading-tfng-2d7a",
+    "language": "en",
+    "subject": "Reading True False Not Given",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Reading - True / False / Not Given",
+      "structure": "tekst + 5–6 stwierdzeń",
+      "types_occuring": "artykuły informacyjne, blogi",
+      "characteristics": "precyzyjne rozróżnienie informacji",
+      "generation_rules": [
+        "Include subtle paraphrasing differences",
+        "Make False statements plausible but incorrect",
+        "Leave some information absent for Not Given",
+        "Avoid exact wording reuse",
+        "Balance T/F/NG distribution",
+        "Include misleading partial truths"
+      ]
+    }
   },
   {
-    "type": "Use of English - uzupełnianie luk (gramatyka/słownictwo)",
-    "structure": "zestaw zdań lub krótki tekst z lukami. Każda luka ma jedną poprawną odpowiedź lub wybór wielokrotny (A–D). Zazwyczaj 8–10 luk.",
-    "types_occuring ": "ćwiczenia gramatyczne w kontekście, teksty użytkowe, mini-artykuły",
-    "characteristics ": "zadanie sprawdza znajomość struktur gramatycznych (czasy, modalne, strony bierne), przyimków oraz kolokacji. Odpowiedzi są często bardzo podobne.",
-    "how_to_prepare": "twórz zdania z jedną brakującą strukturą i przygotuj kilka bardzo podobnych odpowiedzi, aby wymusić dokładną znajomość gramatyki."
+    "id": "useofeng-gap-5c1e",
+    "language": "en",
+    "subject": "Grammar and vocabulary",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Use of English - gap fill",
+      "structure": "tekst z lukami (8–10)",
+      "types_occuring": "gramatyka w kontekście",
+      "characteristics": "testuje struktury gramatyczne i słownictwo",
+      "generation_rules": [
+        "Each gap tests one specific grammar point",
+        "Provide very similar answer options",
+        "Ensure only one fully correct answer",
+        "Use common learner mistakes as distractors",
+        "Avoid ambiguity between correct answers",
+        "Maintain strong contextual dependence"
+      ]
+    }
   },
   {
-    "type": "Use of English - słowotwórstwo",
-    "structure": "tekst z lukami, w których podane są słowa bazowe w nawiasach. Uczeń musi podać poprawnie przekształconą formę słowa.",
-    "types_occuring ": "krótkie teksty informacyjne lub popularnonaukowe",
-    "characteristics ": "zadanie sprawdza znajomość prefiksów, sufiksów oraz zmian części mowy (np. noun → adjective). Wymaga znajomości zaawansowanego słownictwa.",
-    "how_to_prepare": "dobieraj słowa bazowe tak, aby tylko jedna forma była poprawna gramatycznie i znaczeniowo w danym kontekście."
+    "id": "useofeng-wordform-9a3b",
+    "language": "en",
+    "subject": "Word formation",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Use of English - word formation",
+      "structure": "tekst + słowa bazowe",
+      "types_occuring": "teksty informacyjne",
+      "characteristics": "prefixy, suffixy, zmiany części mowy",
+      "generation_rules": [
+        "Only one derived form must fit context",
+        "Test multiple word classes",
+        "Use standard derivation patterns",
+        "Avoid multiple valid solutions",
+        "Ensure grammatical precision",
+        "Mix difficulty levels"
+      ]
+    }
   },
   {
-    "type": "Use of English - transformacje zdań",
-    "structure": "para zdań: pierwsze pełne zdanie oraz drugie zdanie z luką i podanym słowem kluczowym. Uczeń musi zachować znaczenie.",
-    "types_occuring ": "zadania gramatyczno-leksykalne wymagające przekształcania struktur",
-    "characteristics ": "zadanie sprawdza znajomość konstrukcji takich jak mowa zależna, tryby warunkowe, inwersje czy strona bierna. Wymaga zachowania identycznego znaczenia przy innej strukturze.",
-    "how_to_prepare": "twórz zdania o tym samym znaczeniu, ale wymagające użycia różnych struktur gramatycznych i jednego słowa kluczowego."
+    "id": "useofeng-transform-6f8c",
+    "language": "en",
+    "subject": "Sentence transformation",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Use of English - sentence transformation",
+      "structure": "zdanie + keyword transformation",
+      "types_occuring": "gramatyczne transformacje zdań",
+      "characteristics": "zachowanie znaczenia przy zmianie struktury",
+      "generation_rules": [
+        "Keep identical meaning across sentences",
+        "Force structural transformation using keyword",
+        "Ensure only one correct solution exists",
+        "Include advanced grammar structures",
+        "Avoid alternative valid answers",
+        "Make keyword essential to transformation"
+      ]
+    }
   },
   {
-    "type": "Writing - rozprawka (opinion essay / for & against)",
-    "structure": "wypowiedź pisemna 200–250 słów: wstęp, 2–3 akapity rozwinięcia oraz zakończenie. Każdy akapit zawiera jeden główny argument.",
-    "types_occuring ": "formalna wypowiedź argumentacyjna na tematy społeczne, edukacyjne lub technologiczne",
-    "characteristics ": "zadanie sprawdza umiejętność argumentacji, spójności tekstu oraz stosowania języka formalnego. Wymaga użycia linkers (however, moreover, therefore).",
-    "how_to_prepare": "wybieraj tematy dyskusyjne i wymagaj przedstawienia 2–3 argumentów wraz z przykładami oraz wyrażenia własnej opinii."
+    "id": "writing-essay-2a9d",
+    "language": "en",
+    "subject": "Essay writing",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Writing - essay",
+      "structure": "200–250 słów, 4–5 akapitów",
+      "types_occuring": "argumentacyjne tematy społeczne",
+      "characteristics": "formal style, argumentacja, spójność",
+      "generation_rules": [
+        "Require clear thesis in introduction",
+        "Force 2–3 distinct arguments",
+        "One idea per paragraph",
+        "Use formal linking devices",
+        "Include balanced argumentation when needed",
+        "Ensure coherent structure"
+      ]
+    }
   },
   {
-    "type": "Writing - artykuł / e-mail",
-    "structure": "wypowiedź pisemna 200–250 słów w formie artykułu lub e-maila, dostosowana do odbiorcy i sytuacji.",
-    "types_occuring ": "artykuły do gazet szkolnych, e-maile formalne i nieformalne, wpisy blogowe",
-    "characteristics ": "zadanie sprawdza umiejętność dostosowania stylu do kontekstu oraz realizacji wszystkich punktów polecenia. Ważna jest spójność i odpowiedni rejestr językowy.",
-    "how_to_prepare": "określ kontekst sytuacyjny i wymagaj uwzględnienia wszystkich punktów w odpowiednim stylu (formalnym lub nieformalnym)."
+    "id": "writing-email-7c1a",
+    "language": "en",
+    "subject": "Email/article writing",
+    "type": "exam-task-instruction",
+    "content": {
+      "type": "Writing - article / email",
+      "structure": "200–250 słów, formal or informal",
+      "types_occuring": "email, blog, article",
+      "characteristics": "dopasowanie stylu do odbiorcy",
+      "generation_rules": [
+        "Define clear audience and purpose",
+        "Match tone to context (formal/informal)",
+        "Include all required bullet points",
+        "Ensure natural opening and closing",
+        "Avoid mixing registers",
+        "Maintain coherent flow"
+      ]
+    }
   }
 ]

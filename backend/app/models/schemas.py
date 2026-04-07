@@ -1,22 +1,17 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, Field, ConfigDict
+from typing import Literal, Union, Optional
 
-from typing import Literal
-from typing import Union
 
 class ChunkMetadata(BaseModel):
-
     subject: str
     content: Union[str, dict]
 
+
 class Chunk(BaseModel):
     id: str
-
     section: Literal["vocabulary", "grammar", "listening", "reading"]
-
     language: Literal["en", "de", "eng", "ger"]
-
     level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]
-
     metadata: ChunkMetadata
 
     @field_validator("level")
@@ -26,22 +21,28 @@ class Chunk(BaseModel):
             raise ValueError(f"Level must be a single value, received: '{v}'")
         return v
 
+
 class RetrivedChunk(BaseModel):
     payload: Chunk
     score: float
 
+
+class QuestionContent(BaseModel):
+    instruction: str
+    body: str
+
+
 class Question(BaseModel):
-    content : {
-        "instruction" : str,
-        "body" : str
-    }
+    content: list[QuestionContent]
+
 
 class Group(BaseModel):
-    questions : list[Question]
-    answers : list[str]
+    questions: list[Question]
+    answers: list[str]
+
 
 class Test(BaseModel):
-    groups : list[Group]
+    groups: list[Group]
 
 
 class TeacherRequestClassification(BaseModel):
@@ -67,31 +68,25 @@ class TestGeneratorRequest(BaseModel):
     topic: str
     group_count: int = 2
 
-class Exercise(BaseModel):
-    type : str
-    subject : str
-    amount : int
 
+class TestSection(BaseModel):
+    type: str
+    subject: str
+    amount: int
 
-class AgenticPromptFirstLayer(BaseModel):
-    twoja_rola : str
-    zasady : {
-        "task info" : str,
-        "level info" : str,
-        "target age info" : str,
-        "sections info" : str,
-        "total tasks info" : str,
-        "output rule info" : str
-    }
-    dane_z_retrival : dict[str, Union[str, list[Exercise]]]
-    Instructions : list[str]
-    wymagany_format_json : Question
+class FirstLayerRules(BaseModel):
+    task_info: str
+    level_info: str
+    target_age_info: str
+    sections_info: str
+    total_tasks_info: str
+    output_rule_info: str
 
-class AgenticPromptSecondLayer(BaseModel):
-    twoja_rola : str
-    zasady : str
-    dane_z_retrival : dict[str, Union[str, list[Exercise]]]
-    Instructions : list[str]
-    wymagany_format_json : Question
+class TransformedPrompt(BaseModel):
+    task: str 
+    level : Literal["A1", "A2", "B1", "B2", "C1", "C2"]
+    target_age: str
+    sections: list[TestSection]
+    total_tasks: int
 
     
