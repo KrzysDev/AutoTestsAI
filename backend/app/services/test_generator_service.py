@@ -2,7 +2,7 @@ from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
 from backend.app.models.prompts import SystemPrompts
 
-from backend.app.models.schemas import Test, Question, AgenticPromptSecondLayer, AgenticPromptFirstLayer, TransformedPrompt
+from backend.app.models.schemas import Test, Question, AgenticPromptSecondLayer, AgenticPromptFirstLayer, TransformedPrompt, TestSection
 
 import json
 
@@ -27,13 +27,16 @@ class TestGeneratorService:
 
         #retrive chunks based on transformed prompt data
 
+        for section in transformed_prompt.sections:
+            pass
+
         #create new generation prompt with retrived data for each exercise
 
         #for each exercise in exercices AiCreate()
 
         #exercise.append and tests.extend
 
-        
+
 
        
         print("first_layer_prompt", first_layer_prompt.model_dump_json(indent=4))       
