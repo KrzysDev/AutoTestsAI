@@ -125,7 +125,7 @@ class SearchService:
 
         while True:
             batch, next_offset = self.client.scroll(
-                collection_name=collection_name,
+                collection_name="Grammar Collection",
                 limit=100,
                 offset=offset,
                 with_payload=True,
@@ -144,6 +144,6 @@ class SearchService:
             if point.payload.get("subject") == subject
         ]
 
-        return filtered_points
+        return [point.payload for point in filtered_points]
 
         
