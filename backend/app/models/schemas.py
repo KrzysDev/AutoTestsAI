@@ -24,7 +24,7 @@ class Chunk(BaseModel):
 
 class RetrivedChunk(BaseModel):
     payload: Chunk
-    score: float
+    score: Optional[float] = None
 
 
 class QuestionContent(BaseModel):
@@ -70,7 +70,7 @@ class TestGeneratorRequest(BaseModel):
 
 
 class TestSection(BaseModel):
-    type: str
+    section_type: str
     subject: str
     amount: int
 
@@ -89,4 +89,46 @@ class TransformedPrompt(BaseModel):
     sections: list[TestSection]
     total_tasks: int
 
+class RetrievalInstructions(BaseModel):
+    grammar_instructions: list[RetrivedChunk] = Field(alias="Grammar_Instructions")
+    exercise_instructions: list[RetrivedChunk] = Field(alias="Exercise_Instructions")
     
+    model_config = ConfigDict(populate_by_name=True)  
+
+class RetrievalData(BaseModel):
+    instructions: RetrievalInstructions = Field(alias="Instructions")
+    
+    model_config = ConfigDict(populate_by_name=True)  
+
+class GenerationPrompt(BaseModel):
+    twoja_rola: str = Field(
+        default="Jesteś ekspertem w tworzeniu materiałów dydaktycznych do nauki języków obcych. Twoim zadaniem jest stworzenie jednego zadania na podstawie dostarczonych danych z retrivalu.",
+        alias="twoja rola"
+    )
+    zasady: str = Field(
+        default="W polu 'dane z retrival' podane są przykładowe zadania na których MUSISZ się wzorować tworząc nowe podobnego rodzaju. Skup sie na poziomie jaki reprezentuja i jak są skoonstruowane. Poniżej znajdziesz też instrukcje w jaki sposób krok po kroku stworzyć tego typu zadanie. Musisz zwrócić wyłącznie JSON w wymaganym formacie. Nic więcej poza nim. Nie dodawaj nic przed ani po jsonie w tym znaków markdown takich jak ```json lub ```",
+        alias="zasady"
+    )
+    szczegóły_pól: str = Field(
+        default="level - poziom językowy CEFR (A1, A2, B1...C2), age_group - docelowa grupa wiekowa (kids, teens, adults), task_type - typ zadania (np. vocabulary, grammar, reading etc. musisz wybrac jeden), topic - temat zadania (np. present simple, present contionous, reading etc. musisz wybrac jeden), amount - ilość wystąpień / ile zadan musisz w tej liscie tego typu stworzyć (wybierz dowolnie, chyba że została podana przez nauczyciela)",
+        alias="szczegóły_pół"
+    )
+    prosba_nauczyciela: str = Field(alias="prosba_nauczyciela")
+    dane_z_retrieval: RetrievalData = Field(alias="dane z retrival")
+    wymagany_format_json: dict = Field(
+        default={
+            "Question": {
+                "content": {
+                    "instruction": "",
+                    "body": ""
+                }
+            }
+        },
+        alias="wymagany format json"
+    )
+
+    model_config = ConfigDict(populate_by_name=True)
+    
+
+
+

@@ -3,6 +3,9 @@ import requests
 from dotenv import load_dotenv
 import ollama
 from sentence_transformers import SentenceTransformer
+import logging
+
+logging.getLogger("sentence_transformers").setLevel(logging.ERROR)
 
 load_dotenv()
 

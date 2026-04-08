@@ -1,5 +1,5 @@
 import json
-from backend.app.models.schemas import AgenticPromptFirstLayer, RetrivedChunk, TransformedPrompt
+from backend.app.models.schemas import GenerationPrompt, RetrivedChunk, TransformedPrompt, RetrievalData, RetrievalInstructions
 
 class SystemPrompts:
     def __init__(self):
@@ -23,7 +23,7 @@ class SystemPrompts:
                 "target_age": "kids",
                 "sections": [
                     {
-                        "type": "vocabulary",
+                        "section_type": "vocabulary",
                         "subject": "Present Simple",
                         "amount": 3
                     }
@@ -33,29 +33,19 @@ class SystemPrompts:
         }
         return json.dumps(structure, ensure_ascii=False, indent=2)
 
-    def get_first_layer_prompt(self, transformed_prompt: TransformedPrompt, retrived_chunks: list[RetrivedChunk], teacher_request: str) -> AgenticPromptFirstLayer:
+    def get_section_generation_prompt(self, data: RetrievalData, teacher_request: str) -> GenerationPrompt:
        structure = {
             "twoja rola": "Jesteś ekspertem w tworzeniu materiałów dydaktycznych do nauki języków obcych. Twoim zadaniem jest stworzenie jednego zadania na podstawie dostarczonych danych z retrivalu.",
             "zasady": "W polu 'dane z retrival' podane są przykładowe zadania na których MUSISZ się wzorować tworząc nowe podobnego rodzaju. Skup sie na poziomie jaki reprezentuja i jak są skoonstruowane. Poniżej znajdziesz też instrukcje w jaki sposób krok po kroku stworzyć tego typu zadanie. Musisz zwrócić wyłącznie JSON w wymaganym formacie. Nic więcej poza nim. Nie dodawaj nic przed ani po jsonie w tym znaków markdown takich jak ```json lub ```",
             "szczegóły_pół" : "level - poziom językowy CEFR (A1, A2, B1...C2), age_group - docelowa grupa wiekowa (kids, teens, adults), task_type - typ zadania (np. vocabulary, grammar, reading etc. musisz wybrac jeden), topic - temat zadania (np. present simple, present contionous, reading etc. musisz wybrac jeden), amount - ilość wystąpień / ile zadan musisz w tej liscie tego typu stworzyć (wybierz dowolnie, chyba że została podana przez nauczyciela)",
             "prosba_nauczyciela" : teacher_request,
             "dane z retrival": {
-                "Present Simple": "",
-                "Exercise": [
-                    {
-                        "level": "",
-                        "age_group": "",
-                        "task_type": "",
-                        "topic": "",
-                        "amount": "",
-                        "content": {
-                            "instruction": "",
-                            "body": ""
-                        }
-                    }
-                ]
+                "Instructions": {
+                    "Grammar_Instructions": [chunk.model_dump() for chunk in data.instructions.grammar_instructions],
+                    "Exercise_Instructions": [chunk.model_dump() for chunk in data.instructions.exercise_instructions]
+                },
             },
-            "Instructions": [],
+
             "wymagany format json": {
                 "Question": {
                     "content": {
@@ -65,4 +55,4 @@ class SystemPrompts:
                 }
             }
         }
-       return json.dumps(structure, ensure_ascii=False, indent=2)
+       return str(structure)
