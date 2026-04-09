@@ -102,3 +102,44 @@ class SystemPrompts:
             Teacher request: 
             {text}
         """
+    def get_retrival_prompt(self, prompt: ParsedPrompt):
+        return f"""
+            # TASK
+                You are a specialist in designing language tests. As the first agent in a large test-generation system, your task is to extract and return a list of topics that will be useful for generating the test.
+
+                You must return the answer in the following format:
+                ["topic1", "topic2", "topic3", ... "topicx"]
+
+                You are ONLY allowed to choose from the following pool of topics:
+
+                English tenses definitions:
+
+                Present Simple
+                Present Continuous
+                Present Perfect
+                Present Perfect Continuous
+
+                Past Simple
+                Past Continuous
+                Past Perfect
+                Past Perfect Continuous
+
+                Future Simple
+                Future Continuous
+                Future Perfect
+                Future Perfect Continuous
+
+                AND
+                reading, writing, vocabulary, grammar -> instructions for creating exam-style tasks
+
+                ---
+
+                # TEACHER REQUEST
+                "{prompt.model_dump()}"
+
+                ---
+
+                # RULES
+                You are strictly forbidden to return anything other than the list.
+        
+        """

@@ -13,4 +13,7 @@ class ParsedPrompt(BaseModel):
     sections : list[TestSection]
     total_amount : int = 20
 
+class RetrivalQueries(BaseModel):
+    queries : list[Literal["vocabulary", "grammar", "reading", "writing"]]
+
 
