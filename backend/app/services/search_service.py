@@ -142,9 +142,10 @@ class SearchService:
 
         filtered_points = [
             point for point in all_points
-            if point.payload.get("subject") == subject
+            if point.payload.get("subject").startswith(subject)
         ]
 
         return [point.payload for point in filtered_points]
+
 
         
