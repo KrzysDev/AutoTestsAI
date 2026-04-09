@@ -26,14 +26,9 @@ class RetrivedChunk(BaseModel):
     payload: Chunk
     score: Optional[float] = None
 
-
-class QuestionContent(BaseModel):
-    instruction: str
-    body: str
-
-
 class Question(BaseModel):
-    content: list[QuestionContent]
+    instruction : str
+    body : str
 
 
 class Group(BaseModel):
@@ -69,10 +64,11 @@ class TestGeneratorRequest(BaseModel):
     group_count: int = 2
 
 
-class TestSection(BaseModel):
+#section in transformed prompt. Section explained to AI model
+class PromptTestSection(BaseModel):
     section_type: str
-    subject: str
-    amount: int
+    subject : str
+    amount : int
 
 class FirstLayerRules(BaseModel):
     task_info: str
@@ -86,7 +82,7 @@ class TransformedPrompt(BaseModel):
     task: str 
     level : Literal["A1", "A2", "B1", "B2", "C1", "C2"]
     target_age: str
-    sections: list[TestSection]
+    sections: list[PromptTestSection]
     total_tasks: int
 
 class RetrievalInstructions(BaseModel):
