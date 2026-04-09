@@ -26,7 +26,7 @@ class AiService:
 
     def ask(self, text: str):
         if os.environ.get('AI_CLOUD_MODE') == 'true':
-            return self.__ask_ollama_cloud(text, 'gpt-oss:120b')
+            return self.__ask_ollama_cloud(text, 'gemma4:31b-cloud')
         else:
             return self.__ask_ollama_local(text, 'gemma3:4b-cloud')
 
@@ -73,7 +73,7 @@ class AiService:
         )
         return response['message']['content']
 
-    def __ask_ollama_cloud(self, text: str, model: str):
+    def __ask_ollama_cloud(self, text: str, model: str, retries=5):
         message = [
             {
                 'role': 'user',
@@ -81,14 +81,20 @@ class AiService:
             },
         ]
 
-        parts = []
-        try:
-            for part in self.cloud_client.chat(model, messages=message, stream=True):
-                parts.append(part['message']['content'])
-        except Exception as e:
-            print(e)
-            return "Error: Could not connect to Ollama"
-        return "".join(parts)
+        for attempt in range(retries):
+            parts = []
+            try:
+                for part in self.cloud_client.chat(model, messages=message, stream=True):
+                    parts.append(part['message']['content'])
+                return "".join(parts)
+            except Exception as e:
+                wait = 2 ** attempt  # 1s, 2s, 4s, 8s, 16s
+                print(f"Próba {attempt + 1}/{retries} nieudana: {e}")
+                if attempt < retries - 1:
+                    print(f"Czekam {wait}s przed kolejną próbą...")
+                    time.sleep(wait)
+
+        return "Error: Could not connect to Ollama"
     
     def __ask_ollama_cloud_with_photo(self, text: str, photo_path: str, model: str):
         with open(photo_path, "rb") as f:
