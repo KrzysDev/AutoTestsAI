@@ -13,8 +13,21 @@ class TestGeneratorService:
         self.prompts = SystemPrompts()
         self.embeddings_service = EmbeddingsService()
 
+    #helper method
     def __transform_request_to_prompt(self, topic: str):
         return self.ai_service.ask(self.prompts.get_transform_request_to_prompt(topic))
+
+    #helper method with polish prompt, because AI understand polish very good. It tells it to fix the json.
+    def __fix_test_section_with_AI(self, broken_response: str) -> str:
+        fix_prompt = f"""Poniższy tekst powinien być poprawnym JSONem w formacie:
+            {{"Question": {{"content": {{"instruction": "", "body": ""}}}}}}
+
+            Zwróć WYŁĄCZNIE poprawny JSON, nic więcej. Bez markdown, bez tekstu przed ani po.
+
+            Tekst do naprawy:
+            {broken_response}"""
+        return self.ai_service.ask(fix_prompt)
+
 
     def generate_test(self, topic: str):
         transformed_prompt = self.__transform_request_to_prompt(topic)
@@ -78,9 +91,14 @@ class TestGeneratorService:
 
                 try:
                     generated_section = json.loads(generated_section)
-                except ValueError as e:
-                    print(f"could not transform generated section into json: {generated_section} \n Error: {e}")
-                    continue
+                except ValueError:
+                    print(f"JSON invalid, asking AI to fix...")
+                    fixed = self.__fix_json_with_ai(generated_section)
+                    try:
+                        generated_section = json.loads(fixed)
+                    except ValueError as e:
+                        print(f"AI could not fix JSON: {e}")
+                        continue
 
                 new_generated_section = GeneratedTestSection(
                     instruction=generated_section['Question']['content']['instruction'],
