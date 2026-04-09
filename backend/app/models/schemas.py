@@ -110,6 +110,11 @@ class GenerationPrompt(BaseModel):
         default="W polu 'dane z retrival' podane są przykładowe zadania na których MUSISZ się wzorować tworząc nowe podobnego rodzaju. Skup sie na poziomie jaki reprezentuja i jak są skoonstruowane. Poniżej znajdziesz też instrukcje w jaki sposób krok po kroku stworzyć tego typu zadanie. Musisz zwrócić wyłącznie JSON w wymaganym formacie. Nic więcej poza nim. Nie dodawaj nic przed ani po jsonie w tym znaków markdown takich jak ```json lub ```",
         alias="zasady"
     )
+    zasada_braku_powtarzalnosci: str = Field(
+        default="absolutnie, nie wolno ci pod żadnym pozorem, robić takich samych typów zadań które się już pojawiły, CHYBA ŻE NAUCZYCIEL POWIEDZIAL INACZEJ.",
+        alias="zasada_braku_powtarzalnosci"
+    )
+
     szczegóły_pól: str = Field(
         default="level - poziom językowy CEFR (A1, A2, B1...C2), age_group - docelowa grupa wiekowa (kids, teens, adults), task_type - typ zadania (np. vocabulary, grammar, reading etc. musisz wybrac jeden), topic - temat zadania (np. present simple, present contionous, reading etc. musisz wybrac jeden), amount - ilość wystąpień / ile zadan musisz w tej liscie tego typu stworzyć (wybierz dowolnie, chyba że została podana przez nauczyciela)",
         alias="szczegóły_pół"

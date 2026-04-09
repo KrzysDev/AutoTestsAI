@@ -81,15 +81,28 @@ class AiService:
             },
         ]
 
+        options = {
+            "temperature": 0.0,
+            "top_p": 1.0
+        }
+
         for attempt in range(retries):
             parts = []
             try:
-                for part in self.cloud_client.chat(model, messages=message, stream=True):
+                for part in self.cloud_client.chat(
+                    model,
+                    messages=message,
+                    stream=True,
+                    options=options
+                ):
                     parts.append(part['message']['content'])
+
                 return "".join(parts)
+
             except Exception as e:
-                wait = 2 ** attempt  # 1s, 2s, 4s, 8s, 16s
+                wait = 2 ** attempt
                 print(f"Próba {attempt + 1}/{retries} nieudana: {e}")
+
                 if attempt < retries - 1:
                     print(f"Czekam {wait}s przed kolejną próbą...")
                     time.sleep(wait)

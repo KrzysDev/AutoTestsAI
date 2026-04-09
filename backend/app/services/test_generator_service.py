@@ -29,7 +29,6 @@ class TestGeneratorService:
         return self.ai_service.ask(fix_prompt)
 
     def generate_test(self, topic: str):
-
         transformed_prompt = self.__transform_request_to_prompt(topic)
         
         try:
@@ -38,6 +37,9 @@ class TestGeneratorService:
             raise ValueError(f"Invalid TransformedPrompt: {e}")
 
         test_sections = []
+
+        #summaries of previus sections so model does not generate Sarah in the garden for 10000 time. 
+        previous_section_summaries: list[str] = []
 
         for test_section in transformed_prompt.sections:
             for i in range(test_section.amount):  
@@ -81,29 +83,48 @@ class TestGeneratorService:
                         exercise_instructions=exercise_inst
                     )
                 )
-                generate_exercise_prompt = self.prompts.get_section_generation_prompt(retrieval_data, topic)
+                
+                generate_exercise_prompt = self.prompts.get_section_generation_prompt(
+                    retrieval_data, 
+                    topic, 
+                    [str(s) for s in previous_section_summaries] or None)
 
                 generated_section = self.ai_service.ask(generate_exercise_prompt)
 
-                try:
-                    generated_section = json.loads(generated_section)
-                except ValueError:
-                    print(f"JSON invalid, asking AI to fix...")
-                    fixed = self.__fix_generated_section_with_AI(generated_section)
+                previous_section_summaries.append(
+                    self.ai_service.ask(f"""Podsumuj, bardzo krótko zwięźle i na temat 
+                    poniższy fragment testu zapisany w formacie JSON tak, żeby model LLM wiedział
+                    co sie w tej sekcji znajdowało bez potrzeby patrzenia na nią, ale jednoczesnie jest to
+                     podsumowanie krótkie i zwięzłe. Sekcja:  {generated_section}"""))
+
+                max_retries = 4
+                attempt = 0
+
+                while attempt <= max_retries:
                     try:
-                        generated_section = json.loads(fixed)
-                    except ValueError as e:
-                        print(f"AI could not fix JSON: {e}")
-                        continue    
+                        generated_section = json.loads(generated_section)
+                        generated_section = GeneratedTestSection.validate(generated_section)
+                        break 
+
+                    except ValueError:
+                        print(generated_section)
+                        if attempt == max_retries:
+                            print("Max retries reached. Skipping...")
+                            break
+
+                        print(f"JSON invalid (attempt {attempt + 1}), asking AI to fix...")
+                        generated_section = self.__fix_generated_section_with_AI(generated_section)
+                        attempt += 1   
 
                 try:
                     new_generated_section = GeneratedTestSection(
                         instruction=str(generated_section['Question']['content']['instruction']),
                         body=str(generated_section['Question']['content']['body'])
                     )
+                    test_sections.append(new_generated_section)
                 except ValueError as e:
                     print(f"error while saving generated section: {e}")
-
-                test_sections.append(new_generated_section)
+                    break
+                
         
         return test_sections
