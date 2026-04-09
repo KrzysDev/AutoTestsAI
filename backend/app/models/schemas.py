@@ -70,6 +70,11 @@ class PromptTestSection(BaseModel):
     subject : str
     amount : int
 
+#section format in test. Used to print it on pdf and as model output
+class GeneratedTestSection(BaseModel):
+    instruction: str
+    body: str
+
 class FirstLayerRules(BaseModel):
     task_info: str
     level_info: str
