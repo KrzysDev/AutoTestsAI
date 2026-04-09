@@ -30,63 +30,63 @@ class TestGeneratorService:
         test_sections = []
 
         for test_section in transformed_prompt.sections:
+            for i in range(test_section.amount):  
+                grammar_inst = []
+                exercise_inst = []
 
-            grammar_inst = []
-            exercise_inst = []
-
-            embedding = self.embeddings_service.embed_text(
-                f"{test_section.section_type}, {test_section.subject}"
-            )
-
-            grammar_records = self.search_service.get_points_with_subject(test_section.subject)
-
-            instruction_records = self.search_service.search_with_filter(
-                "Grammar Collection", "type", "exam-task-instruction", embedding, 1
-            )
-
-            for grammar_record in grammar_records:
-                grammar_inst.append(RetrivedChunk(
-                    payload=Chunk(
-                        id=str(grammar_record.get("id", "")),
-                        section="grammar",                        
-                        language=grammar_record.get("language", "en"),
-                        level=transformed_prompt.level,          
-                        metadata=ChunkMetadata(
-                            subject=grammar_record.get("subject", ""),
-                            content=grammar_record.get("content", "")  
-                        )
-                    ),
-                    score=None
-                ))
-            
-            for instruction_record in instruction_records:
-                exercise_inst.append(RetrivedChunk(
-                    payload=instruction_record.payload,
-                    score=None
-                ))
-
-            retrieval_data = RetrievalData(
-                instructions=RetrievalInstructions(
-                    grammar_instructions=grammar_inst,
-                    exercise_instructions=exercise_inst
+                embedding = self.embeddings_service.embed_text(
+                    f"{test_section.section_type}, {test_section.subject}"
                 )
-            )
 
-            generate_exercise_prompt = self.prompts.get_section_generation_prompt(retrieval_data, topic)
+                grammar_records = self.search_service.get_points_with_subject(test_section.subject)
 
-            generated_section = self.ai_service.ask(generate_exercise_prompt)
+                instruction_records = self.search_service.search_with_filter(
+                    "Grammar Collection", "type", "exam-task-instruction", embedding, 1
+                )
 
-            try:
-                generated_section = json.loads(generated_section)
-            except ValueError as e:
-                print(f"could not transform generated section into json: {generated_section} \n Error: {e}")
-                continue
+                for grammar_record in grammar_records:
+                    grammar_inst.append(RetrivedChunk(
+                        payload=Chunk(
+                            id=str(grammar_record.get("id", "")),
+                            section="grammar",                        
+                            language=grammar_record.get("language", "en"),
+                            level=transformed_prompt.level,          
+                            metadata=ChunkMetadata(
+                                subject=grammar_record.get("subject", ""),
+                                content=grammar_record.get("content", "")  
+                            )
+                        ),
+                        score=None
+                    ))
+                
+                for instruction_record in instruction_records:
+                    exercise_inst.append(RetrivedChunk(
+                        payload=instruction_record.payload,
+                        score=None
+                    ))
 
-            new_generated_section = GeneratedTestSection(
-                instruction=generated_section['Question']['content']['instruction'],
-                body=generated_section['Question']['content']['body']
-            )
+                retrieval_data = RetrievalData(
+                    instructions=RetrievalInstructions(
+                        grammar_instructions=grammar_inst,
+                        exercise_instructions=exercise_inst
+                    )
+                )
 
-            test_sections.append(new_generated_section)
+                generate_exercise_prompt = self.prompts.get_section_generation_prompt(retrieval_data, topic)
+
+                generated_section = self.ai_service.ask(generate_exercise_prompt)
+
+                try:
+                    generated_section = json.loads(generated_section)
+                except ValueError as e:
+                    print(f"could not transform generated section into json: {generated_section} \n Error: {e}")
+                    continue
+
+                new_generated_section = GeneratedTestSection(
+                    instruction=generated_section['Question']['content']['instruction'],
+                    body=generated_section['Question']['content']['body']
+                )
+
+                test_sections.append(new_generated_section)
         
         return test_sections
