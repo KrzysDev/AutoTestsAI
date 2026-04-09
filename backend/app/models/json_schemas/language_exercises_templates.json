@@ -2,7 +2,7 @@
   {
     "id": "listening-mc-7a2b",
     "language": "en",
-    "subject": "Listening comprehension",
+    "subject": "listening",
     "type": "exam-task-instruction",
     "content": {
       "type": "Listening - multiple choice (A/B/C)",
@@ -23,7 +23,7 @@
   {
     "id": "listening-match-3d9f",
     "language": "en",
-    "subject": "Listening matching",
+    "subject": "listening",
     "type": "exam-task-instruction",
     "content": {
       "type": "Listening - matching information",
@@ -43,7 +43,7 @@
   {
     "id": "listening-notes-1c8e",
     "language": "en",
-    "subject": "Listening note completion",
+    "subject": "listening",
     "type": "exam-task-instruction",
     "content": {
       "type": "Listening - uzupełnianie notatek / formularzy",
@@ -63,7 +63,7 @@
   {
     "id": "reading-mc-9f2a",
     "language": "en",
-    "subject": "Reading comprehension",
+    "subject": "reading",
     "type": "exam-task-instruction",
     "content": {
       "type": "Reading - multiple choice (A/B/C/D)",
@@ -83,7 +83,7 @@
   {
     "id": "reading-headlines-4b6c",
     "language": "en",
-    "subject": "Reading matching headings",
+    "subject": "reading",
     "type": "exam-task-instruction",
     "content": {
       "type": "Reading - dopasowywanie nagłówków",
@@ -103,7 +103,7 @@
   {
     "id": "reading-gaps-8e1d",
     "language": "en",
-    "subject": "Reading sentence insertion",
+    "subject": "reading",
     "type": "exam-task-instruction",
     "content": {
       "type": "Reading - uzupełnianie luk (zdania)",
@@ -123,7 +123,7 @@
   {
     "id": "reading-tfng-2d7a",
     "language": "en",
-    "subject": "Reading True False Not Given",
+    "subject": "reading",
     "type": "exam-task-instruction",
     "content": {
       "type": "Reading - True / False / Not Given",
@@ -143,7 +143,7 @@
   {
     "id": "useofeng-gap-5c1e",
     "language": "en",
-    "subject": "Grammar and vocabulary",
+    "subject": "grammar",
     "type": "exam-task-instruction",
     "content": {
       "type": "Use of English - gap fill",
@@ -163,7 +163,7 @@
   {
     "id": "useofeng-wordform-9a3b",
     "language": "en",
-    "subject": "Word formation",
+    "subject": "vocabulary",
     "type": "exam-task-instruction",
     "content": {
       "type": "Use of English - word formation",
@@ -183,7 +183,7 @@
   {
     "id": "useofeng-transform-6f8c",
     "language": "en",
-    "subject": "Sentence transformation",
+    "subject": "grammar",
     "type": "exam-task-instruction",
     "content": {
       "type": "Use of English - sentence transformation",
@@ -203,7 +203,7 @@
   {
     "id": "writing-essay-2a9d",
     "language": "en",
-    "subject": "Essay writing",
+    "subject": "writing",
     "type": "exam-task-instruction",
     "content": {
       "type": "Writing - essay",
@@ -223,7 +223,7 @@
   {
     "id": "writing-email-7c1a",
     "language": "en",
-    "subject": "Email/article writing",
+    "subject": "writing",
     "type": "exam-task-instruction",
     "content": {
       "type": "Writing - article / email",
