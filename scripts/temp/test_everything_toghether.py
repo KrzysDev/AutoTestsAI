@@ -3,11 +3,15 @@ from backend.app.services.prompt_parser_service import PromptParserService
 from backend.app.models.prompts import SystemPrompts
 import json
 from backend.app.models.schemas import ParsedPrompt
+from backend.app.services.ai_service import AiService
+
 
 def main():
     classification_service = ClassificationService()
     prompt_parser_service = PromptParserService()
     prompts = SystemPrompts()
+    ai_service = AiService()
+
 
     prompt = input("Podaj prompt")
 
@@ -27,7 +31,10 @@ def main():
 
         prompt2 = prompts.get_retrival_prompt(parsed_prompt)
 
-        print(prompt2)
+        queries = ai_service.ask(prompt2)
+
+        print(queries)
+        
 
 
 main()
