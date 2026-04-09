@@ -18,7 +18,7 @@ class TestGeneratorService:
         return self.ai_service.ask(self.prompts.get_transform_request_to_prompt(topic))
 
     #helper method with polish prompt, because AI understand polish very good. It tells it to fix the json.
-    def __fix_test_section_with_AI(self, broken_response: str) -> str:
+    def __fix_generated_section_with_AI(self, broken_response: str) -> str:
         fix_prompt = f"""Poniższy tekst powinien być poprawnym JSONem w formacie:
             {{"Question": {{"content": {{"instruction": "", "body": ""}}}}}}
 
@@ -27,7 +27,6 @@ class TestGeneratorService:
             Tekst do naprawy:
             {broken_response}"""
         return self.ai_service.ask(fix_prompt)
-
 
     def generate_test(self, topic: str):
 
@@ -103,13 +102,15 @@ class TestGeneratorService:
                     generated_section = json.loads(generated_section)
                 except ValueError:
                     print(f"JSON invalid, asking AI to fix...")
-                    fixed = self.__fix_json_with_ai(generated_section)
+                    fixed = self.__fix_generated_section_with_AI(generated_section)
                     try:
                         generated_section = json.loads(fixed)
                     except ValueError as e:
                         print(f"AI could not fix JSON: {e}")
-                        continue
+                        continue    
                 
+                print(generated_section)
+
                 try:
                     new_generated_section = GeneratedTestSection(
                         instruction=str(generated_section['Question']['content']['instruction']),
@@ -119,11 +120,13 @@ class TestGeneratorService:
                     with open("debug.txt", "a") as f:
                         f.write(debug)
                     print(f"error while saving generated section: {e}")
+                    
 
                 print(new_generated_section)
 
                 test_sections.append(new_generated_section)
 
-
+        with open("debug.txt", "w", encoding="utf-8") as f:
+            f.write(debug)
         
-        return test_sectionse
+        return test_sections
