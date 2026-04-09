@@ -5,6 +5,8 @@ import json
 from backend.app.models.prompts import SystemPrompts
 from backend.app.models.schemas import TeacherRequestClassification, Question
 
+import time
+
 load_dotenv()
 
 class AiService:
@@ -28,8 +30,7 @@ class AiService:
         if os.environ.get('AI_CLOUD_MODE') == 'true':
             return self.__ask_ollama_cloud(text, 'gemma4:31b-cloud')
         else:
-            return self.__ask_ollama_local(text, 'gemma3:4b-cloud')
-
+            return self.__ask_ollama_local(text, 'gemma3:4b')
 
     def __ask_ollama_local(self, text: str, model: str):
         response = self.local_client.chat(model=model, messages=[
