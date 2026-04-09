@@ -10,6 +10,7 @@ import math
 
 load_dotenv()
 
+embeddings_service = EmbeddingsService()
 
 class SearchService:
     def __init__(self):
@@ -17,10 +18,10 @@ class SearchService:
             url=os.getenv("CLUSTER_ENDPOINT"),
             api_key=os.getenv("QDRANT_API_KEY")
         )
-        self.embeddings_service = EmbeddingsService()
+        
 
     def search(self, query: str, top_k: int = 5) -> list[RetrivedChunk]:
-        query_vector = self.embeddings_service.embed_text(query)
+        query_vector = embeddings_service.embed_text(query)
 
         hits = self.client.query_points(
             collection_name="Grammar Collection",

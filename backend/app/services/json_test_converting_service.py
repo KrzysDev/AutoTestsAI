@@ -1,9 +1,15 @@
 import os
+import json
 from fpdf import FPDF
-from backend.app.models.schemas import Test
+from backend.app.models.schemas import Test, GeneratedTestSection
 
 class JsonTestConvertingService:
-    def convert_to_pdf(self, test_data: Test | dict) -> bytearray:
+    def save_to_json(self, test_sections: list[GeneratedTestSection], filepath: str = "generated_test.json"):
+        data = [section.model_dump() for section in test_sections]
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+
+    def convert_to_pdf(self, test_data: Test | dict | list[GeneratedTestSection]) -> bytearray:
         pdf = FPDF()
         pdf.set_auto_page_break(auto=True, margin=15)
 
@@ -14,6 +20,22 @@ class JsonTestConvertingService:
         else:
             font_family = "Helvetica"
 
+        # Obsługa nowego schematu (listy sekcji testowych)
+        if isinstance(test_data, list) and all(isinstance(item, GeneratedTestSection) for item in test_data):
+            pdf.add_page()
+            pdf.set_font(font_family, size=12)
+
+            header = "name:______________ surname:__________________ class:________________ date:____________________"
+            pdf.multi_cell(0, 10, header)
+            pdf.ln(10)
+
+            for i, section in enumerate(test_data, start=1):
+                pdf.multi_cell(0, 10, f"Ex{i}. {section.instruction}\n{section.body}")
+                pdf.ln(5)
+            
+            return pdf.output()
+
+        # Obsługa starego schematu
         groups = []
         if isinstance(test_data, dict):
             groups = test_data.get("groups", [])

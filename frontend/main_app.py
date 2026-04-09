@@ -9,6 +9,8 @@ import sys
 import requests
 
 from backend.app.main import app
+from backend.app.services.json_test_converting_service import JsonTestConvertingService
+from backend.app.models.schemas import GeneratedTestSection
 
 import uvicorn
 import threading
@@ -37,7 +39,7 @@ def _print_success(msg: str) -> None:
     console.print(f"  [bold green]✔[/]  {msg}")
 
 def _print_error(msg: str) -> None:
-    print(f"  [bold red]✖[/]  {msg}")
+    console.print(f"  [bold red]✖[/]  {msg}")
 
 def _section(title: str) -> None:
     console.print()
@@ -89,7 +91,7 @@ def generate_test() -> None:
         ):
             response = requests.post(
                 f"http://{server.config.host}:{server.config.port}/v1/rag/test/generate",
-                params={"topic": topic},  # ← "topic" nie "prompt"
+                params={"topic": topic},
                 timeout=300,
             )
             response.raise_for_status()
@@ -107,14 +109,34 @@ def generate_test() -> None:
 
     _print_success("Done!")
     console.print()
+    
+    data = response.json()
     console.print(Panel(
-        str(response.json()),
+        str(data),
         border_style="magenta",
         title="[bold]Response[/]",
         padding=(1, 2),
     ))
     console.print()
-    data = response.json()
+
+    try:
+        sections = [GeneratedTestSection.model_validate(item) for item in data]
+        converting_service = JsonTestConvertingService()
+        
+        json_path = "wygenerowany_test.json"
+        pdf_path = "wygenerowany_test.pdf"
+        
+        converting_service.save_to_json(sections, filepath=json_path)
+        
+        pdf_bytes = converting_service.convert_to_pdf(sections)
+        with open(pdf_path, "wb") as f:
+            f.write(pdf_bytes)
+            
+        _print_success(f"Saved files to [bold]{json_path}[/] and [bold]{pdf_path}[/]")
+    except Exception as e:
+        _print_error(f"Could not save files: {e}")
+
+    console.print()
     questionary.press_any_key_to_continue("Press any key to return to the menu…").ask()
 
 
@@ -127,10 +149,9 @@ def shutdown() -> None:
         padding=(0, 4),
     ))
     console.print()
-    sys.exit(0)
 
 
-def navigate_menu() -> None:
+def navigate_menu() -> bool:
     console.clear()
     print_header()
     console.print()
@@ -147,8 +168,11 @@ def navigate_menu() -> None:
 
     if choice == "generate":
         generate_test()
+        return True
     elif choice == "exit" or choice is None:
-        shutdown()
+        return False
+    
+    return True
 
 
 def main() -> None:
@@ -156,8 +180,11 @@ def main() -> None:
     thread.start()
     try:
         while True:
-            navigate_menu()
-    except (KeyboardInterrupt, SystemExit):
+            if not navigate_menu():
+                break
+    except KeyboardInterrupt:
+        pass
+    finally:
         shutdown()
 
 
