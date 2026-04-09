@@ -1,3 +1,6 @@
+
+from backend.app.models.schemas import ParsedPrompt, TestSection
+
 class SystemPrompts:
     def __init__(self):
         pass
@@ -60,3 +63,42 @@ class SystemPrompts:
             {text}
             """
 
+    def get_parsing_prompt(self, text: str):
+        return f"""
+            # TASK
+            You are a specialist in planning English tests.
+
+            Your task is to extract all necessary information from the teacher's input and return it in the required JSON format.
+
+            ---
+
+            # OUTPUT FORMAT
+            You must strictly follow this JSON structure:
+
+            #RULES OF FIELDS
+            'task' - teachers request 
+            'level' - CEFR level write ONLY ('A1', 'A2'......'C1', 'C2')
+            -'age_group' - you can choose only one from those - kids, teens, adults.
+            -'sections' - TestSections where task type is ONLY vocabulary, grammar, reading or writing. amount represents how many such sections occur in the test.
+            -total_amount - how many exercises in total
+            
+
+            {TestSection.model_json_schema()}
+
+            ---
+
+            # RULES
+            - You MUST return ONLY valid JSON.
+            - Do NOT include any explanations.
+            - Do NOT include markdown formatting (e.g. ```json, ```).
+            - Do NOT add any extra text before or after the JSON.
+            - You MUST use double quotes for all keys and string values.
+            - The output must strictly match the provided schema (no missing or extra fields).
+            - If information is missing, use null or empty values where appropriate (according to schema).
+
+            ---
+
+            # INPUT
+            Teacher request: 
+            {text}
+        """

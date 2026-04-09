@@ -1,8 +1,10 @@
 from backend.app.services.ai_service import AiService
-
+from backend.app.models.schemas import ParsedPrompt, TestSection
+from backend.app.models.prompts import SystemPrompts
 class PromptParserService:
-    def __init__():
-        pass
+    def __init__(self):
+        self.ai_service =AiService()
+        self.prompts = SystemPrompts()
 
     def parse_prompt(self, text: str):
-        pass
+        return self.ai_service.ask(self.prompts.get_parsing_prompt(text))

@@ -3,7 +3,7 @@ from ollama import Client
 from dotenv import load_dotenv
 import json
 from backend.app.models.prompts import SystemPrompts
-from backend.app.models.schemas import TeacherRequestClassification, Question
+
 
 import time
 
