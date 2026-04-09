@@ -30,9 +30,12 @@ class TestGeneratorService:
 
 
     def generate_test(self, topic: str):
+
+        debug : string = ""
+
         transformed_prompt = self.__transform_request_to_prompt(topic)
 
-        print("transformed_prompt", transformed_prompt)
+        debug += str(transformed_prompt)
         
         try:
             transformed_prompt = TransformedPrompt.model_validate(json.loads(transformed_prompt))
@@ -85,9 +88,16 @@ class TestGeneratorService:
                     )
                 )
 
+                debug += '\n' * 3
+                debug += str(retrieval_data)
+
+                debug += '\n' * 3
                 generate_exercise_prompt = self.prompts.get_section_generation_prompt(retrieval_data, topic)
+                debug += str(generate_exercise_prompt)
 
                 generated_section = self.ai_service.ask(generate_exercise_prompt)
+                debug += '\n' * 3
+                debug += generated_section
 
                 try:
                     generated_section = json.loads(generated_section)
@@ -99,12 +109,21 @@ class TestGeneratorService:
                     except ValueError as e:
                         print(f"AI could not fix JSON: {e}")
                         continue
+                
+                try:
+                    new_generated_section = GeneratedTestSection(
+                        instruction=str(generated_section['Question']['content']['instruction']),
+                        body=str(generated_section['Question']['content']['body'])
+                    )
+                except ValueError as e:
+                    with open("debug.txt", "a") as f:
+                        f.write(debug)
+                    print(f"error while saving generated section: {e}")
 
-                new_generated_section = GeneratedTestSection(
-                    instruction=generated_section['Question']['content']['instruction'],
-                    body=generated_section['Question']['content']['body']
-                )
+                print(new_generated_section)
 
                 test_sections.append(new_generated_section)
+
+
         
-        return test_sections
+        return test_sectionse
