@@ -1,7 +1,7 @@
 from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
 from backend.app.models.prompts import SystemPrompts
-from backend.app.models.schemas import Test, Question, TransformedPrompt, TestSection, RetrievalData, RetrievalInstructions, RetrivedChunk
+from backend.app.models.schemas import Test, Question, TransformedPrompt, TestSection, RetrievalData, RetrievalInstructions, RetrivedChunk, Chunk, ChunkMetadata
 from backend.app.services.embeddings_service import EmbeddingsService
 import json
 import time
@@ -38,17 +38,25 @@ class TestGeneratorService:
             )
 
             instruction_records = self.search_service.search_with_filter(
-                "Grammar Collection", "type", "exam-task-instruction", embedding, 3
+                "Grammar Collection", "type", "exam-task-instruction", embedding, 1
             )
 
-            grammar_records = self.search_service.search_with_filter(
-                "Grammar Collection", "type", "grammar", embedding, 3
-            )
+            grammar_records = self.search_service.get_points_with_subject(test_section.subject)
+            print("GRAMMAR RECORD KEYS:", grammar_records[0] if grammar_records else "EMPTY")
 
             for grammar_record in grammar_records:
                 grammar_inst.append(RetrivedChunk(
-                    payload=grammar_record.payload,
-                    score = None
+                    payload=Chunk(
+                        id=str(grammar_record.get("id", "")),
+                        section="grammar",                        
+                        language=grammar_record.get("language", "en"),
+                        level=transformed_prompt.level,          
+                        metadata=ChunkMetadata(
+                            subject=grammar_record.get("subject", ""),
+                            content=grammar_record.get("content", "")  
+                        )
+                    ),
+                    score=None
                 ))
             for instruction_record in instruction_records:
                 exercise_inst.append(RetrivedChunk(
