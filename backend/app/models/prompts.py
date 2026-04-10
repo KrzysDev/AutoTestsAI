@@ -1,4 +1,4 @@
-
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection, GeneratedTest, Exercise
 from backend.app.models.schemas import ParsedPrompt, TestSection
 
 class SystemPrompts:
@@ -143,3 +143,91 @@ class SystemPrompts:
                 You are strictly forbidden to return anything other than the list.
         
         """
+
+    def get_generation_prompt(self, retrival, parsed_prompt):
+        return f"""
+            # ROLE
+            You are an expert instructional designer specializing in English language assessment. 
+            You create structured English tests based strictly on teacher input and provided retrieval data.
+
+            ---
+
+            # OBJECTIVE
+            Generate a complete English test based on:
+            - teacher instructions (highest priority)
+            - provided retrieval data (supporting material)
+
+            You must strictly follow all constraints and output format.
+
+            ---
+
+            # HIERARCHY OF INPUTS
+            1. Teacher input = STRICT PRIORITY (must always be followed)
+            2. Retrieval data = supporting inspiration only (never overrides teacher input)
+
+            If there is a conflict, ALWAYS follow teacher input.
+
+            ---
+
+            # CORE RULES
+            - Each exercise must focus on ONLY ONE grammar/topic (no mixing topics in a single task)
+            Example: Present Simple exercise must NOT include Present Continuous
+            - If multiple grammar points are provided, ALL must be included in the test
+            - Do NOT repeat identical task templates within the same test unless absolutely necessary
+            - Be creative and vary exercise formats (e.g., MCQ, matching, transformation, ordering, error correction)
+            - Keep difficulty appropriate to the implied level in teacher input (if not specified, assume B1)
+
+            ---
+
+            # OUTPUT REQUIREMENTS (STRICT)
+            - Output MUST be valid JSON only
+            - Do NOT include any explanations, markdown, or text outside JSON
+            - Do NOT wrap output in ``` or any formatting
+            - Output MUST match the schema of:
+            {GeneratedTest.model_dump(mode='json')}
+
+            ---
+
+            # TEST STRUCTURE GUIDELINES
+            Your generated test should:
+            - Contain a clear title
+            - Include a defined number of exercises (4–10 depending on input complexity)
+            - Cover all required grammar/topics from teacher input
+            - Include different task types across the test
+            - Include an answer key for all tasks
+
+            ---
+
+            # TASK DESIGN RULES
+            Allowed task types (use variety):
+            - multiple choice (A/B/C/D)
+            - gap fill (but vary format, e.g. word bank, selection-based)
+            - sentence transformation
+            - error correction
+            - matching
+            - ordering sentences
+            - short reading comprehension (ONLY if explicitly requested or provided)
+
+            Important:
+            - One task = one focused skill/grammar point
+            - Do not combine reading + grammar unless explicitly requested
+
+            ---
+
+            # ANSWER KEY RULE
+            - Provide a complete answer key for ALL exercises
+            - Must match generated tasks exactly
+            - No extra explanations in answer key
+
+            ---
+
+            # INPUTS
+
+            ## TEACHER INPUT
+            {parsed_prompt}
+
+            ## PROVIDED DATA (RAG CONTEXT)
+            {retrieval}
+
+        """
+
