@@ -15,7 +15,10 @@ def main():
     search_service = SearchService()
 
 
-    prompt = input("Podaj prompt")
+    prompt = input("Podaj prompt > ")
+    level: Literal['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] = input("level > ")
+    age_group : Literal["kids", "teens", "adults"] = input("age_group > ")
+
 
     if classification_service.classify(prompt) == "normal":
         classified_prompt = prompt_parser_service.parse_prompt(prompt)
@@ -24,8 +27,8 @@ def main():
 
         parsed_prompt = ParsedPrompt(
             task = prompt,
-            level = 'B2',
-            age_group = "teens",
+            level = level,
+            age_group = age_group,
             sections = json_classified_prompt['sections'],
             total_amount = json_classified_prompt['total_amount']
 
@@ -46,6 +49,12 @@ def main():
         
         print("data: ")
         print(data)
+
+        generation_prompt = prompts.get_generation_prompt(data, parsed_prompt)
+
+        generated_test = ai_service.ask(generation_prompt)
+
+        print(generated_test)
         
 
 

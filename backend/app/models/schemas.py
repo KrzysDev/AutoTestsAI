@@ -11,7 +11,7 @@ class Exercise(BaseModel):
     body: str
 
 class GeneratedTest(BaseModel):
-    exercises = list[Exercise]
+    exercises: list[Exercise]
 
 class ParsedPrompt(BaseModel):
     task : str

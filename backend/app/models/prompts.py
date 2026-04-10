@@ -1,5 +1,5 @@
 from backend.app.models.schemas import ParsedPrompt, PromptTestSection, GeneratedTest, Exercise
-from backend.app.models.schemas import ParsedPrompt, TestSection
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection
 
 class SystemPrompts:
     def __init__(self):
@@ -83,7 +83,7 @@ class SystemPrompts:
             -total_amount - how many exercises in total
             
 
-            {TestSection.model_json_schema()}
+            {PromptTestSection.model_json_schema()}
 
             ---
 
@@ -144,10 +144,10 @@ class SystemPrompts:
         
         """
 
-    def get_generation_prompt(self, retrival, parsed_prompt):
+    def get_generation_prompt(self, retrieval, parsed_prompt):
         return f"""
             # ROLE
-            You are an expert instructional designer specializing in English language assessment. 
+            You are an expert designer specializing in English language tests. 
             You create structured English tests based strictly on teacher input and provided retrieval data.
 
             ---
@@ -175,7 +175,10 @@ class SystemPrompts:
             - If multiple grammar points are provided, ALL must be included in the test
             - Do NOT repeat identical task templates within the same test unless absolutely necessary
             - Be creative and vary exercise formats (e.g., MCQ, matching, transformation, ordering, error correction)
-            - Keep difficulty appropriate to the implied level in teacher input (if not specified, assume B1)
+            - Keep difficulty appropriate to the implied level in teacher input 
+            - each exercise should have at least 5 subsections unless teacher said diffrently
+            - reading exercises should have a long at least 800 word text and at least 4 exercises. Pick one type from the retrival data and use it
+
 
             ---
 
@@ -184,40 +187,45 @@ class SystemPrompts:
             - Do NOT include any explanations, markdown, or text outside JSON
             - Do NOT wrap output in ``` or any formatting
             - Output MUST match the schema of:
-            {GeneratedTest.model_dump(mode='json')}
+            {GeneratedTest.model_json_schema()}
 
             ---
 
             # TEST STRUCTURE GUIDELINES
             Your generated test should:
-            - Contain a clear title
             - Include a defined number of exercises (4–10 depending on input complexity)
             - Cover all required grammar/topics from teacher input
             - Include different task types across the test
             - Include an answer key for all tasks
 
-            ---
 
-            # TASK DESIGN RULES
-            Allowed task types (use variety):
-            - multiple choice (A/B/C/D)
-            - gap fill (but vary format, e.g. word bank, selection-based)
-            - sentence transformation
-            - error correction
-            - matching
-            - ordering sentences
-            - short reading comprehension (ONLY if explicitly requested or provided)
+            #HOW DIFFICULT EACH EXERCISE SHOULD BE
+            If level = A2:
+                - use simple vocabulary
+                - use direct grammar gaps
+                - avoid ambiguity
 
-            Important:
-            - One task = one focused skill/grammar point
-            - Do not combine reading + grammar unless explicitly requested
+                If level = B1 or B2:
+                - include distractors (wrong but plausible answers)
+                - mix similar tenses within context
+                - use contextual reasoning instead of isolated grammar
+                - avoid obvious verb cues that reveal the answer
 
-            ---
+                If level = C1:
+                - include everything from B1/B2 rules
+                - add inference-based questions
+                - introduce ambiguity where appropriate (multiple plausible interpretations)
+                - use paraphrasing tasks and rewording challenges
 
             # ANSWER KEY RULE
             - Provide a complete answer key for ALL exercises
             - Must match generated tasks exactly
             - No extra explanations in answer key
+            - answer key should follow the same json schema as regular test. But use one object only. it should be something like this:
+                {{
+                    "instructions" : "answer key" 
+                    "body" : "here you write answers"
+                }}
 
             ---
 
