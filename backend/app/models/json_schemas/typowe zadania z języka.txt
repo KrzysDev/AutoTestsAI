@@ -1,0 +1,407 @@
+OK — zrobimy to tak, żebyś mógł to potem dosłownie wkleić do LLM i on będzie wiedział **dokładnie jak generować zadania egzaminacyjne**.
+
+Poniżej masz **PRECYZYJNE SZABLONY “TEST CONSTRUCTION PROMPTS”** dla każdego typu zadania. Każdy opis ma:
+
+* 🎯 CEL (co test sprawdza)
+* 📦 WEJŚCIE (co model dostaje)
+* 🏗 STRUKTURĘ WYJŚCIA (jak ma wyglądać zadanie)
+* ⚙️ REGUŁY GENEROWANIA (co musi zachować)
+* ❌ PUŁAPKI (czego unikać)
+
+---
+
+# 1. READING – Multiple Choice
+
+## 🎯 CEL
+
+Sprawdzenie rozumienia tekstu (global + szczegół + inference)
+
+## 📦 WEJŚCIE
+
+* tekst (150–600 słów)
+* poziom (A2–C2)
+* liczba pytań
+
+## 🏗 WYJŚCIE
+
+Dla każdego pytania:
+
+```
+Q1: [pytanie]
+A. ...
+B. ...
+C. ...
+D. ...
+Correct: B
+```
+
+## ⚙️ REGUŁY
+
+* 1 poprawna odpowiedź
+* 3 distractory MUSZĄ być:
+
+  * podobne semantycznie
+  * ale błędne logicznie
+* minimum 2 pytania muszą być “inference”
+* nie cytuj dokładnie zdań z tekstu jako odpowiedzi
+
+## ❌ BŁĘDY
+
+* oczywista poprawna odpowiedź
+* zbyt różne opcje (łatwe)
+* copy-paste z tekstu
+
+---
+
+# 2. READING – True / False / Not Given
+
+## 🎯 CEL
+
+Sprawdzenie dokładnego rozumienia informacji
+
+## 📦 WEJŚCIE
+
+* tekst
+* liczba zdań
+
+## 🏗 WYJŚCIE
+
+```
+1. statement → T / F / NG
+2. statement → T / F / NG
+```
+
+## ⚙️ REGUŁY
+
+* T = dokładnie w tekście
+* F = zaprzeczenie w tekście
+* NG = brak informacji (KLUCZOWE)
+* minimum 30% NG
+* zdania muszą być “podchwytliwe”
+
+## ❌ BŁĘDY
+
+* brak NG (częsty błąd)
+* zbyt oczywiste F
+
+---
+
+# 3. READING – Matching headings
+
+## 🎯 CEL
+
+Rozumienie głównej idei akapitów
+
+## 📦 WEJŚCIE
+
+* tekst z 4–8 akapitami
+
+## 🏗 WYJŚCIE
+
+```
+A. Heading 1
+B. Heading 2
+...
+Answer:
+1 → C
+2 → A
+```
+
+## ⚙️ REGUŁY
+
+* nagłówki MUSZĄ być podobne tematycznie
+* każdy akapit = 1 idea główna
+* 1–2 “trap headings” (bardzo podobne)
+
+## ❌ BŁĘDY
+
+* zbyt oczywiste nagłówki
+* wiele poprawnych pasujących
+
+---
+
+# 4. GRAMMAR – Gap-fill (cloze)
+
+## 🎯 CEL
+
+Sprawdzenie gramatyki i struktur
+
+## 📦 WEJŚCIE
+
+* tekst
+* lista targetów (np. prepositions, tenses)
+
+## 🏗 WYJŚCIE
+
+```
+We went ___ the park yesterday.
+```
+
+## ⚙️ REGUŁY
+
+* tylko 1 poprawna odpowiedź
+* luki:
+
+  * przyimki
+  * auxiliary verbs
+  * articles
+  * modal verbs
+* nie usuwaj słów “losowo” → tylko funkcjonalne
+
+## ❌ BŁĘDY
+
+* luka z wieloma poprawnymi odpowiedziami
+* brak kontekstu
+
+---
+
+# 5. GRAMMAR – Multiple choice gap-fill
+
+## 🎯 CEL
+
+Kontrola struktur w kontekście
+
+## 📦 WEJŚCIE
+
+* zdania/tekst
+* 4 opcje na lukę
+
+## 🏗 WYJŚCIE
+
+```
+She ___ to school every day.
+A. go
+B. goes
+C. going
+D. gone
+Correct: B
+```
+
+## ⚙️ REGUŁY
+
+* 1 poprawna
+* 3 “grammatically plausible”
+* wszystkie opcje MUSZĄ pasować do kategorii (np. verbs)
+
+## ❌ BŁĘDY
+
+* 1 oczywiście błędna opcja
+
+---
+
+# 6. GRAMMAR – Sentence transformation
+
+## 🎯 CEL
+
+Transformacja struktury bez zmiany znaczenia
+
+## 📦 WEJŚCIE
+
+* sentence A
+* instruction (np. passive, reported speech)
+
+## 🏗 WYJŚCIE
+
+```
+Rewrite the sentence:
+I started learning English 2 years ago.
+→ I have been learning English for 2 years.
+```
+
+## ⚙️ REGUŁY
+
+* meaning MUST stay identical
+* zmiana struktury obowiązkowa
+* tylko 1 poprawna odpowiedź
+
+## ❌ BŁĘDY
+
+* zmiana znaczenia
+* zbyt wiele możliwych odpowiedzi
+
+---
+
+# 7. WORD FORMATION
+
+## 🎯 CEL
+
+Zmiana formy słowa
+
+## 📦 WEJŚCIE
+
+* base word
+* sentence
+
+## 🏗 WYJŚCIE
+
+```
+He is very ______ (happy)
+Answer: happiness / unhappy (depending on context)
+```
+
+## ⚙️ REGUŁY
+
+* prefix/suffix obowiązkowy
+* zmiana części mowy często wymagana
+* 1 poprawna forma w kontekście
+
+## ❌ BŁĘDY
+
+* brak kontekstu
+* wiele poprawnych form
+
+---
+
+# 8. ERROR CORRECTION
+
+## 🎯 CEL
+
+Wykrywanie błędów
+
+## 📦 WEJŚCIE
+
+* poprawne + błędne zdania
+
+## 🏗 WYJŚCIE
+
+```
+Find the mistake:
+She go to school every day.
+→ goes
+```
+
+## ⚙️ REGUŁY
+
+* max 1 błąd na zdanie
+* błąd MUSI być gramatyczny, nie stylistyczny
+
+## ❌ BŁĘDY
+
+* brak błędu
+* więcej niż 1 błąd
+
+---
+
+# 9. WRITING – Essay
+
+## 🎯 CEL
+
+Argumentacja + struktura
+
+## 📦 WEJŚCIE
+
+* temat
+* poziom
+* liczba słów
+
+## 🏗 WYJŚCIE
+
+```
+Essay Title
+Introduction
+Paragraph 1 (argument)
+Paragraph 2 (counterargument)
+Conclusion
+```
+
+## ⚙️ REGUŁY
+
+* 2–3 argumenty
+* formal tone
+* spójność logiczna
+
+## ❌ BŁĘDY
+
+* brak struktury
+* brak conclusion
+
+---
+
+# 10. WRITING – Email/Letter
+
+## 🎯 CEL
+
+Komunikacja sytuacyjna
+
+## 📦 WEJŚCIE
+
+* sytuacja
+* punkty do zawarcia
+
+## 🏗 WYJŚCIE
+
+```
+Hi John,
+...
+Best,
+```
+
+## ⚙️ REGUŁY
+
+* wszystkie punkty MUSZĄ być zawarte
+* styl zgodny (formal/informal)
+* naturalne zwroty
+
+## ❌ BŁĘDY
+
+* pominięcie bullet pointów
+* zły styl
+
+---
+
+# 11. SPEAKING – Picture description
+
+## 🎯 CEL
+
+Opis + interpretacja
+
+## 📦 WEJŚCIE
+
+* opis obrazu
+
+## 🏗 WYJŚCIE STRUCTURE
+
+* what you see
+* what is happening
+* speculation
+
+## ⚙️ REGUŁY
+
+* must include speculation (maybe, probably)
+* present continuous
+
+---
+
+# 🔥 BONUS: UNIWERSALNY META-PROMPT DO LLM
+
+Jeśli chcesz generator testów:
+
+```
+You are an exam task generator.
+
+Generate: {TASK_TYPE}
+Level: {A2-B2-C1}
+Topic: {TOPIC}
+Number of items: {N}
+
+Rules:
+- ensure only one correct answer per item
+- distractors must be plausible
+- avoid ambiguity
+- maintain exam realism (FCE style)
+- do not repeat sentence patterns
+
+Output format: strict exam layout only.
+```
+
+---
+
+# Jeśli chcesz kolejny level
+
+Mogę Ci zrobić:
+
+* 🧠 “system do generowania całych arkuszy egzaminacyjnych”
+* 🤖 albo JSON schema pod LLM (idealne do backendu)
+* ⚙️ albo system RAG do automatycznego tworzenia testów z tekstów
+
+Daj znać 👍

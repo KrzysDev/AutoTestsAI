@@ -1,70 +1,28 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, Field, ConfigDict
 
-from typing import Literal
-from typing import Union
+from typing import Literal, Union, Optional
 
-class ChunkMetadata(BaseModel):
+class PromptTestSection(BaseModel):
+    task_type: Literal["vocabulary", "grammar", "reading", "writing"]
+    amount : int
 
-    subject: str
-    content: Union[str, dict]
+class Exercise(BaseModel):
+    instruction: str
+    body: str
 
-class Chunk(BaseModel):
-    id: str
+class GeneratedTest(BaseModel):
+    exercises: list[Exercise]
 
-    section: Literal["vocabulary", "grammar", "listening", "reading"]
-
-    language: Literal["en", "de", "eng", "ger"]
-
-    level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]
-
-    metadata: ChunkMetadata
-
-    @field_validator("level")
-    @classmethod
-    def no_combined_levels(cls, v: str) -> str:
-        if "/" in v or "-" in v:
-            raise ValueError(f"Level must be a single value, received: '{v}'")
-        return v
-
-class RetrivedChunk(BaseModel):
-    payload: Chunk
-    score: float
-
-class Question(BaseModel):
-    instruction : str
-    text : str
-    type : Literal["multiple_choice", "open_ended"]
-    correct_answer : str
-
-class Group(BaseModel):
-    questions : list[Question]
-    answers : list[str]
-
-class Test(BaseModel):
-    groups : list[Group]
+class ParsedPrompt(BaseModel):
+    task : str
+    level : Literal['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+    age_group : Literal["kids", "teens", "adults"]
+    sections : list[PromptTestSection]
+    total_amount : int = 20
 
 
-class TeacherRequestClassification(BaseModel):
-    text: str
-    classification: str
-
-    @field_validator("classification")
-    @classmethod
-    def validate_classification(cls, v: str) -> str:
-        if v.lower() not in ["general", "test", "general\n", "test\n, \ngeneral", "\ntest"]:
-            if v.startswith("general"):
-                return "general"
-            elif v.startswith("test"):
-                return "test"
-            else:
-                raise ValueError(f"Classification must be either 'general' or 'test', received: '{v}'")
-        return v.lower()
+class RetrivalQueries(BaseModel):
+    queries : list[Literal["vocabulary", "grammar", "reading", "writing"]]
 
 
-class TestGeneratorRequest(BaseModel):
-    language: Literal["en", "de", "eng", "ger"]
-    level: Literal["A1", "A2", "B1", "B2", "C1", "C2"]
-    topic: str
-    group_count: int = 2
 
-    

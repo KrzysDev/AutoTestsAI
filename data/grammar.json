@@ -1,0 +1,171 @@
+[
+    {
+        "id": "present-simple-3f2a",
+        "language": "en",
+        "subject": "Present Simple",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności powtarzalnych, nawyków, faktów, praw ogólnych, stanów oraz zaplanowanych wydarzeń według harmonogramu (np. rozkłady jazdy).",
+            "structure": "S + base verb (3rd person: +s/es)",
+            "signal_words": "always, usually, often, sometimes, never, every day, on Mondays",
+            "examples": "I go to the gym every day.; She works in a bank.; Water boils at 100°C.; I like pizza.; The train leaves at 6 PM.",
+            "common_mistakes": "Adding -s to all persons (wrong: I goes); using continuous with stative verbs (wrong: I am knowing)."
+        }
+    },
+    {
+        "id": "present-continuous-7b1c",
+        "language": "en",
+        "subject": "Present Continuous",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności dziejących się w chwili mówienia, sytuacji tymczasowych oraz irytujących nawyków (np. z 'always').",
+            "structure": "S + am/is/are + verb-ing",
+            "signal_words": "now, at the moment, currently, today, always",
+            "examples": "I am studying now.; She is watching TV at the moment.; We are working on a project this week.; He is always complaining.; I am meeting him tomorrow.",
+            "common_mistakes": "Using with stative verbs (wrong: I am liking); forgetting 'to be' (wrong: I studying)."
+        }
+    },
+    {
+        "id": "present-perfect-5d4e",
+        "language": "en",
+        "subject": "Present Perfect",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności, które wydarzyły się w przeszłości, ale mają skutek teraz, bez podania konkretnego momentu w czasie.",
+            "structure": "S + have/has + past participle (V3)",
+            "signal_words": "already, yet, just, ever, never, since, for",
+            "examples": "I have finished my homework.; She has never been to London.; We have already eaten.; He has lost his keys.; Have you ever tried sushi?",
+            "common_mistakes": "Using with specific past time (wrong: I have seen him yesterday); wrong past participle forms."
+        }
+    },
+    {
+        "id": "present-perfect-continuous-9a6b",
+        "language": "en",
+        "subject": "Present Perfect Continuous",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności, które zaczęły się w przeszłości i trwają do teraz lub niedawno się zakończyły, z naciskiem na proces i długość trwania.",
+            "structure": "S + have/has been + verb-ing",
+            "signal_words": "for, since, all day, recently, lately",
+            "examples": "I have been studying for 2 hours.; She has been working all day.; They have been playing football since morning.; He has been learning English for 5 years.; We have been waiting for you.",
+            "common_mistakes": "Confusing with Present Perfect (result vs process); using stative verbs."
+        }
+    },
+    {
+        "id": "past-simple-2c8d",
+        "language": "en",
+        "subject": "Past Simple",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania zakończonych czynności w przeszłości oraz ciągu wydarzeń w przeszłości.",
+            "structure": "S + verb (V2/ed)",
+            "signal_words": "yesterday, last week, in 2020, ago",
+            "examples": "I went to school yesterday.; She bought a new phone.; We watched a movie last night.; He didn’t come to the party.; I woke up, ate breakfast and left.",
+            "common_mistakes": "Using present perfect with past time markers; неправильna forma czasownika."
+        }
+    },
+    {
+        "id": "past-continuous-4e1f",
+        "language": "en",
+        "subject": "Past Continuous",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności trwających w określonym momencie w przeszłości lub czynności przerwanej przez inną.",
+            "structure": "S + was/were + verb-ing",
+            "signal_words": "while, when, at that moment",
+            "examples": "I was studying at 5 PM.; She was cooking when I arrived.; They were playing football.; We were not listening.; What were you doing yesterday?",
+            "common_mistakes": "Mixing with Past Simple incorrectly; forgetting 'was/were'."
+        }
+    },
+    {
+        "id": "past-perfect-6b3a",
+        "language": "en",
+        "subject": "Past Perfect",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności, która wydarzyła się przed inną w przeszłości, szczególnie gdy kolejność nie jest oczywista.",
+            "structure": "S + had + past participle (V3)",
+            "signal_words": "before, after, already, just",
+            "examples": "I had finished homework before dinner.; She had left before I arrived.; They had already eaten.; He hadn’t seen it before.; Had you done it earlier?",
+            "common_mistakes": "Overusing when sequence is clear; using wrong verb form."
+        }
+    },
+    {
+        "id": "past-perfect-continuous-8d5c",
+        "language": "en",
+        "subject": "Past Perfect Continuous",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności, które trwały przez pewien czas przed określonym momentem w przeszłości, z naciskiem na długość trwania.",
+            "structure": "S + had been + verb-ing",
+            "signal_words": "for, since, before, all day",
+            "examples": "I had been studying for 2 hours before dinner.; She had been working all day.; They had been waiting for hours.; He had been playing before it rained.; We had been talking before the teacher came.",
+            "common_mistakes": "Confusing with Past Perfect; ignoring duration aspect."
+        }
+    },
+    {
+        "id": "future-simple-1e7f",
+        "language": "en",
+        "subject": "Future Simple (will)",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do spontanicznych decyzji, przewidywań (opinii) oraz obietnic.",
+            "structure": "S + will + base verb",
+            "signal_words": "probably, I think, I believe, maybe",
+            "examples": "I will help you.; She will call you later.; I think it will rain.; I won’t do that again.; Will you come with me?",
+            "common_mistakes": "Using for planned actions (use going to instead)."
+        }
+    },
+    {
+        "id": "future-going-to-3a2d",
+        "language": "en",
+        "subject": "Going to",
+        "type": "grammar",
+        "content": {
+            "definition": "Konstrukcja używana do opisywania planów podjętych przed momentem mówienia oraz przewidywań opartych na dowodach.",
+            "structure": "S + am/is/are + going to + base verb",
+            "signal_words": "tomorrow, next week, soon",
+            "examples": "I am going to study tonight.; She is going to travel next week.; Look at the sky! It is going to rain.; They are going to build a house.; We are not going to lose.",
+            "common_mistakes": "Confusing with will; forgetting 'to'."
+        }
+    },
+    {
+        "id": "future-continuous-5c9e",
+        "language": "en",
+        "subject": "Future Continuous",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności, które będą trwały w określonym momencie w przyszłości oraz do uprzejmych pytań o plany.",
+            "structure": "S + will be + verb-ing",
+            "signal_words": "this time tomorrow, at 5 PM tomorrow",
+            "examples": "I will be studying at 5 PM.; She will be working tomorrow.; They will be traveling this time next week.; We will be waiting for you.; Will you be using your laptop?",
+            "common_mistakes": "Using instead of Present Continuous for fixed plans."
+        }
+    },
+    {
+        "id": "future-perfect-7f1b",
+        "language": "en",
+        "subject": "Future Perfect",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności, które zakończą się przed określonym momentem w przyszłości.",
+            "structure": "S + will have + past participle (V3)",
+            "signal_words": "by, by the time, before",
+            "examples": "I will have finished homework by 6 PM.; She will have left by then.; They will have completed the project.; He will have learned a lot.; Will you have done it by tomorrow?",
+            "common_mistakes": "Using without clear future deadline."
+        }
+    },
+    {
+        "id": "future-perfect-continuous-9c4d",
+        "language": "en",
+        "subject": "Future Perfect Continuous",
+        "type": "grammar",
+        "content": {
+            "definition": "Czas używany do opisywania czynności, które będą trwały przez określony czas do momentu w przyszłości, z naciskiem na długość trwania.",
+            "structure": "S + will have been + verb-ing",
+            "signal_words": "for, by the time, for X hours",
+            "examples": "I will have been studying for 2 hours by 6 PM.; She will have been working all day.; They will have been living here for 10 years.; He will have been training for months.; We will have been waiting for a long time.",
+            "common_mistakes": "Confusing with Future Perfect; ignoring duration."
+        }
+    }
+]

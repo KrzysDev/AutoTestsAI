@@ -2,6 +2,9 @@ import easyocr
 import image_slicer
 import os
 
+# <summary>
+# Service for Optical Character Recognition (OCR) using easyocr, extracting text directly from images.
+# </summary>
 class OCRService:
     def __init__(self):
         self.reader = easyocr.Reader(['en', 'de', 'pl'], gpu=True)

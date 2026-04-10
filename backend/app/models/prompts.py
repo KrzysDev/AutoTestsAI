@@ -1,218 +1,244 @@
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection, GeneratedTest, Exercise
 
-from typing import Literal
-import json
-from backend.app.models.schemas import Test, Chunk
-
+# <summary>
+# Provides system prompts and templates for instructing the LLMs across various classification, parsing, and generation tasks.
+# </summary>
 class SystemPrompts:
-
-    def get_data_extraction_prompt(self, language: Literal["en", "de"]) -> str:
+    def __init__(self):
+        pass
+    
+    def get_classification_prompts(self, text: str):
         return f"""
-                ##ZADANIE
-                Z podanego zdjecia podrecznika do jezyka {"angielskiego" if language == "en" else "niemieckiego"} wypisz WSZYSTKIE wystepujace tam slowka w podanym formacie JSON:
+            # TASK
+            You are a classifier for teacher messages in an English exam generation system.
 
-                ##POPRAWNY FORMAT JSON
-                {{
-                "subject": temat, który twoim zdaniem najlepiej pasuje wybrany z tych: human being, place of residence, education, work, private life, nutrition, shopping and services, travel and tourism, culture, sport, health, science and technology, state and society.  
-                "content": [
-                {{
-                    "word" : ({"angielskie" if language == "en" else "niemieckie"} słowo),
-                    "translation" : (polskie tlumaczenie)
-                }},
-                    ...... itd...
-                ]
-                }}
+            Your job is to classify the message into exactly ONE category:
 
-                ##UWAGI
-                -nie zwracaj nic poza JSON'em. NIc nie moze znajdować się przed ani po nim. Sam czysty json. Nie poprzedzaj go znakami takimi jak ``` lub innymi
-                -uzywaj tlumaczen podanych wylacznie na zdjeciu nie pisz swoich
-        """
-    def get_grammar_extraction_prompt(self, language: Literal["en", "de"]) -> str:
-        return f"""
-            ##ZADANIE
-            Zapoznaj sie z zagadnieniem gramatycznym znajdujacym sie na podanym zdjeciu podrecznika do jezyka {"angielskiego" if language == "en" else "niemieckiego"}. Przenalizuj zasady, wystepowanie oraz przykłady.
+            1. "general"
+            2. "normal"
 
-            ##POPRAWNY FORMAT JSON
-            {{
-                "subject": temat, który twoim zdaniem najlepiej pasuje (nazwa czasu / kategorii gramatycznej)
-                "content":
-                {{
-                    "description": "opis zagadnienia gramatycznego (po polsku)",
-                    "examples": [
-                        "example 1 (po angielsku)",
-                        "example 2 (po angielsku)",
-                        "example 3 (po angielsku)"
-                    ]
-                }}
-            }}
+            ---
 
-            ##UWAGI
-            -nie zwracaj nic poza JSON'em. NIc nie moze znajdować się przed ani po nim. Sam czysty json. Nie poprzedzaj go znakami takimi jak ``` lub innymi
-            -jeżeli na podanym zdjęciu znajdują się przykłady użycia danego zagadnienia (np. czasu, gramatycznej struktury) to przepisz je do pola "examples" w JSON'ie
-            -jeżeli na podanym zdjęciu nie znajdują się przykłady użycia danego zagadnienia (np. czasu, gramatycznej struktury) to pole wymyśl własne przykłady.
-        """
+            # DEFINITIONS
 
-    def get_data_correction_prompt(self, language: Literal["en", "de"], extracted_data) -> str:
-        return f"""
-            ##ZADANIE
-            Podany JSON, popraw tak aby spełniał poniższe warunki. 
+            ## 1. "general"
+            The message is general and does NOT clearly request creation of a test or exam.
 
-            ##POPRAWNY FORMAT JSON
-            {{
-                "subject": temat, który twoim zdaniem najlepiej pasuje wybrany z tych: human being, place of residence, education, work, private life, nutrition, shopping and services, travel and tourism, culture, sport, health, science and technology, state and society.  
-                "content": [
-                {{
-                    "word" : ({"angielskie" if language == "en" else "niemieckie"} słowo),
-                    "translation" : (polskie tlumaczenie)
-                }},
-                    ...... itd...
-                ]
-            }}
+            It may:
+            - ask what the system can do
+            - ask general questions about teaching or exercises
+            - not request a concrete test
 
-            ##UWAGI
-            -nie zwracaj nic poza JSON'em. NIc nie moze znajdować się przed ani po nim. Sam czysty json. Nie poprzedzaj go znakami takimi jak ``` lub innymi
-            -uzywaj tlumaczen podanych wylacznie na zdjeciu nie pisz swoich
-            -jeżeli jakieś tłumaczenie jest niepoprawne, popraw je
-            -jeżeli jakieś słowo jest nieczytelne, źle napisane i nie wiesz czym jest usuń je.
+            Examples:
+            - "What can you generate?"
+            - "Can you help with grammar?"
+            - "How does this system work?"
 
-            #DANE DO POPRAWY
-            {extracted_data}
-        """
-    def get_data_grammar_correction_prompt(self, language: Literal["en", "de"], extracted_data) -> str:
-        return f"""
-            ##ZADANIE
-            Podany JSON (lub zły tekst), popraw tak aby spełniał poniższe warunki.
+            ---
 
-            ##POPRAWNY FORMAT JSON
-            {{
-                "subject": temat, który twoim zdaniem najlepiej pasuje (nazwa czasu / kategorii gramatycznej)
-                "content":
-                {{
-                    "description": "opis zagadnienia gramatycznego (po polsku)",
-                    "examples": [
-                        "example 1 (po angielsku)",
-                        "example 2 (po angielsku)",
-                        "example 3 (po angielsku)"
-                    ]
-                }}
-            }}
+            ## 2. "normal"
+            The message clearly requests creation of a test or exam.
 
-            ##UWAGI
-            -nie zwracaj nic poza JSON'em. NIc nie moze znajdować się przed ani po nim. Sam czysty json. Nie poprzedzaj go znakami takimi jak ``` lub innymi
-            -jeżeli na podanym zdjęciu znajdują się przykłady użycia danego zagadnienia (np. czasu, gramatycznej struktury) to przepisz je do pola "examples" w JSON'ie
-            -jeżeli na podanym zdjęciu nie znajdują się przykłady użycia danego zagadnienia (np. czasu, gramatycznej struktury) to pole wymyśl własne przykłady.
+            Examples:
+            - "Create an English test for high school students."
+            - "Make me a grammar test for B1 level."
+            - "Prepare a reading comprehension exam."
 
-            #DANE DO POPRAWY
-            {extracted_data}
-        """
-    def get_classification_prompt(self, text: str) -> str:
-        return f"""
-            ##ZADANIE
-            Na podstawie podanego tekstu musisz okreslic czy jest to ogólne zapytanie czy prośba o utworzenie testu/sprawdzianu/kartkowki.
+            Even if some details are present, if the request is incomplete → "normal".
 
-            #CO ZWRACASSZ
-            -JEDYNIE - 'general' lub 'test'. NIC POZA TYM.
+            ---
 
-            #ZAPYTANIE DO ANALIZY
+            # OUTPUT RULES
+
+            - Output ONLY one word
+            - No punctuation
+            - No explanations
+            - No extra text
+
+            Allowed outputs:
+            - general
+            - normal
+
+            ---
+
+            ## TEACHER REQUEST
             {text}
-        """
+            """
 
-    def get_test_planning_prompt(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str) -> str:
+    def get_parsing_prompt(self, text: str):
         return f"""
-            ##ZADANIE
-            Na odstawie podanego zapytania nauczyciela, zaplanuj test.
+            # TASK
+            You are a specialist in planning English tests.
 
-            ##CO ZWRACASZ
-            Czytelny, prosty do zrozumienia plan, który będzie instrukcją skoonstruowania testu krok po kroku tak jak nauczyciel prawdopodobnie sobie tego zyczy.
-            Napisz liste kroków, przez która model językowy przechodząc, będzie tworzył odpowiedni dla nauczyciela test.
+            Your task is to extract all necessary information from the teacher's input and return it in the required JSON format.
 
-            ##ZAPYTANIE NAUCZYCIELA:
-            {topic}
+            ---
 
-            ##DANE
-            Język: {"angielski" if language == "en" else "niemiecki"}
-            Poziom: {level}
+            # OUTPUT FORMAT
+            You must strictly follow this JSON structure:
 
-            ##UWAGI
-            -nie zwracaj nic poza planem. NIC POZA TYM.
-            -plan ma być czytelny i prosty do zrozumienia.
-            -plan ma być listą kroków, przez która model językowy przechodząc, będzie tworzył odpowiedni dla nauczyciela test.
-        """
-    def get_query_requests_prompt(self, plan: str) -> str:
-        return f"""
-            ##ZADANIE
-            Na podstawie podanego planu, wygeneruj zapytania do modelu językowego.
-
-            ##CO ZWRACASZ
-            Liste zapytan do systemu wyszukujacego materialy do testu. Niech zapytania beda sformulowane tak aby jak najwieksza szansa byla na odnalezienie przydatnych chunków.
-            Kazde zapytanie powinno byc wlasnym zdaniem w nowej linii.
-
-            ##Przyklad Odpowiedzi:
-                ' - Present Simple
-                  - czlowiek słówka / człowiek
-                  - dom i rodzina '
+            #RULES OF FIELDS
+            'task' - teachers request 
+            'level' - CEFR level write ONLY ('A1', 'A2'......'C1', 'C2')
+            -'age_group' - you can choose only one from those - kids, teens, adults.
+            -'sections' - TestSections where task type is ONLY vocabulary, grammar, reading or writing. amount represents how many such sections occur in the test.
+            -total_amount - how many exercises in total
             
 
-            ##PLAN:
-            {plan}
+            {PromptTestSection.model_json_schema()}
 
-            ##UWAGI
-            -zauwaz ze "zdania" w przykladzie to same proste hasla, nie zdania poprawne skladniowo. takie wlasnie hasla, najlepiej pojedyczne slowa chce zebys wypisal pod soba
-            -nie zwracaj nic poza listą zapytań. NIC POZA TYM.
-            -lista zapytań ma być czytelna i prosta do zrozumienia.
-            -lista zapytań ma byc zdaniami (MAKSYMALNIE 4)
-            -kazde zdanie musi byc oddzielone znakiem nowej linii (innymi slowy kazde ma byc w innej linii)
+            ---
+
+            # RULES
+            - You MUST return ONLY valid JSON.
+            - Do NOT include any explanations.
+            - Do NOT include markdown formatting (e.g. ```json, ```).
+            - Do NOT add any extra text before or after the JSON.
+            - You MUST use double quotes for all keys and string values.
+            - The output must strictly match the provided schema (no missing or extra fields).
+            - If information is missing, use null or empty values where appropriate (according to schema).
+
+            ---
+
+            # INPUT
+            Teacher request: 
+            {text}
         """
-    def get_test_generation_prompt(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], data: list[Chunk], plan :str, teachers_request: str, group_count: int, question_count: int) -> str:
+    def get_retrival_prompt(self, prompt: ParsedPrompt):
         return f"""
-            ##CECHY
-            Jesteś specjalistą od układania testów językowych z języka {"angielskiego" if language == "en" else "niemieckiego"} na poziomie {level}. Będziesz zajmowaniem się układaniem testów na podstawie przesłanego ci kontekstu oraz prośby nauczyciela w odpowiednim formacie JSON.
+            # TASK
+                You are a specialist in designing language tests. As the first agent in a large test-generation system, your task is to extract and return a list of topics that will be useful for generating the test.
 
-            ##PROŚBA NAUCZYCIELA
-            {teachers_request}
+                You must return the answer in the following format:
+                ["topic1", "topic2", "topic3", ... "topicx"]
 
-            ##ULOZONY PRZEZ CIEBIE PLAN DZIALANIA W UKLADANIU TESTU
-            {plan}
+                You are ONLY allowed to choose from the following pool of topics:
 
-            ##DANE WYCIAGNIETE Z JEZYKOWEJ BAZY DANYCH
-            {data}
+                English tenses definitions:
 
-            ##ILOSC GRUP DO STWORZENIA
-            {group_count}
+                Present Simple
+                Present Continuous
+                Present Perfect
+                Present Perfect Continuous
 
-            ##ILE PYTAN W JEDNEJ GRUPIE:
-            {question_count}
+                Past Simple
+                Past Continuous
+                Past Perfect
+                Past Perfect Continuous
 
-            ##WYMAGANA STRUKTURA JSON
-            {json.dumps(Test.model_json_schema(), indent=2)}
- 
+                Future Simple
+                Future Continuous
+                Future Perfect
+                Future Perfect Continuous
+
+                AND
+                reading, writing, vocabulary, grammar -> instructions for creating exam-style tasks
+
+                ---
+
+                # TEACHER REQUEST
+                "{prompt.model_dump()}"
+
+                ---
+
+                # RULES
+                You are strictly forbidden to return anything other than the list.
+        
         """
 
-    def get_test_validation_prompt(self, s: str) -> str:
+    def get_generation_prompt(self, retrieval, parsed_prompt):
         return f"""
-            ##ZADANIE
-            Sprawdz poprawnosc testu. 
+            # ROLE
+            You are an expert designer specializing in English language tests. 
+            You create structured English tests based strictly on teacher input and provided retrieval data.
 
-            ##TEST DO SPRAWDZENIA
-            {s}
+            ---
 
-            ##UWAGI
-            -nie zwracaj nic poza poprawnym testem. NIC POZA TYM.
-            -test ma byc poprawny i spelniac wszystkie wymagania takie jak odpowiednia struktura json:
-            {json.dumps(Test.model_json_schema(), indent=2)}
+            # OBJECTIVE
+            Generate a complete English test based on:
+            - teacher instructions (highest priority)
+            - provided retrieval data (supporting material)
 
-            -ZWROC JEDYNIE TEST W POPRAWNEJ WERSJI JSON ZADEN TEKST NIC POZA TYM.
+            You must strictly follow all constraints and output format.
+
+            ---
+
+            # HIERARCHY OF INPUTS
+            1. Teacher input = STRICT PRIORITY (must always be followed)
+            2. Retrieval data = supporting inspiration only (never overrides teacher input)
+
+            If there is a conflict, ALWAYS follow teacher input.
+
+            ---
+
+            # CORE RULES
+            - Each exercise must focus on ONLY ONE grammar/topic (no mixing topics in a single task)
+            Example: Present Simple exercise must NOT include Present Continuous
+            - If multiple grammar points are provided, ALL must be included in the test
+            - Do NOT repeat identical task templates within the same test unless absolutely necessary
+            - Be creative and vary exercise formats (e.g., MCQ, matching, transformation, ordering, error correction)
+            - Keep difficulty appropriate to the implied level in teacher input 
+            - each exercise should have at least 5 subsections unless teacher said diffrently
+
+
+            ---
+
+            # OUTPUT REQUIREMENTS (STRICT)
+            - Output MUST be valid JSON only
+            - Do NOT include any explanations, markdown, or text outside JSON
+            - Do NOT wrap output in ``` or any formatting
+            - Output MUST match the schema of:
+            {GeneratedTest.model_json_schema()}
+
+            ---
+
+            # TEST STRUCTURE GUIDELINES
+            Your generated test should:
+            - Include a defined number of exercises (4–10 depending on input complexity)
+            - Cover all required grammar/topics from teacher input
+            - Include different task types across the test
+            - Include an answer key for all tasks
+
+
+            #HOW DIFFICULT EACH EXERCISE SHOULD BE
+            If level = A2:
+                - use simple vocabulary
+                - use direct grammar gaps
+                - avoid ambiguity
+                - if reading = short
+
+                If level = B1 or B2:
+                - include distractors (wrong but plausible answers)
+                - mix similar tenses within context
+                - use contextual reasoning instead of isolated grammar
+                - avoid obvious verb cues that reveal the answer
+                - readings at least 500 words or longer
+
+                If level = C1:
+                - include everything from B1/B2 rules
+                - add inference-based questions
+                - introduce ambiguity where appropriate (multiple plausible interpretations)
+                - use paraphrasing tasks and rewording challenges
+
+            # ANSWER KEY RULE
+            - Provide a complete answer key for ALL exercises
+            - Must match generated tasks exactly
+            - No extra explanations in answer key
+            - answer key should follow the same json schema as regular test. But use one object only. it should be something like this:
+                {{
+                    "instructions" : "answer key" 
+                    "body" : "here you write answers"
+                }}
+
+            ---
+
+            # INPUTS
+
+            ## TEACHER INPUT
+            {parsed_prompt}
+
+            ## PROVIDED DATA (RAG CONTEXT)
+            {retrieval}
+
         """
-    def get_general_question_prompt(self, topic: str) -> str:
-        return f"""
-            ##ZADANIE
-            Na podstawie podanego zapytania nauczyciela, odpowiedz na nie.
 
-            ##ZAPYTANIE NAUCZYCIELA:
-            {topic}
-
-            ##TWOJE CECHY
-            -Jesteś specjalistą od tworzenia testów językowych dla uczniów na różnym poziomie zaawansowania.
-            -Potrafisz tworzyc testy wyłącznie z języka angielskiego.
-            -Jesli uznasz to za konieczne, wspomnij ze jestes Asystentem w wersji testowej i że nie potrafisz zrobić bardziej zaawansowanych testów dobrze. Tj. Sluchanie ze zrozumieniem.
-            -odpowiadaj w takim samym języku jak zapytanie nauczyciela.
-        """
