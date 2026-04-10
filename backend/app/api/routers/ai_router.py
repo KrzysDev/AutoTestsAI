@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Body
 import ollama
 from backend.app.services.ai_service import AiService
 from datetime import datetime
@@ -11,7 +11,7 @@ ai_service = AiService()
 last_requests_cloud = defaultdict(lambda: datetime.min)
 
 @router.post("/v1/rag/ask/local")
-def ask_ollama_local(text: str):
+def ask_ollama_local(text: str = Body(..., description="Query for the local AI")):
     if not text.strip():
         raise HTTPException(status_code=400, detail="Input text cannot be empty")
     try:
@@ -22,7 +22,7 @@ def ask_ollama_local(text: str):
         raise HTTPException(status_code=500, detail="Unexpected local model error.")
 
 @router.post("/v1/rag/ask/cloud")
-def ask_ollama_cloud(text: str, request: Request):
+def ask_ollama_cloud(request: Request, text: str = Body(..., description="Query for the cloud AI")):
     client_ip = request.client.host
     now = datetime.now()
     delta = (now - last_requests_cloud[client_ip]).total_seconds()

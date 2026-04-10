@@ -23,3 +23,9 @@ class ParsedPrompt(BaseModel):
 
 class RetrivalQueries(BaseModel):
     queries : list[Literal["vocabulary", "grammar", "reading", "writing"]]
+
+class TestGeneratorRequest(BaseModel):
+    prompt: str
+    level: Literal['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+    age_group: Literal["kids", "teens", "adults"]
+    total_amount: int = 20
