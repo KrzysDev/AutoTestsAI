@@ -23,6 +23,3 @@ class ParsedPrompt(BaseModel):
 
 class RetrivalQueries(BaseModel):
     queries : list[Literal["vocabulary", "grammar", "reading", "writing"]]
-
-
-
