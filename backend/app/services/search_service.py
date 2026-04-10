@@ -3,8 +3,6 @@ from qdrant_client.models import Filter, FieldCondition, MatchValue
 import os
 from dotenv import load_dotenv
 
-from backend.app.models.schemas import RetrivedChunk, Chunk
-
 import math
 
 load_dotenv()
@@ -41,7 +39,7 @@ class SearchService:
             point for point in all_points
             if point.payload.get("subject").startswith(subject)
         ]
-
+        
         return [point.payload for point in filtered_points]
        
 

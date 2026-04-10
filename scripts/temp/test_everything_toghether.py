@@ -4,6 +4,7 @@ from backend.app.models.prompts import SystemPrompts
 import json
 from backend.app.models.schemas import ParsedPrompt
 from backend.app.services.ai_service import AiService
+from backend.app.services.search_service import SearchService
 
 
 def main():
@@ -11,6 +12,7 @@ def main():
     prompt_parser_service = PromptParserService()
     prompts = SystemPrompts()
     ai_service = AiService()
+    search_service = SearchService()
 
 
     prompt = input("Podaj prompt")
@@ -32,8 +34,18 @@ def main():
         prompt2 = prompts.get_retrival_prompt(parsed_prompt)
 
         queries = ai_service.ask(prompt2)
+        
+        queries = json.loads(queries)
 
         print(queries)
+
+        data = []
+        
+        for query in queries:
+            data.append(search_service.search(query))
+        
+        print("data: ")
+        print(data)
         
 
 
