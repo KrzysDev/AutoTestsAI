@@ -9,6 +9,9 @@ logging.getLogger("sentence_transformers").setLevel(logging.ERROR)
 
 load_dotenv()
 
+# <summary>
+# Service used for converting text into vector embeddings using the SentenceTransformer model.
+# </summary>
 class EmbeddingsService:
     def __init__(self):
         self.model = SentenceTransformer("intfloat/multilingual-e5-large")

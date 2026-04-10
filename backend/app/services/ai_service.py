@@ -9,6 +9,10 @@ import time
 
 load_dotenv()
 
+# <summary>
+# Service for interacting with LLM APIs (Ollama), handling both local and cloud inference.
+# Provides text and document analysis capabilities and classification utility methods.
+# </summary>
 class AiService:
     def __init__(self):
         api_key = os.environ.get('OLLAMA_API_KEY')
@@ -102,10 +106,10 @@ class AiService:
 
             except Exception as e:
                 wait = 2 ** attempt
-                print(f"Próba {attempt + 1}/{retries} nieudana: {e}")
+                print(f"Attempt {attempt + 1}/{retries} failed: {e}")
 
                 if attempt < retries - 1:
-                    print(f"Czekam {wait}s przed kolejną próbą...")
+                    print(f"Waiting {wait}s before next attempt...")
                     time.sleep(wait)
 
         return "Error: Could not connect to Ollama"

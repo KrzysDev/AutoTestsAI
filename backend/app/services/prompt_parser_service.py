@@ -4,6 +4,9 @@ from backend.app.models.schemas import ParsedPrompt, PromptTestSection
 
 from backend.app.models.prompts import SystemPrompts
 
+# <summary>
+# Service used to parse natural language prompts into structural models for further processing.
+# </summary>
 class PromptParserService:
 
     def __init__(self):

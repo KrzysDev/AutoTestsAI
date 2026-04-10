@@ -7,6 +7,9 @@ import math
 
 load_dotenv()
 
+# <summary>
+# Service used to connect to Qdrant cluster and fetch vector embeddings or points based on subjects.
+# </summary>
 class SearchService:
     def __init__(self):
         self.client = QdrantClient(

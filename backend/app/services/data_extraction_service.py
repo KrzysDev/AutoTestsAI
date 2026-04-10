@@ -8,6 +8,9 @@ import image_slicer
 
 from typing import Literal
 
+# <summary>
+# Service for extracting vocabulary and grammar datasets from images using OCR and AI corrections.
+# </summary>
 class DataExtractionService:
     def __init__(self):
         self.ai_service = AiService()

@@ -1,6 +1,8 @@
 from backend.app.models.schemas import ParsedPrompt, PromptTestSection, GeneratedTest, Exercise
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection
 
+# <summary>
+# Provides system prompts and templates for instructing the LLMs across various classification, parsing, and generation tasks.
+# </summary>
 class SystemPrompts:
     def __init__(self):
         pass
@@ -177,7 +179,6 @@ class SystemPrompts:
             - Be creative and vary exercise formats (e.g., MCQ, matching, transformation, ordering, error correction)
             - Keep difficulty appropriate to the implied level in teacher input 
             - each exercise should have at least 5 subsections unless teacher said diffrently
-            - reading exercises should have a long at least 800 word text and at least 4 exercises. Pick one type from the retrival data and use it
 
 
             ---
@@ -204,12 +205,14 @@ class SystemPrompts:
                 - use simple vocabulary
                 - use direct grammar gaps
                 - avoid ambiguity
+                - if reading = short
 
                 If level = B1 or B2:
                 - include distractors (wrong but plausible answers)
                 - mix similar tenses within context
                 - use contextual reasoning instead of isolated grammar
                 - avoid obvious verb cues that reveal the answer
+                - readings at least 500 words or longer
 
                 If level = C1:
                 - include everything from B1/B2 rules
