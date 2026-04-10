@@ -1,9 +1,6 @@
 import re
 from app.models.schemas import Chunk, ChunkMetadata
 
-# <summary>
-# Service responsible for chunking data and text documents into manageable semantic pieces.
-# </summary>
 class ChunkingService:
     def __init__(self):
         pass

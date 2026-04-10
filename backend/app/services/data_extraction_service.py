@@ -1,16 +1,13 @@
-from backend.app.services.ai_service import AiService
-from backend.app.models.schemas import Chunk, ChunkMetadata
+from app.services.ai_service import AiService
+from app.models.schemas import Chunk, ChunkMetadata
 import sys
 import os
-from backend.app.models.prompts import SystemPrompts as prompts
+from app.models.prompts import SystemPrompts as prompts
 
 import image_slicer
 
 from typing import Literal
 
-# <summary>
-# Service for extracting vocabulary and grammar datasets from images using OCR and AI corrections.
-# </summary>
 class DataExtractionService:
     def __init__(self):
         self.ai_service = AiService()

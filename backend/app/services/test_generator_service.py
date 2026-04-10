@@ -1,59 +1,97 @@
 from backend.app.services.ai_service import AiService
+from backend.app.models.prompts_v2 import SystemPrompts
+from backend.app.models.schemas import RetrivedChunk, Group, Test
 from backend.app.services.search_service import SearchService
-from backend.app.models.prompts import SystemPrompts
-from backend.app.services.embeddings_service import EmbeddingsService
-import json
-import ast
 from typing import Literal
-from backend.app.services.classification_service import ClassificationService
-from backend.app.services.prompt_parser_service import PromptParserService
-from backend.app.models.schemas import ParsedPrompt
+import json
 
-
-# <summary>
-# Service responsible for generating educational tests by orchestrating AI and search components.
-# Includes classification, prompt parsing, retrieval, and final test generation.
-# </summary>
 class TestGeneratorService:
+
     def __init__(self):
         self.ai_service = AiService()
-        self.search_service = SearchService()
         self.prompts = SystemPrompts()
-        self.embeddings_service = EmbeddingsService()
-        self.classification_service = ClassificationService()
-        self.prompt_parser_service = PromptParserService()
+        self.search_service = SearchService()
 
-    def generate_test(self, 
-                      prompt: str, 
-                      level: Literal['A1', 'A2', 'B1', 'B2', 'C1', 'C2'], 
-                      age_group: Literal["kids", "teens", "adults"],
-                      total_amount: int) -> str:
-        """
-        Generates a test based on the user prompt and configuration.
-        """
-        if self.classification_service.classify(prompt) == "normal":
-            classified_prompt = self.prompt_parser_service.parse_prompt(prompt)
-            json_classified_prompt = json.loads(classified_prompt)
+    def __generate_query_requests(self, language: str, level: str, topic: str) -> list[str]:
+        raw = self.ai_service.ask_ollama_cloud(self.prompts.get_queries_prompt(language, level, topic), 'gpt-oss:20b')
+        return json.loads(raw)
 
-            parsed_prompt = ParsedPrompt(
-                task=prompt,
-                level=level,
-                age_group=age_group,
-                sections=json_classified_prompt['sections'],
-                total_amount=total_amount
-            )
+    def __retrive_data(self, questions: list[str]) -> list[RetrivedChunk]:
+        unique_chunks = []
+        seen = set()
 
-            retrieval_prompt = self.prompts.get_retrival_prompt(parsed_prompt)
-            queries_json = self.ai_service.ask(retrieval_prompt)
-            queries = json.loads(queries_json)
+        for question in questions:
+            chunks = self.search_service.search(question, top_k=5)
+            for chunk in chunks:
+                key = f"{chunk.payload.metadata.subject}:{chunk.payload.metadata.content}"
+                if key not in seen:
+                    seen.add(key)
+                    unique_chunks.append(chunk)
+            
+        return unique_chunks
+    
+    def generate_plan(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, retrieved_chunks: list[RetrivedChunk], group_count: int) -> str:
+        return self.ai_service.ask_ollama_cloud(self.prompts.get_plan_test_creation_prompt(language, level, topic, retrieved_chunks, group_count), 'gpt-oss:120b')
+    
+    def generate_group(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, plan: str) -> str:
+        return self.ai_service.ask_ollama_cloud(self.prompts.get_test_creation_prompt(language, level, topic, plan), 'gpt-oss:120b')
 
-            data = []
-            for query in queries:
-                data.append(self.search_service.search(query))
+    def generate_another_group(self, language: Literal["en", "de"], level: Literal["A1", "A2", "B1", "B2", "C1", "C2"], topic: str, plan: str, previous_group: Group) -> str:
+        return self.ai_service.ask_ollama_cloud(self.prompts.get_another_group_prompt(language, level, topic, plan, previous_group), 'gpt-oss:120b')
 
-            generation_prompt = self.prompts.get_generation_prompt(data, parsed_prompt)
-            generated_test = self.ai_service.ask(generation_prompt)
+    def generate_all_groups(
+        self, 
+        language: str, 
+        level: str, 
+        topic: str,
+        group_count: int = 2 ) -> Test:
 
-            return generated_test
-        else:
-            raise ValueError("Prompt classification failed. Unrecognized prompt format.")
+        queries = self.__generate_query_requests(language, level, topic)
+        #print("queries:", queries)
+        #print("========================================================")
+
+        retrieved_chunks = self.__retrive_data(queries)
+        #print("retrieved chunks:", retrieved_chunks)
+        #print("========================================================")
+
+        plan = self.generate_plan(language, level, topic, retrieved_chunks, group_count)
+        #print("plan:", plan)
+        #print("========================================================")
+
+        first_group_raw = self.generate_group(language, level, topic, plan)
+        #print("first group raw:", first_group_raw)
+        #print("========================================================")
+
+
+
+        MAX_RETRIES = 3
+        count = 0
+        all_groups = []
+
+        while count < group_count:
+            last_error = None
+            for attempt in range(1, MAX_RETRIES + 1):
+                try:
+                    if count == 0:
+                        group = Group.model_validate_json(first_group_raw)
+                    else:
+                        raw = self.generate_another_group(language, level, topic, plan, all_groups[-1])
+                        group = Group.model_validate_json(raw)
+
+                    all_groups.append(group)
+                    count += 1
+                    break
+                except Exception as e:
+                    last_error = e
+                    print(f"Attempt {attempt}/{MAX_RETRIES} for group {count} failed: {e}")
+                    if count == 0 and attempt < MAX_RETRIES:
+                        first_group_raw = self.generate_group(language, level, topic, plan)
+            else:
+                print(f"All {MAX_RETRIES} attempts failed for group {count}. Last error: {last_error}")
+                break
+
+        if not all_groups:
+            raise ValueError("Failed to generate any valid group after multiple retries.")
+
+        test = Test(groups=all_groups)
+        return test

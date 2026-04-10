@@ -1,50 +1,50 @@
-from qdrant_client import QdrantClient
-from qdrant_client.models import Filter, FieldCondition, MatchValue
+from qdrant_client import QdrantClient, models
 import os
 from dotenv import load_dotenv
-
-import math
+from backend.app.services.embeddings_service import EmbeddingsService
+from backend.app.models.schemas import RetrivedChunk, Chunk
 
 load_dotenv()
 
-# <summary>
-# Service used to connect to Qdrant cluster and fetch vector embeddings or points based on subjects.
-# </summary>
 class SearchService:
     def __init__(self):
+        self.embeddings_service = EmbeddingsService()
+
+    def search(self, query: str, top_k: int = 5) -> list[RetrivedChunk]:
         self.client = QdrantClient(
             url=os.getenv("CLUSTER_ENDPOINT"),
             api_key=os.getenv("QDRANT_API_KEY")
         )
+        query_vector = self.embeddings_service.embed_text(query)
+
+        hits = self.client.query_points(
+            collection_name="Language Data v2",
+            query=query_vector,
+            limit=top_k,
+        ).points
         
+        data = []
 
-    def search(self, subject: str):
-        all_points = []
-        offset = None
+        for hit in hits:
+            data.append(RetrivedChunk(
+                payload=Chunk(
+                    id=str(hit.id),
+                    section=hit.payload.get("section", "grammar"),
+                    language=hit.payload.get("language", "en"),
+                    level=hit.payload.get("level", "B2"),
+                    metadata={
+                        "subject": hit.payload.get("subject", ""),
+                        "content": hit.payload.get("content", "")
+                    }
+                ),
+                score=hit.score
+            ))
 
-        while True:
-            batch, next_offset = self.client.scroll(
-                collection_name="Grammar Collection",
-                limit=100,
-                offset=offset,
-                with_payload=True,
-                with_vectors=True, 
-            )
+        return data
 
-            all_points.extend(batch)
 
-            if next_offset is None:
-                break
 
-            offset = next_offset
 
-        filtered_points = [
-            point for point in all_points
-            if point.payload.get("subject").startswith(subject)
-        ]
-        
-        return [point.payload for point in filtered_points]
-       
 
 
         
