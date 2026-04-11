@@ -1,4 +1,4 @@
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection, GeneratedTest, Exercise
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection, GeneratedTest, Exercise, PDFTest
 
 # <summary>
 # Provides system prompts and templates for instructing the LLMs across various classification, parsing, and generation tasks.
@@ -175,7 +175,9 @@ class SystemPrompts:
             - Each exercise must focus on ONLY ONE grammar/topic (no mixing topics in a single task)
             Example: Present Simple exercise must NOT include Present Continuous
             - If multiple grammar points are provided, ALL must be included in the test
-            - Do NOT repeat identical task templates within the same test unless absolutely necessary
+            - NEVER repeat or reuse similar sentences, contexts, or question patterns across the test
+            - Each question MUST be unique in structure, vocabulary, and context
+            - Avoid generating variations of the same sentence with only minor changes (e.g., changing subject or verb only)
             - Be creative and vary exercise formats (e.g., MCQ, matching, transformation, ordering, error correction)
             - Keep difficulty appropriate to the implied level in teacher input 
             - each exercise should have at least 5 subsections unless teacher said diffrently
@@ -240,5 +242,164 @@ class SystemPrompts:
             ## PROVIDED DATA (RAG CONTEXT)
             {retrieval}
 
+        """
+
+    def get_generation_prompt(self, retrieval, parsed_prompt):
+        return f"""
+            # ROLE
+            You are an expert designer specializing in English language tests.
+            You create structured, high-quality English tests based strictly on teacher input.
+
+            ---
+
+            # OBJECTIVE
+            Generate a COMPLETE English test that strictly follows:
+            - teacher instructions (highest priority)
+            - provided retrieval data (supporting only)
+
+            ---
+
+            # HIERARCHY OF INPUTS
+            1. Teacher input = ABSOLUTE PRIORITY (must always be followed)
+            2. Retrieval data = inspiration only (NEVER overrides teacher input)
+
+            If conflict occurs -> ALWAYS follow teacher input.
+
+            ---
+
+            # HARD CONSTRAINTS (MANDATORY)
+            - You MUST generate EXACT amount exercises exercises that is provided in total_amount
+            - Each exercise MUST contain BETWEEN 6 and 10 questions unless teacher said otherwise
+            - Each exercise MUST be meaningful and non-trivial unless teacher said otherwise
+            - You MUST include ALL topics requested in teacher input
+            - Each topic MUST appear in AT LEAST one full exercise
+            - never mix topics in one exercise unless teacher said otherwise
+
+            ---
+
+            # TOPIC DISTRIBUTION (STRICT)
+            - Distribute exercises EVENLY across topics
+            - NO topic may exceed 40% of the test
+            - If "reading" is requested:
+                - MAXIMUM 2 reading exercises allowed unless teacher said otherwise
+            - If multiple grammar topics are requested:
+                - Each must have its own dedicated exercise
+
+            ---
+
+            # EXERCISE DESIGN RULES
+            - Each exercise must have ONE PRIMARY focus (grammar or skill)
+            - Secondary grammar may appear ONLY if natural (e.g. reading context)
+            - NEVER mix multiple unrelated grammar topics in one exercise
+
+            - Each question MUST be unique:
+                - different sentence
+                - different vocabulary
+                - different context
+
+            - STRICTLY FORBIDDEN:
+                - repeating sentence structures
+                - minor variations of the same sentence
+                - шаблон-type repetition
+
+            ---
+
+            # VARIETY REQUIREMENT
+            You MUST use a mix of exercise types:
+            - multiple choice
+            - gap filling
+            - sentence transformation
+            - matching
+            - error correction
+            - ordering
+
+            Avoid repeating the same format more than twice.
+
+            ---
+
+            # READING RULES (STRICT)
+            - Reading exercises are LIMITED:
+                - MAX 2 per test
+            - Each reading must include:
+                - a text (400–700 words depending on level)
+                - 5–8 comprehension questions
+            - Do NOT generate multiple readings unless required
+
+            ---
+
+            # DIFFICULTY ADJUSTMENT
+
+            If level = A2:
+            - simple vocabulary
+            - direct grammar usage
+            - short texts
+
+            If level = B1/B2:
+            - include distractors
+            - use context-based grammar
+            - avoid obvious answers
+            - readings: at least 500 words
+
+            If level = C1:
+            - inference questions
+            - paraphrasing
+            - ambiguity allowed
+            - advanced vocabulary
+
+            ---
+
+            # SELF-VALIDATION (MANDATORY)
+            Before producing final JSON, internally verify:
+            - Number of exercises == required number
+            - Each exercise has 6–10 questions
+            - All requested topics are covered
+            - Topic distribution is balanced
+            - Reading limits are respected
+
+            If ANY condition fails → REGENERATE before output.
+
+            ---
+
+            # OUTPUT REQUIREMENTS (STRICT)
+            - Output MUST be valid JSON only
+            - Do NOT include explanations
+            - Do NOT include markdown or formatting
+            - Do NOT wrap in ```
+            - Output MUST match schema exactly:
+
+            {GeneratedTest.model_json_schema()}
+
+            ---
+
+            # ANSWER KEY RULE
+            - Provide a COMPLETE answer key
+            - Must match tasks exactly
+            - NO explanations
+            - Format as ONE object:
+
+            {{
+                "instruction": "answer key",
+                "body": "answers here"
+            }}
+
+            ---
+
+            # INTERNAL PLANNING STEP (HIDDEN - DO NOT OUTPUT)
+            First, create an internal plan:
+            - list 6 exercises
+            - assign topic to each
+            - assign type (MCQ, gap fill, etc.)
+
+            Then generate the full test based on that plan.
+
+            ---
+
+            # INPUTS
+
+            ## TEACHER INPUT
+            {parsed_prompt}
+
+            ## PROVIDED DATA (RAG CONTEXT)
+            {retrieval}
         """
 
