@@ -146,7 +146,7 @@ class SystemPrompts:
         
         """
 
-    def get_generation_prompt(self, retrieval, parsed_prompt):
+    def get_generation_prompt(self, retrieval, parsed_prompt: ParsedPrompt):
         return f"""
         # ROLE
         You are an expert designer specializing in English language tests.
@@ -170,8 +170,8 @@ class SystemPrompts:
         ---
 
         # HARD CONSTRAINTS (MANDATORY)
-        - You MUST generate EXACTLY 6 exercises unless teacher specifies otherwise
-        - Each exercise MUST contain BETWEEN 6 and 10 questions
+        - You MUST generate EXACTLY {parsed_prompt.total_amount} exercises 
+        - Each exercise MUST contain BETWEEN 6 and 10 questions unless teacher said diffrently
         - Each exercise MUST be meaningful and non-trivial
         - You MUST include ALL topics requested in teacher input
         - Each topic MUST appear in AT LEAST one full exercise
@@ -187,7 +187,6 @@ class SystemPrompts:
 
         # EXERCISE DESIGN RULES
         - Each exercise must have ONE PRIMARY focus (grammar or skill)
-        - Secondary grammar may appear ONLY if natural (e.g. reading context)
         - NEVER mix multiple unrelated grammar topics in one exercise
 
         - Each question MUST be unique:
@@ -198,7 +197,7 @@ class SystemPrompts:
         - STRICTLY FORBIDDEN:
             - repeating sentence structures
             - minor variations of the same sentence
-            - шаблон-type repetition
+            - exercise-template-type repetition
 
         ---
 
@@ -224,7 +223,6 @@ class SystemPrompts:
         - include distractors
         - use context-based grammar
         - avoid obvious answers
-        - readings: at least 500 words
 
         If level = C1:
         - paraphrasing
@@ -235,7 +233,7 @@ class SystemPrompts:
 
         # SELF-VALIDATION (MANDATORY)
         Before producing final JSON, internally verify:
-        - Number of exercises == required number
+        - Number of exercises == {parsed_prompt.total_amount}
         - Each exercise has 6–10 questions
         - All requested topics are covered
         - Topic distribution is balanced
