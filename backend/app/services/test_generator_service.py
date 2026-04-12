@@ -53,13 +53,19 @@ class TestGeneratorService:
             data = []
 
             reading_data = []
+            writing_data = []
 
             reading_enabled = False
+            writing_enabled = False
 
             for query in queries:
                 if query.lower() == "reading":
                     reading_data.append(self.search_service.search(query))
                     reading_enabled = True
+                
+                if query.lower() == "writing":
+                    writing_data.append(self.search_service.search(query))
+                    writing_enabled = True
                 
                 data.append(self.search_service.search(query))
 
@@ -80,6 +86,23 @@ class TestGeneratorService:
                 elif 'exercises' in reading_data_parsed:
                     # Fallback if generated_test has weird structure
                     generated_test = reading_data_parsed
+
+            if writing_enabled:
+                writing_prompt = self.prompts.get_writing_prompt(writing_data, parsed_prompt)
+                writing_raw = self.ai_service.ask(writing_prompt)
+                writing_json = self.__clean_json_response(writing_raw)
+                writing_data_parsed = json.loads(writing_json)
+
+                # Merge exercises lists
+                if 'exercises' in generated_test and 'exercises' in writing_data_parsed:
+                    # If there's an answer key in generated_test, we might want to put writing before it
+                    # but simple extend is what reading does
+                    generated_test['exercises'].extend(writing_data_parsed['exercises'])
+                elif 'exercises' in writing_data_parsed:
+                    if not generated_test:
+                        generated_test = writing_data_parsed
+                    else:
+                        generated_test['exercises'] = writing_data_parsed['exercises']
 
             return json.dumps(generated_test)
         else:

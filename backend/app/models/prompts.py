@@ -175,7 +175,7 @@ class SystemPrompts:
         - Each exercise MUST be meaningful and non-trivial
         - You MUST include ALL topics requested in teacher input
         - Each topic MUST appear in AT LEAST one full exercise
-        - YOU ALWAYS MUST skip reading and listening exercises
+        - YOU ALWAYS MUST skip reading, listening and writing exercises
 
         ---
 
@@ -329,6 +329,70 @@ class SystemPrompts:
             - Do NOT generate grammar exercises
             - Do NOT generate multiple unrelated texts in one exercise
             - Each exercise = one reading passage
+
+            ---
+
+            # INPUTS
+
+            ## TEACHER INPUT
+            {parsed_prompt}
+
+            ## RAG DATA
+            {retrieval}
+        """
+
+    def get_writing_prompt(self, retrieval, parsed_prompt):
+        return f"""
+            # ROLE
+            You are an expert in designing high-quality English writing tasks, specialized in email and letter writing.
+
+            ---
+
+            # OBJECTIVE
+            Generate writing exercises ONLY, specifically focusing on "writing an email" or "writing a letter" as requested.
+
+            ---
+
+            # HARD CONSTRAINTS (MANDATORY)
+            - Generate EXACTLY 1 writing exercise unless the teacher specified a different amount.
+            - The exercise must include:
+                - Clear instructions/prompt for the student.
+                - Context for the writing (who is the recipient, what is the purpose).
+                - 3-4 specific points the student must include in their writing.
+                - Word count requirement based on the level:
+                    - A1-A2: 50–80 words
+                    - B1: 100–120 words
+                    - B2: 300–350 words
+                    - C1: 400–600 words
+
+            ---
+
+            # WRITING REQUIREMENTS
+            - The prompt must be realistic and engaging.
+            - It should clearly state whether the tone should be formal or informal.
+            - Use varied scenarios (e.g., inviting a friend, complaining to a store, applying for a job).
+
+            ---
+
+            # DIFFICULTY
+            - Adjust the complexity of the scenario and the required language functions based on the level ({parsed_prompt.level}).
+
+            ---
+
+            # OUTPUT FORMAT
+            - Output MUST match the schema exactly:
+            {GeneratedTest.model_json_schema()}
+
+            - YOU MUST include a MODEL ANSWER as the LAST element in the "exercises" list.
+            - The model answer exercise MUST have:
+                "instruction": "Answer Key",
+                "body": "Provide a high-quality model answer here that meets all the criteria."
+
+            ---
+
+            # IMPORTANT
+            - Do NOT generate grammar or reading exercises.
+            - Focus solely on the writing task and its requirements.
 
             ---
 
