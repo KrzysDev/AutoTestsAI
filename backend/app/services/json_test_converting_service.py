@@ -125,8 +125,8 @@ class JsonTestConvertingService:
         elements = []
         for i, q in enumerate(exercise.questions, 1):
             data = [[f"{i}.", q.question]]
-            for opt in q.options:
-                data.append(["", " [   ] ", opt])
+            for j, opt in enumerate(q.options):
+                data.append(["", f" {chr(ord('A') + j)} ", opt])
             
             t = Table(data, colWidths=[20, 40, 380])
             t.setStyle(TableStyle([
@@ -146,7 +146,7 @@ class JsonTestConvertingService:
         for i in range(max_len):
             left = exercise.left_column[i] if i < len(exercise.left_column) else ""
             right = exercise.right_column[i] if i < len(exercise.right_column) else ""
-            data.append([left, "[       ]", right])
+            data.append([left, f" {chr(ord('A') + i)} ", right])
             
         t = Table(header + data, colWidths=[140, 80, 220])
         t.setStyle(TableStyle([
