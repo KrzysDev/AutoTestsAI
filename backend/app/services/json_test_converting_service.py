@@ -1,16 +1,4 @@
 import io
-from reportlab.lib.pagesizes import A4
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import cm
-from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, KeepTogether
-)
-from backend.app.models.schemas import PDFTest, PDFExercise
-from reportlab.lib.enums import TA_LEFT, TA_CENTER
-
-
-import io
 from typing import List, Any
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
@@ -80,7 +68,7 @@ class JsonTestConvertingService:
         
         # Add Title
         elements.append(Paragraph("ENGLISH LANGUAGE TEST", self.title_style))
-        elements.append(Paragraph("Name:___________________ Last Name:____________________"), self.text_style)
+        elements.append(Paragraph("Name:___________________ Last Name:____________________", self.text_style))
         elements.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#BDC3C7"), spaceAfter=20))
         
         # Process Exercises
@@ -109,8 +97,8 @@ class JsonTestConvertingService:
         elements = []
 
         if exercise.instruction.lower() == "answer key":
-            elements.append(Paragraph(f"Answer key (Dont print this): "), self.title_style)
-            elements.append(Paragraph(f"{exercise.body}"), self.text_style)
+            elements.append(Paragraph(f"Answer key (Dont print this): ", self.title_style))
+            elements.append(Paragraph(f"{exercise.body}", self.text_style))
             return elements
 
         # Add Instruction Header
@@ -231,7 +219,7 @@ class JsonTestConvertingService:
             data = [
                 [f"{i}.", item.original_sentence],
                 ["", item.key_word],
-                ["", item.sentence_with_gap]
+                ["", item.sentence_with_gap],
                 ["\n", ""]
             ]
             t = Table(data, colWidths=[20, 420])
