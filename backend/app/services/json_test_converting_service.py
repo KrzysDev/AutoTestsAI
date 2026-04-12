@@ -86,7 +86,15 @@ class JsonTestConvertingService:
         for i, exercise in enumerate(test_data.exercises, 1):
             exercise_elements = self._process_exercise(exercise, i)
             if exercise_elements:
-                elements.append(KeepTogether(exercise_elements))
+                if len(exercise_elements) > 1:
+                    # Keep instruction header and the first element of the task together
+                    # to prevent "orphan" headers at the bottom of a page.
+                    elements.append(KeepTogether(exercise_elements[:2]))
+                    # Allow the rest of the task elements to flow and split across pages naturally.
+                    elements.extend(exercise_elements[2:])
+                else:
+                    elements.extend(exercise_elements)
+                
                 elements.append(Spacer(1, 25))
             
         doc.build(elements)
@@ -148,7 +156,7 @@ class JsonTestConvertingService:
             right = exercise.right_column[i] if i < len(exercise.right_column) else ""
             data.append([left, f" {chr(ord('A') + i)} ", right])
             
-        t = Table(header + data, colWidths=[140, 80, 220])
+        t = Table(header + data, colWidths=[140, 80, 220], repeatRows=1)
         t.setStyle(TableStyle([
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
             ('LINEBELOW', (0, 0), (-1, 0), 1, colors.black),
@@ -162,7 +170,7 @@ class JsonTestConvertingService:
         header = [["STATEMENTS", "T", "F"]]
         data = [[Paragraph(s, self.text_style), " ", " "] for s in exercise.statements]
         
-        t = Table(header + data, colWidths=[360, 40, 40])
+        t = Table(header + data, colWidths=[360, 40, 40], repeatRows=1)
         t.setStyle(TableStyle([
             ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
             ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
