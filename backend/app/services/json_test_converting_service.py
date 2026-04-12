@@ -80,6 +80,7 @@ class JsonTestConvertingService:
         
         # Add Title
         elements.append(Paragraph("ENGLISH LANGUAGE TEST", self.title_style))
+        elements.append(Paragraph("Name:___________________ Last Name:____________________"), self.text_style)
         elements.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#BDC3C7"), spaceAfter=20))
         
         # Process Exercises
@@ -104,7 +105,14 @@ class JsonTestConvertingService:
         """
         Dispatches exercise data to the appropriate drawing helper.
         """
+
         elements = []
+
+        if exercise.instruction.lower() == "answer key":
+            elements.append(Paragraph(f"Answer key (Dont print this): "), self.title_style)
+            elements.append(Paragraph(f"{exercise.body}"), self.text_style)
+            return elements
+
         # Add Instruction Header
         elements.append(Paragraph(f"Task {index}. {exercise.instruction}", self.q_style))
         
@@ -154,7 +162,7 @@ class JsonTestConvertingService:
         for i in range(max_len):
             left = exercise.left_column[i] if i < len(exercise.left_column) else ""
             right = exercise.right_column[i] if i < len(exercise.right_column) else ""
-            data.append([left, f" {chr(ord('A') + i)} ", right])
+            data.append([left, f"  ", right])
             
         t = Table(header + data, colWidths=[140, 80, 220], repeatRows=1)
         t.setStyle(TableStyle([
@@ -224,6 +232,7 @@ class JsonTestConvertingService:
                 [f"{i}.", item.original_sentence],
                 ["", item.key_word],
                 ["", item.sentence_with_gap]
+                ["\n", ""]
             ]
             t = Table(data, colWidths=[20, 420])
             t.setStyle(TableStyle([
