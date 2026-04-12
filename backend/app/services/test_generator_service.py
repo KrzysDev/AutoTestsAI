@@ -2,12 +2,13 @@ from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
 from backend.app.models.prompts import SystemPrompts
 from backend.app.services.embeddings_service import EmbeddingsService
+from backend.app.services.json_test_converting_service import JsonTestConvertingService
 import json
 import ast
 from typing import Literal
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
-from backend.app.models.schemas import ParsedPrompt
+from backend.app.models.schemas import ParsedPrompt, GeneratedTest, PDFTest
 import re
 
 
@@ -23,6 +24,7 @@ class TestGeneratorService:
         self.embeddings_service = EmbeddingsService()
         self.classification_service = ClassificationService()
         self.prompt_parser_service = PromptParserService()
+        self.json_test_converting_service = JsonTestConvertingService()
 
     def generate_test(self, 
                       prompt: str, 
@@ -82,6 +84,33 @@ class TestGeneratorService:
             return json.dumps(generated_test)
         else:
             raise ValueError("Prompt classification failed. Unrecognized prompt format.")
+
+    def generate_beautified_test(self, generated_test_json: str) -> bytes:
+        """
+        Restructures a raw generated test and converts it to a beautified PDF.
+        """
+        # Parse the raw test to ensure it's valid
+        raw_test_data = json.loads(generated_test_json)
+        generated_test = GeneratedTest(**raw_test_data)
+
+        # Get the restructuring prompt
+        restructure_prompt = self.prompts.get_test_restructuring_prompt(generated_test)
+        
+        # Ask AI to restructure
+        restructured_raw = self.ai_service.ask(restructure_prompt)
+        restructured_json = self.__clean_json_response(restructured_raw)
+        
+        try:
+            # Parse into PDFTest model
+            pdf_test = PDFTest(**json.loads(restructured_json))
+            
+            # Convert to PDF
+            pdf_bytes = self.json_test_converting_service.convert_to_pdf(pdf_test)
+            return pdf_bytes
+        except Exception as e:
+            # Fallback or error handling
+            print(f"Error during restructuring or PDF generation: {e}")
+            raise ValueError(f"Failed to generate beautified PDF: {e}")
 
     def __clean_json_response(self, response: str) -> str:
         """
