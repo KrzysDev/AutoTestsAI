@@ -341,41 +341,92 @@ class SystemPrompts:
             {retrieval}
         """
 
-    def get_pdf_structure_prompt(self, test_data: GeneratedTest):
+    def get_test_restructuring_prompt(self, test_data: GeneratedTest):
         return f"""
             # ROLE
             You are an expert in structuring language tests for PDF generation.
-            Your task is to take a raw test JSON and assign the most appropriate formatting type to each exercise.
+            Your task is to take a raw GeneratedTest (which has simple instruction and body strings) and restructure it into a highly structured PDFTest format.
 
             ---
 
-            # INPUT DATA
+            # INPUT RAW DATA
             {test_data.model_dump_json()}
 
             ---
 
-            # OUTPUT FORMAT (MANDATORY)
-            You MUST return valid JSON matching the following schema:
+            # TARGET SCHEMA
+            Your output must be a valid JSON object matching this schema:
             {PDFTest.model_json_schema()}
 
             ---
 
-            # AVAILABLE FORMATTING TYPES (STRICT CHOICES)
-            1. "True-False" - use if the body contains sentences that need to be marked as true or false.
-            2. "Listening-Multiple-Choice" - use for multiple choice tasks (A, B, C, D).
-            3. "Listeninig-Match-Inf" - (note the typo in key) - use for matching information tasks (e.g. 1-5 to A-E).
-            4. "Listening-Insert" - use for gap-filling tasks (________).
-            5. "Reading-Multiple-Choice" - same as listening but for reading passages.
-            6. "Reading-Match-Headings" - use specifically for paragraph heading matching.
+            # STRUCTURE GUIDELINES (task_type mapping)
 
-            *Note: If a task doesn't fit, pick the closest one.*
+            1. "multiple_choice": 
+               - Body contains questions with options like A., B., C.
+               - Separate them into 'questions' list where each has 'question', 'options', and optional 'answer'.
+
+            2. "matching":
+               - Body contains two columns or lists to be matched (e.g. 1-5 and A-E).
+               - Map to 'left_column' and 'right_column'.
+
+            3. "true_false":
+               - Body contains statements to be marked T/F.
+               - Map to 'statements' list.
+
+            4. "word_formation":
+               - Body contains sentences with gaps and a base word in brackets or at the end.
+               - Map to 'items' list with 'sentence_with_gap' and 'root_word'.
+
+            5. "gap_fill":
+               - Body has a text with gaps like [ 1 ] and a list of sentences/words to insert at the bottom.
+               - Map to 'passage' and 'choices'.
+
+            6. "transformation":
+               - Body contains: Original sentence, a Key word, and a sentence with a gap.
+               - Map to 'items' list with 'original_sentence', 'key_word', and 'sentence_with_gap'.
+
+            7. "writing":
+               - Body is a writing prompt/instructions.
+               - Map to 'prompt' and 'word_count_range'.
+
+            8. "cloze":
+               - Body is a text with gaps like ___1___ and a list of options for each gap below.
+               - Map to 'passage' and 'options_per_gap'.
+
+            9. "simple_text":
+               - Use this for "Answer Key" or any other unstructured text.
 
             ---
 
-            # RULES
+            # CRITICAL RULES
             - Return ONLY valid JSON.
-            - Do NOT include any explanations.
-            - Do NOT include markdown or formatting (like ```json).
-            - Preserve the original instruction and body text as accurately as possible.
+            - Do NOT add any conversational text or markdown (No ```json).
+            - Be extremely precise when splitting strings into structured fields.
+            - Ensure the 'task_type' field is present and correct for every exercise.
         """
+
+    def clean_json_response(self, response: str) -> str:
+        """
+        Cleans the AI response by removing markdown code blocks and extra text.
+        """
+        import re
+        # Remove markdown code blocks like ```json ... ```
+        json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response)
+        if json_match:
+            return json_match.group(1).strip()
+        
+        # If no code block, try to find the first '{' or '[' and last '}' or ']'
+        start_idx = response.find('{')
+        if start_idx == -1:
+            start_idx = response.find('[')
+            
+        end_idx = response.rfind('}')
+        if end_idx == -1:
+            end_idx = response.rfind(']')
+            
+        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+            return response[start_idx:end_idx + 1].strip()
+            
+        return response.strip()
 
