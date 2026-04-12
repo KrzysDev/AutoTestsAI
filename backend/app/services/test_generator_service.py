@@ -2,12 +2,14 @@ from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
 from backend.app.models.prompts import SystemPrompts
 from backend.app.services.embeddings_service import EmbeddingsService
+from backend.app.services.json_test_converting_service import JsonTestConvertingService
 import json
 import ast
 from typing import Literal
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
-from backend.app.models.schemas import ParsedPrompt
+from backend.app.models.schemas import ParsedPrompt, GeneratedTest, PDFTest
+import re
 
 
 # <summary>
@@ -22,6 +24,7 @@ class TestGeneratorService:
         self.embeddings_service = EmbeddingsService()
         self.classification_service = ClassificationService()
         self.prompt_parser_service = PromptParserService()
+        self.json_test_converting_service = JsonTestConvertingService()
 
     def generate_test(self, 
                       prompt: str, 
@@ -48,12 +51,86 @@ class TestGeneratorService:
             queries = json.loads(queries_json)
 
             data = []
+
+            reading_data = []
+
+            reading_enabled = False
+
             for query in queries:
+                if query.lower() == "reading":
+                    reading_data.append(self.search_service.search(query))
+                    reading_enabled = True
+                
                 data.append(self.search_service.search(query))
 
             generation_prompt = self.prompts.get_generation_prompt(data, parsed_prompt)
-            generated_test = self.ai_service.ask(generation_prompt)
+            generated_test_raw = self.ai_service.ask(generation_prompt)
+            generated_test_json = self.__clean_json_response(generated_test_raw)
+            generated_test = json.loads(generated_test_json)
 
-            return generated_test
+            if reading_enabled:
+                reading_prompt = self.prompts.get_reading_prompt(reading_data, parsed_prompt)
+                reading_raw = self.ai_service.ask(reading_prompt)
+                reading_json = self.__clean_json_response(reading_raw)
+                reading_data_parsed = json.loads(reading_json)
+
+                # Merge exercises lists
+                if 'exercises' in generated_test and 'exercises' in reading_data_parsed:
+                    generated_test['exercises'].extend(reading_data_parsed['exercises'])
+                elif 'exercises' in reading_data_parsed:
+                    # Fallback if generated_test has weird structure
+                    generated_test = reading_data_parsed
+
+            return json.dumps(generated_test)
         else:
             raise ValueError("Prompt classification failed. Unrecognized prompt format.")
+
+    def generate_beautified_test(self, generated_test_json: str) -> bytes:
+        """
+        Restructures a raw generated test and converts it to a beautified PDF.
+        """
+        # Parse the raw test to ensure it's valid
+        raw_test_data = json.loads(generated_test_json)
+        generated_test = GeneratedTest(**raw_test_data)
+
+        # Get the restructuring prompt
+        restructure_prompt = self.prompts.get_test_restructuring_prompt(generated_test)
+        
+        # Ask AI to restructure
+        restructured_raw = self.ai_service.ask(restructure_prompt)
+        restructured_json = self.__clean_json_response(restructured_raw)
+        
+        try:
+            # Parse into PDFTest model
+            pdf_test = PDFTest(**json.loads(restructured_json))
+            
+            # Convert to PDF
+            pdf_bytes = self.json_test_converting_service.convert_to_pdf(pdf_test)
+            return pdf_bytes
+        except Exception as e:
+            # Fallback or error handling
+            print(f"Error during restructuring or PDF generation: {e}")
+            raise ValueError(f"Failed to generate beautified PDF: {e}")
+
+    def __clean_json_response(self, response: str) -> str:
+        """
+        Cleans the AI response by removing markdown code blocks and extra text.
+        """
+        # Remove markdown code blocks like ```json ... ```
+        json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response)
+        if json_match:
+            return json_match.group(1).strip()
+        
+        # If no code block, try to find the first '{' or '[' and last '}' or ']'
+        start_idx = response.find('{')
+        if start_idx == -1:
+            start_idx = response.find('[')
+            
+        end_idx = response.rfind('}')
+        if end_idx == -1:
+            end_idx = response.rfind(']')
+            
+        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+            return response[start_idx:end_idx + 1].strip()
+            
+        return response.strip()
