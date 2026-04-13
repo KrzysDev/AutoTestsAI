@@ -104,11 +104,13 @@ class TestGeneratorService:
                     else:
                         generated_test['exercises'] = writing_data_parsed['exercises']
             
-            checked_generated_test_prompt = self.prompts.get_test_checking_prompt(generated_test, parsed_prompt)
+            checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), parsed_prompt)
 
-            checked_generated_test = self.ai_service.ask(checked_generated_test_prompt)
+            checked_generated_test_raw = self.ai_service.ask(checked_generated_test_prompt)
+            checked_generated_test_json = self.__clean_json_response(checked_generated_test_raw)
+            checked_generated_test: GeneratedTest = GeneratedTest(**json.loads(checked_generated_test_json))
 
-            return json.dumps(checked_generated_test)
+            return checked_generated_test.model_dump_json()
         else:
             raise ValueError("Prompt classification failed. Unrecognized prompt format.")
 
