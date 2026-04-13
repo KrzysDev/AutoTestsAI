@@ -470,6 +470,70 @@ class SystemPrompts:
             - Ensure the 'task_type' field is present and correct for every exercise.
         """
 
+    def get_test_checking_prompt(self, test, parsed_prompt):
+        return f"""
+        You are a strict Test Quality Validator AND Fixer.
+
+        Your task is to analyze the generated test and IMPROVE it so that it fully meets the requirements.
+
+        === INPUT DATA ===
+        TEST (JSON):
+        {test}
+
+        TEACHERS REQUIREMENTS (parsed_prompt):
+        {parsed_prompt}
+
+        === YOUR TASK ===
+
+        1. DUPLICATION CHECK
+        - If any tasks/questions are repeated or very similar:
+        - You MUST rewrite them to be clearly different.
+        - Keep the same difficulty level.
+
+        2. DIVERSITY CHECK
+        - Ensure tasks are diverse:
+        - different grammar types
+        - different skills (reading, writing, use of English)
+        - different instructions
+        - If the user explicitly requested repetition → respect it.
+
+        3. REQUIREMENTS MATCH
+        - Ensure the test strictly follows parsed_prompt:
+        - number of tasks
+        - task types
+        - difficulty level
+        - age group
+        - If something is wrong → FIX IT.
+
+        4. QUALITY CHECK
+        - Improve unclear instructions.
+        - Make tasks meaningful and non-trivial.
+        - Ensure the test is usable by a teacher.
+
+        === OUTPUT FORMAT ===
+
+        - Return EXACTLY the same JSON structure as in TEST.
+        - DO NOT add new fields.
+        - DO NOT remove fields.
+        - ONLY modify values where necessary to fix issues.
+        - Return ONLY valid JSON.
+        - Do NOT add any conversational text or markdown (No ```json).
+        - Be extremely precise when splitting strings into structured fields.
+        - Ensure the 'task_type' field is present and correct for every exercise.
+        - You ABSOLUTELY MUST RETURN WHOLE TEST DO NOT MISS ANYTHING
+
+        === CRITICAL RULES ===
+        - Return ONLY valid JSON.
+        - No markdown, no comments, no explanations.
+        - Preserve all keys (especially 'task_type').
+        - Ensure all fields are properly filled.
+        - Ensure consistency across the whole test.
+
+        === IMPORTANT ===
+        - If the test is already correct → return it unchanged.
+        - Otherwise → return FULLY FIXED version.
+    """
+
     def clean_json_response(self, response: str) -> str:
         """
         Cleans the AI response by removing markdown code blocks and extra text.
@@ -493,4 +557,6 @@ class SystemPrompts:
             return response[start_idx:end_idx + 1].strip()
             
         return response.strip()
+
+    
 
