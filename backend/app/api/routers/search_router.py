@@ -7,7 +7,7 @@ router = APIRouter()
 search_service = SearchService()
 
 @router.post("/v1/rag/search")
-def search(text: str = Body(...), top_k: int = Body(5)):
-    return search_service.search(text, top_k)
+def search(text: str):
+    return search_service.search(text)
     
 

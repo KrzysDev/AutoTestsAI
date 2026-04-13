@@ -2,623 +2,184 @@ from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Generate
 import json
 
 # <summary>
-# Provides system prompts and templates for instructing the LLMs across various classification, parsing, and generation tasks.
+# System prompts used by agentic system to generate tests.
 # </summary>
 class SystemPrompts:
     def __init__(self):
         pass
-    
+
     def get_classification_prompts(self, text: str):
-        return f"""
-            # TASK
-            You are a classifier for teacher messages in an English exam generation system.
+        return f"""You are processing a teacher's message. 
 
-            Your job is to classify the message into exactly ONE category:
+    FIRST: Does the message express intent to CREATE a test or exam?
+    Intent = any of: create, make, generate, write, prepare, give me, build + test, exam, quiz, classwork, worksheet.
 
-            1. "general"
-            2. "normal"
+    If YES → extract parameters and return ONLY this JSON (no markdown, no extra text):
+    {ParsedPrompt.model_json_schema()}
 
-            ---
+    Field rules:
+    - task: teacher's original request verbatim
+    - level: CEFR only — A1, A2, B1, B2, C1, C2
+    - age_group: one of — kids, teens, adults
+    - sections: list where task_type is one of — vocabulary, grammar, reading, writing; amount = number of such sections
+    - total_amount: total exercises count
+    If any field is unclear → make a reasonable assumption, do NOT return "general".
 
-            # DEFINITIONS
+    If NO (purely general question, no test creation intent) → return ONLY the word: general
 
-            ## 1. "general"
-            The message is general and does NOT clearly request creation of a test or exam.
+    Message: {text}"""
 
-            It may:
-            - ask what the system can do
-            - ask general questions about teaching or exercises
-            - not request a concrete test
 
-            Examples:
-            - "What can you generate?"
-            - "Can you help with grammar?"
-            - "How does this system work?"
-
-            ---
-
-            ## 2. "normal"
-            The message clearly requests creation of a test or exam.
-
-            Examples:
-            - "Create an English test for high school students."
-            - "Make me a grammar test for B1 level."
-            - "Prepare a reading comprehension exam."
-
-            Even if some details are present, if the request is incomplete → "normal".
-
-            ---
-
-            # OUTPUT RULES
-
-            - Output ONLY one word
-            - No punctuation
-            - No explanations
-            - No extra text
-
-            Allowed outputs:
-            - general
-            - normal
-
-            ---
-
-            ## TEACHER REQUEST
-            {text}
-            """
-
-    def get_parsing_prompt(self, text: str):
-        return f"""
-            # TASK
-            You are a specialist in planning English tests.
-
-            Your task is to extract all necessary information from the teacher's input and return it in the required JSON format.
-
-            ---
-
-            # OUTPUT FORMAT
-            You must strictly follow this JSON structure:
-
-            #RULES OF FIELDS
-            'task' - teachers request 
-            'level' - CEFR level write ONLY ('A1', 'A2'......'C1', 'C2')
-            -'age_group' - you can choose only one from those - kids, teens, adults.
-            -'sections' - TestSections where task type is ONLY vocabulary, grammar, reading or writing. amount represents how many such sections occur in the test.
-            -total_amount - how many exercises in total
-            
-
-            {PromptTestSection.model_json_schema()}
-
-            ---
-
-            # RULES
-            - You MUST return ONLY valid JSON.
-            - Do NOT include any explanations.
-            - Do NOT include markdown formatting (e.g. ```json, ```).
-            - Do NOT add any extra text before or after the JSON.
-            - You MUST use double quotes for all keys and string values.
-            - The output must strictly match the provided schema (no missing or extra fields).
-            - If information is missing, use null or empty values where appropriate (according to schema).
-
-            ---
-
-            # INPUT
-            Teacher request: 
-            {text}
-        """
     def get_retrival_prompt(self, prompt: ParsedPrompt):
-        return f"""
-            # TASK
-                You are a specialist in designing language tests. As the first agent in a large test-generation system, your task is to extract and return a list of topics that will be useful for generating the test.
+        return f"""Return a JSON list of topics needed to generate this test. Choose ONLY from the list below. Return ONLY the list — no other text.
 
-                You must return the answer in the following format:
-                ["topic1", "topic2", "topic3", ... "topicx"]
+        Allowed topics:
+        Present Simple, Present Continuous, Present Perfect, Present Perfect Continuous,
+        Past Simple, Past Continuous, Past Perfect, Past Perfect Continuous,
+        Future Simple, Future Continuous, Future Perfect, Future Perfect Continuous,
+        reading, writing, vocabulary, grammar
 
-                You are ONLY allowed to choose from the following pool of topics:
-
-                English tenses definitions:
-
-                Present Simple
-                Present Continuous
-                Present Perfect
-                Present Perfect Continuous
-
-                Past Simple
-                Past Continuous
-                Past Perfect
-                Past Perfect Continuous
-
-                Future Simple
-                Future Continuous
-                Future Perfect
-                Future Perfect Continuous
-
-                AND
-                reading, writing, vocabulary, grammar -> instructions for creating exam-style tasks
-
-                ---
-
-                # TEACHER REQUEST
-                "{prompt.model_dump()}"
-
-                ---
-
-                # RULES
-                You are strictly forbidden to return anything other than the list.
-        
-        """
+        Teacher request: {prompt.model_dump()}"""
 
     def get_generation_prompt(self, retrieval, parsed_prompt: ParsedPrompt):
-        return f"""
-        # ROLE
-        You are an expert designer specializing in English language tests.
-        You create structured, high-quality English tests based strictly on teacher input.
+        return f"""You are an expert English test designer. Generate a complete English test.
 
-        ---
+PRIORITY: Teacher input overrides everything. RAG data is inspiration only.
 
-        # OBJECTIVE
-        Generate a COMPLETE English test that strictly follows:
-        - teacher instructions (highest priority)
-        - provided retrieval data (supporting only)
+MANDATORY RULES:
+- Generate EXACTLY {parsed_prompt.total_amount} exercises
+- Each exercise: 6–10 questions (unless teacher specified otherwise)
+- Cover ALL teacher-requested topics; each topic in at least one exercise
+- Skip reading, listening, and writing exercises
+- Distribute topics evenly; no topic exceeds 40% of the test
+- Each exercise has ONE primary grammar/skill focus
+- All questions must be unique (different sentence, vocabulary, context)
+- Use varied formats: multiple choice, gap fill, transformation, matching, error correction, ordering — no format repeated more than twice
 
-        ---
+Difficulty:
+- A2: simple vocab, direct grammar, short texts
+- B1/B2: distractors, context-based grammar
+- C1: paraphrasing, ambiguity, advanced vocab
 
-        # HIERARCHY OF INPUTS
-        1. Teacher input = ABSOLUTE PRIORITY (must always be followed)
-        2. Retrieval data = inspiration only (NEVER overrides teacher input)
+Output schema (return ONLY valid JSON, no markdown):
+{GeneratedTest.model_json_schema()}
 
-        If conflict occurs → ALWAYS follow teacher input.
+The LAST exercise MUST be the Answer Key: {{"instruction": "Answer Key", "body": "..."}}
 
-        ---
-
-        # HARD CONSTRAINTS (MANDATORY)
-        - You MUST generate EXACTLY {parsed_prompt.total_amount} exercises 
-        - Each exercise MUST contain BETWEEN 6 and 10 questions unless teacher said diffrently
-        - Each exercise MUST be meaningful and non-trivial
-        - You MUST include ALL topics requested in teacher input
-        - Each topic MUST appear in AT LEAST one full exercise
-        - YOU ALWAYS MUST skip reading, listening and writing exercises
-
-        ---
-
-        # TOPIC DISTRIBUTION (STRICT)
-        - Distribute exercises EVENLY across topics
-        - NO topic may exceed 40% of the test
-
-        ---
-
-        # EXERCISE DESIGN RULES
-        - Each exercise must have ONE PRIMARY focus (grammar or skill)
-        - NEVER mix multiple unrelated grammar topics in one exercise
-
-        - Each question MUST be unique:
-            - different sentence
-            - different vocabulary
-            - different context
-
-        - STRICTLY FORBIDDEN:
-            - repeating sentence structures
-            - minor variations of the same sentence
-            - exercise-template-type repetition
-
-        ---
-
-        # VARIETY REQUIREMENT
-        You MUST use a mix of exercise types:
-        - multiple choice
-        - gap filling
-        - sentence transformation
-        - matching
-        - error correction
-        - ordering
-
-        Avoid repeating the same format more than twice.
-
-        # DIFFICULTY ADJUSTMENT
-
-        If level = A2:
-        - simple vocabulary
-        - direct grammar usage
-        - short texts
-
-        If level = B1/B2:
-        - include distractors
-        - use context-based grammar
-        - avoid obvious answers
-
-        If level = C1:
-        - paraphrasing
-        - ambiguity allowed
-        - advanced vocabulary
-
-        ---
-
-        # SELF-VALIDATION (MANDATORY)
-        Before producing final JSON, internally verify:
-        - Number of exercises == {parsed_prompt.total_amount}
-        - Each exercise has 6–10 questions
-        - All requested topics are covered
-        - Topic distribution is balanced
-        - Reading limits are respected
-
-        If ANY condition fails → REGENERATE before output.
-
-        ---
-
-        - Output MUST match the schema exactly:
-        {GeneratedTest.model_json_schema()}
-
-        - YOU MUST include the ANSWER KEY as the LAST element in the "exercises" list.
-        - The answer key exercise MUST have:
-            "instruction": "Answer Key",
-            "body": "Provide all answers here"
-
-        ---
-
-        # INTERNAL PLANNING STEP (HIDDEN - DO NOT OUTPUT)
-        First, create an internal plan:
-        - list 6 exercises
-        - assign topic to each
-        - assign type (MCQ, gap fill, etc.)
-
-        Then generate the full test based on that plan.
-
-        ---
-
-        # INPUTS
-
-        ## TEACHER INPUT
-        {parsed_prompt}
-
-        ## PROVIDED DATA (RAG CONTEXT)
-        {retrieval}
-        """
+Teacher input: {parsed_prompt}
+RAG context: {retrieval}"""
 
     def get_reading_prompt(self, retrieval, parsed_prompt):
-        return f"""
-            # ROLE
-            You are an expert in designing high-quality English reading comprehension tests.
+        return f"""Generate reading comprehension exercises ONLY. Return ONLY valid JSON, no markdown.
 
-            ---
+Rules:
+- Generate 1–2 reading exercises (unless teacher specified otherwise)
+- Each exercise: a text (500–700 words for B1-B2, longer for C1) + 5–8 comprehension questions
+- Questions must mix: main idea, detail, inference, vocabulary in context
+- No grammar exercises; one passage per exercise
 
-            # OBJECTIVE
-            Generate reading comprehension exercises ONLY.
+Difficulty same as standard levels (A2/B1-B2/C1).
 
-            ---
+Output schema: {GeneratedTest.model_json_schema()}
+Last exercise MUST be: {{"instruction": "Answer Key", "body": "..."}}
 
-            # HARD CONSTRAINTS (MANDATORY)
-            - Generate EXACTLY 1 or 2 reading exercises unless teacher said something else.
-            - Each reading must include:
-                - a text (500–700 words for B1-B2, longer for C1)
-                - 5–8 comprehension questions
-
-            ---
-
-            # READING REQUIREMENTS
-            - Text must be engaging, realistic, and coherent
-            - Use varied vocabulary appropriate to level
-            - Avoid artificial or repetitive phrasing
-
-            ---
-
-            # QUESTIONS REQUIREMENTS
-            Questions must include mix of:
-            - main idea
-            - detail understanding
-            - inference
-            - vocabulary in context
-
-            Avoid obvious answers.
-
-            ---
-
-            # DIFFICULTY
-            (A2 / B1-B2 / C1 rules same as before)
-
-            ---
-
-            - Output MUST match the schema exactly:
-            {GeneratedTest.model_json_schema()}
-
-            - YOU MUST include the ANSWER KEY as the LAST element in the "exercises" list.
-            - The answer key exercise MUST have:
-                "instruction": "Answer Key",
-                "body": "Provide all answers here"
-
-            ---
-
-            # IMPORTANT
-            - Do NOT generate grammar exercises
-            - Do NOT generate multiple unrelated texts in one exercise
-            - Each exercise = one reading passage
-
-            ---
-
-            # INPUTS
-
-            ## TEACHER INPUT
-            {parsed_prompt}
-
-            ## RAG DATA
-            {retrieval}
-        """
+Teacher input: {parsed_prompt}
+RAG context: {retrieval}"""
 
     def get_writing_prompt(self, retrieval, parsed_prompt):
-        return f"""
-            # ROLE
-            You are an expert in designing high-quality English writing tasks, specialized in email and letter writing.
+        return f"""Generate writing exercises ONLY (email or letter writing). Return ONLY valid JSON, no markdown.
 
-            ---
+Rules:
+- Generate 1 exercise (unless teacher specified otherwise)
+- Include: clear instructions, context (recipient + purpose), 3–4 bullet points to address, word count:
+  A1-A2: 50–80 | B1: 100–120 | B2: 300–350 | C1: 400–600
+- Prompt must be realistic, state formal/informal tone clearly
+- No grammar or reading exercises
 
-            # OBJECTIVE
-            Generate writing exercises ONLY, specifically focusing on "writing an email" or "writing a letter" as requested.
+Level: {parsed_prompt.level}
 
-            ---
+Output schema: {GeneratedTest.model_json_schema()}
+Last exercise MUST be a model answer: {{"instruction": "Answer Key", "body": "..."}}
 
-            # HARD CONSTRAINTS (MANDATORY)
-            - Generate EXACTLY 1 writing exercise unless the teacher specified a different amount.
-            - The exercise must include:
-                - Clear instructions/prompt for the student.
-                - Context for the writing (who is the recipient, what is the purpose).
-                - 3-4 specific points the student must include in their writing.
-                - Word count requirement based on the level:
-                    - A1-A2: 50–80 words
-                    - B1: 100–120 words
-                    - B2: 300–350 words
-                    - C1: 400–600 words
-
-            ---
-
-            # WRITING REQUIREMENTS
-            - The prompt must be realistic and engaging.
-            - It should clearly state whether the tone should be formal or informal.
-            - Use varied scenarios (e.g., inviting a friend, complaining to a store, applying for a job).
-
-            ---
-
-            # DIFFICULTY
-            - Adjust the complexity of the scenario and the required language functions based on the level ({parsed_prompt.level}).
-
-            ---
-
-            # OUTPUT FORMAT
-            - Output MUST match the schema exactly:
-            {GeneratedTest.model_json_schema()}
-
-            - YOU MUST include a MODEL ANSWER as the LAST element in the "exercises" list.
-            - The model answer exercise MUST have:
-                "instruction": "Answer Key",
-                "body": "Provide a high-quality model answer here that meets all the criteria."
-
-            ---
-
-            # IMPORTANT
-            - Do NOT generate grammar or reading exercises.
-            - Focus solely on the writing task and its requirements.
-
-            ---
-
-            # INPUTS
-
-            ## TEACHER INPUT
-            {parsed_prompt}
-
-            ## RAG DATA
-            {retrieval}
-        """
+Teacher input: {parsed_prompt}
+RAG context: {retrieval}"""
 
     def get_test_restructuring_prompt(self, test_data: GeneratedTest):
-        return f"""
-            # ROLE
-            You are an expert in structuring language tests for PDF generation.
-            Your task is to take a raw GeneratedTest (which has simple instruction and body strings) and restructure it into a highly structured PDFTest format.
+        return f"""Restructure the raw GeneratedTest into PDFTest format. Return ONLY valid JSON, no markdown.
 
-            ---
+task_type mapping:
+- multiple_choice: questions with A/B/C options → list of {{question, options, answer?}}
+- matching: two columns to match → {{left_column, right_column}}
+- true_false: T/F statements → {{statements}}
+- word_formation: gaps + base word → {{items: [{{sentence_with_gap, root_word}}]}}
+- gap_fill: text with [1] gaps + word bank → {{passage, choices}}
+- transformation: original + key word + gapped sentence → {{items: [{{original_sentence, key_word, sentence_with_gap}}]}}
+- writing: prompt + word count → {{prompt, word_count_range}}
+- cloze: text with ___1___ gaps + options per gap → {{passage, options_per_gap}}
+- simple_text: Answer Key or unstructured content
 
-            # INPUT RAW DATA
-            {test_data.model_dump_json()}
+Target schema: {PDFTest.model_json_schema()}
 
-            ---
-
-            # TARGET SCHEMA
-            Your output must be a valid JSON object matching this schema:
-            {PDFTest.model_json_schema()}
-
-            ---
-
-            # STRUCTURE GUIDELINES (task_type mapping)
-
-            1. "multiple_choice": 
-               - Body contains questions with options like A., B., C.
-               - Separate them into 'questions' list where each has 'question', 'options', and optional 'answer'.
-
-            2. "matching":
-               - Body contains two columns or lists to be matched (e.g. 1-5 and A-E).
-               - Map to 'left_column' and 'right_column'.
-
-            3. "true_false":
-               - Body contains statements to be marked T/F.
-               - Map to 'statements' list.
-
-            4. "word_formation":
-               - Body contains sentences with gaps and a base word in brackets or at the end.
-               - Map to 'items' list with 'sentence_with_gap' and 'root_word'.
-
-            5. "gap_fill":
-               - Body has a text with gaps like [ 1 ] and a list of sentences/words to insert at the bottom.
-               - Map to 'passage' and 'choices'.
-
-            6. "transformation":
-               - Body contains: Original sentence, a Key word, and a sentence with a gap.
-               - Map to 'items' list with 'original_sentence', 'key_word', and 'sentence_with_gap'.
-
-            7. "writing":
-               - Body is a writing prompt/instructions.
-               - Map to 'prompt' and 'word_count_range'.
-
-            8. "cloze":
-               - Body is a text with gaps like ___1___ and a list of options for each gap below.
-               - Map to 'passage' and 'options_per_gap'.
-
-            9. "simple_text":
-               - Use this for "Answer Key" or any other unstructured text.
-
-            ---
-
-            # CRITICAL RULES
-            - Return ONLY valid JSON.
-            - Do NOT add any conversational text or markdown (No ```json).
-            - Be extremely precise when splitting strings into structured fields.
-            - Ensure the 'task_type' field is present and correct for every exercise.
-        """
+Input: {test_data.model_dump_json()}"""
 
     def get_test_checking_prompt(self, test: GeneratedTest, parsed_prompt: ParsedPrompt):
-        return f"""You are a strict Test Quality Validator AND Fixer.
+        return f"""You are a Test Validator and Fixer. Analyze the test and fix any issues. Return ONLY the corrected test as valid JSON — no markdown, no extra text.
 
-        Your task is to analyze the generated test and IMPROVE it so that it fully meets the requirements.
+Fix if needed:
+1. Duplicated/similar questions → rewrite to be clearly different, same difficulty
+2. Low diversity → ensure varied formats (gap fill, transformation, MCQ, error correction, matching)
+3. Mismatch with requirements → fix number of tasks, types, difficulty, age group
+4. Unclear instructions → improve them
 
-        === INPUT DATA ===
+Rules:
+- Same JSON schema as input (no new/removed fields)
+- Every exercise must have: instruction, body, task_type
+- Return the FULL test — do not truncate
+- If test is already correct → return it unchanged
 
-        TEST (JSON):
-        <START_JSON>
-        {test.model_dump_json(indent=2)}
-        <END_JSON>
+Test: {test.model_dump_json(indent=2)}
+Requirements: {parsed_prompt.model_dump_json(indent=2)}"""
 
-        TEACHERS REQUIREMENTS (parsed_prompt JSON):
-        <START_JSON>
-        {parsed_prompt.model_dump_json(indent=2)}
-        <END_JSON>
-
-        === YOUR TASK ===
-
-        1. DUPLICATION CHECK
-        - If any tasks/questions are repeated or very similar:
-        - You MUST rewrite them to be clearly different.
-        - Keep the same difficulty level.
-
-        2. DIVERSITY CHECK
-        - Ensure tasks are diverse:
-        - different grammar types
-        - different skills (fill in the gaps, transformation, multiple choice, error correction, matching exercises)
-        - different instructions
-        - If the user explicitly requested repetition → respect it.
-
-        3. REQUIREMENTS MATCH
-        - Ensure the test strictly follows parsed_prompt:
-        - number of tasks
-        - task types
-        - difficulty level
-        - age group
-        - If something is wrong → FIX IT.
-
-        4. QUALITY CHECK
-        - Improve unclear instructions.
-        - Make tasks meaningful and non-trivial.
-        - Ensure the test is usable by a teacher.
-
-        === OUTPUT FORMAT ===
-
-        You MUST return EXACTLY the same JSON structure as in TEST.
-
-        CRITICAL RULES:
-        - Return ONLY valid JSON.
-        - DO NOT add any text before or after JSON.
-        - DO NOT add markdown (no ```json).
-        - DO NOT return JSON as a string.
-        - DO NOT wrap JSON in quotes.
-        - DO NOT escape quotes.
-
-        - DO NOT add new fields.
-        - DO NOT remove fields.
-        - ONLY modify values where necessary.
-
-        - Preserve ALL keys (especially "task_type").
-        - Ensure every exercise has "instruction", "body", and "task_type".
-
-        - Return the FULL test. Do NOT truncate anything.
-
-        === VALIDATION ===
-
-        Before returning, internally check:
-        - Is this valid JSON?
-        - Can it be parsed by a standard JSON parser?
-
-        If not → fix it before returning.
-
-        === IMPORTANT ===
-
-        If the test is already correct → return it unchanged.
-        Otherwise → return FULLY FIXED version.
-
-        If your output is not valid JSON, your answer is incorrect.
-        """
     def get_test_fixing_prompt(self, test: GeneratedTest, teacher_prompt: str):
-        return f"""
-        # ROLE
-        You are a strict Test Quality Validator AND Fixer.
-        Your task is to modify the provided English test according to the teacher's specific instructions.
+        return f"""Modify the English test according to the teacher's instructions. Return ONLY valid JSON, no markdown.
 
-        ---
+Rules:
+- Apply all teacher-requested changes
+- Maintain original JSON schema and quality/difficulty (unless teacher changed it)
+- Every exercise must have: instruction, body
+- Return the FULL test — do not truncate
+- If instructions are unclear, interpret in the way that best improves the test
 
-        # INPUT DATA
-        
-        ## CURRENT TEST (JSON)
-        {test.model_dump_json(indent=2)}
+Test: {test.model_dump_json(indent=2)}
+Teacher instructions: "{teacher_prompt}"""
 
-        ## TEACHER'S FEEDBACK/INSTRUCTIONS
-        "{teacher_prompt}"
-
-        ---
-
-        # YOUR TASK
-        1. Analyze the teacher's feedback carefully.
-        2. Apply the requested changes to the test.
-        3. Ensure the overall structure of the test remains consistent with the original JSON schema.
-        4. Maintain the same level of difficulty and quality unless the teacher requested otherwise.
-
-        ---
-
-        # OUTPUT FORMAT (STRICT)
-        You MUST return EXACTLY the same JSON structure as the input test.
-
-        # CRITICAL RULES
-        - Return ONLY valid JSON.
-        - DO NOT add any text before or after JSON.
-        - DO NOT add markdown (no ```json).
-        - Ensure every exercise has "instruction" and "body".
-        - Return the FULL test. Do NOT truncate anything.
-        - If the teacher's request is unclear, do your best to interpret it in a way that improves the test.
-
-        ---
-
-        # INTERNAL VALIDATION
-        Before returning, ensure:
-        - The JSON is valid and parseable.
-        - ALL teacher's instructions have been addressed.
-        - No parts of the test are missing.
-        """
     def clean_json_response(self, response: str) -> str:
-        """
-        Cleans the AI response by removing markdown code blocks and extra text.
-        """
         import re
-        # Remove markdown code blocks like ```json ... ```
         json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response)
         if json_match:
             return json_match.group(1).strip()
-        
-        # If no code block, try to find the first '{' or '[' and last '}' or ']'
         start_idx = response.find('{')
         if start_idx == -1:
             start_idx = response.find('[')
-            
         end_idx = response.rfind('}')
         if end_idx == -1:
             end_idx = response.rfind(']')
-            
         if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
             return response[start_idx:end_idx + 1].strip()
-            
         return response.strip()
 
-    
+    def get_general_question_prompt(self, prompt: str):
+        return f""" 
+        You are a test designer assistant. You can generate english tests on various topics in various styles.
+        Your task is to respond to user general question.
 
+        Do not answer any questions not related with your task. You are a english test designer. Remember that.
+
+        Answer very shortly, do not talk to much. Direct answers only.
+        
+        Always answer in user language.
+
+        question : {prompt}
+        
+        
+        """

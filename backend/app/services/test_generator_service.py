@@ -10,7 +10,7 @@ from backend.app.services.prompt_parser_service import PromptParserService
 from backend.app.models.schemas import ParsedPrompt, GeneratedTest, PDFTest
 import re
 
-
+import time
 # <summary>
 # Service responsible for generating educational tests by orchestrating AI and search components.
 # Includes classification, prompt parsing, retrieval, and final test generation.
@@ -32,21 +32,21 @@ class TestGeneratorService:
         """
         Generates a test based on the user prompt and configuration.
         """
-        if self.classification_service.classify(prompt) == "normal":
-            classified_prompt = self.prompt_parser_service.parse_prompt(prompt)
-            json_classified_prompt = json.loads(classified_prompt)
+        
+        start = time.time()
+        classification = self.classification_service.classify(prompt)
+        print(classification)
 
-            parsed_prompt = ParsedPrompt(
-                task=prompt,
-                level=level,
-                age_group=age_group,
-                sections=json_classified_prompt['sections'],
-                total_amount=total_amount
-            )
+        if(classification != "general"):
+            classification = json.loads(classification)
+            classification = ParsedPrompt(**classification)
 
-            retrieval_prompt = self.prompts.get_retrival_prompt(parsed_prompt)
+        if isinstance(classification, ParsedPrompt):
+
+
+            retrieval_prompt = self.prompts.get_retrival_prompt(classification)
             queries_json = self.ai_service.ask(retrieval_prompt)
-            queries = json.loads(queries_json)
+            queries = json.loads(self.__clean_json_response(queries_json))
 
             data = []
 
@@ -67,13 +67,13 @@ class TestGeneratorService:
                 else:
                     data.append(self.search_service.search(query))
 
-            generation_prompt = self.prompts.get_generation_prompt(data, parsed_prompt)
+            generation_prompt = self.prompts.get_generation_prompt(data, classification)
             generated_test_raw = self.ai_service.ask(generation_prompt)
             generated_test_json = self.__clean_json_response(generated_test_raw)
             generated_test = json.loads(generated_test_json)
 
             if reading_enabled:
-                reading_prompt = self.prompts.get_reading_prompt(reading_data, parsed_prompt)
+                reading_prompt = self.prompts.get_reading_prompt(reading_data, classification)
                 reading_raw = self.ai_service.ask(reading_prompt)
                 reading_json = self.__clean_json_response(reading_raw)
                 reading_data_parsed = json.loads(reading_json)
@@ -86,7 +86,7 @@ class TestGeneratorService:
                     generated_test = reading_data_parsed
 
             if writing_enabled:
-                writing_prompt = self.prompts.get_writing_prompt(writing_data, parsed_prompt)
+                writing_prompt = self.prompts.get_writing_prompt(writing_data, classification)
                 writing_raw = self.ai_service.ask(writing_prompt)
                 writing_json = self.__clean_json_response(writing_raw)
                 writing_data_parsed = json.loads(writing_json)
@@ -102,15 +102,21 @@ class TestGeneratorService:
                     else:
                         generated_test['exercises'] = writing_data_parsed['exercises']
             
-            checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), parsed_prompt)
+            checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), classification)
 
             checked_generated_test_raw = self.ai_service.ask(checked_generated_test_prompt)
             checked_generated_test_json = self.__clean_json_response(checked_generated_test_raw)
             checked_generated_test: GeneratedTest = GeneratedTest(**json.loads(checked_generated_test_json))
 
+            end = time.time()
+
+            timer = end - start
+
+            print("test generated in [", timer, "] seconds")
+
             return checked_generated_test.model_dump_json()
         else:
-            raise ValueError("Prompt classification failed. Unrecognized prompt format.")
+            return self.ai_service.ask(self.prompts.get_general_question_prompt(prompt))
 
     def generate_beautified_test(self, generated_test_json: str) -> bytes:
         """
