@@ -1,7 +1,6 @@
 from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
 from backend.app.models.prompts import SystemPrompts
-from backend.app.services.embeddings_service import EmbeddingsService
 from backend.app.services.json_test_converting_service import JsonTestConvertingService
 import json
 import ast
@@ -21,7 +20,6 @@ class TestGeneratorService:
         self.ai_service = AiService()
         self.search_service = SearchService()
         self.prompts = SystemPrompts()
-        self.embeddings_service = EmbeddingsService()
         self.classification_service = ClassificationService()
         self.prompt_parser_service = PromptParserService()
         self.json_test_converting_service = JsonTestConvertingService()
