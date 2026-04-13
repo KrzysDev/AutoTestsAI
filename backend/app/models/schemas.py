@@ -33,6 +33,10 @@ class TestGeneratorRequest(BaseModel):
     age_group: Literal["kids", "teens", "adults"]
     total_amount: int = 20
 
+class TestFixRequest(BaseModel):
+    generated_test: GeneratedTest
+    teacher_prompt: str
+
 # Data types to make generated test pretty
 
 class MultipleChoiceQuestion(BaseModel):

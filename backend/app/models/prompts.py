@@ -551,6 +551,51 @@ class SystemPrompts:
 
         If your output is not valid JSON, your answer is incorrect.
         """
+    def get_test_fixing_prompt(self, test: GeneratedTest, teacher_prompt: str):
+        return f"""
+        # ROLE
+        You are a strict Test Quality Validator AND Fixer.
+        Your task is to modify the provided English test according to the teacher's specific instructions.
+
+        ---
+
+        # INPUT DATA
+        
+        ## CURRENT TEST (JSON)
+        {test.model_dump_json(indent=2)}
+
+        ## TEACHER'S FEEDBACK/INSTRUCTIONS
+        "{teacher_prompt}"
+
+        ---
+
+        # YOUR TASK
+        1. Analyze the teacher's feedback carefully.
+        2. Apply the requested changes to the test.
+        3. Ensure the overall structure of the test remains consistent with the original JSON schema.
+        4. Maintain the same level of difficulty and quality unless the teacher requested otherwise.
+
+        ---
+
+        # OUTPUT FORMAT (STRICT)
+        You MUST return EXACTLY the same JSON structure as the input test.
+
+        # CRITICAL RULES
+        - Return ONLY valid JSON.
+        - DO NOT add any text before or after JSON.
+        - DO NOT add markdown (no ```json).
+        - Ensure every exercise has "instruction" and "body".
+        - Return the FULL test. Do NOT truncate anything.
+        - If the teacher's request is unclear, do your best to interpret it in a way that improves the test.
+
+        ---
+
+        # INTERNAL VALIDATION
+        Before returning, ensure:
+        - The JSON is valid and parseable.
+        - ALL teacher's instructions have been addressed.
+        - No parts of the test are missing.
+        """
     def clean_json_response(self, response: str) -> str:
         """
         Cleans the AI response by removing markdown code blocks and extra text.
