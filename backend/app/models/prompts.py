@@ -1,4 +1,5 @@
 from backend.app.models.schemas import ParsedPrompt, PromptTestSection, GeneratedTest, Exercise, PDFTest
+import json
 
 # <summary>
 # Provides system prompts and templates for instructing the LLMs across various classification, parsing, and generation tasks.
@@ -470,6 +471,86 @@ class SystemPrompts:
             - Ensure the 'task_type' field is present and correct for every exercise.
         """
 
+    def get_test_checking_prompt(self, test: GeneratedTest, parsed_prompt: ParsedPrompt):
+        return f"""You are a strict Test Quality Validator AND Fixer.
+
+        Your task is to analyze the generated test and IMPROVE it so that it fully meets the requirements.
+
+        === INPUT DATA ===
+
+        TEST (JSON):
+        <START_JSON>
+        {test.model_dump_json(indent=2)}
+        <END_JSON>
+
+        TEACHERS REQUIREMENTS (parsed_prompt JSON):
+        <START_JSON>
+        {parsed_prompt.model_dump_json(indent=2)}
+        <END_JSON>
+
+        === YOUR TASK ===
+
+        1. DUPLICATION CHECK
+        - If any tasks/questions are repeated or very similar:
+        - You MUST rewrite them to be clearly different.
+        - Keep the same difficulty level.
+
+        2. DIVERSITY CHECK
+        - Ensure tasks are diverse:
+        - different grammar types
+        - different skills (fill in the gaps, transformation, multiple choice, error correction, matching exercises)
+        - different instructions
+        - If the user explicitly requested repetition → respect it.
+
+        3. REQUIREMENTS MATCH
+        - Ensure the test strictly follows parsed_prompt:
+        - number of tasks
+        - task types
+        - difficulty level
+        - age group
+        - If something is wrong → FIX IT.
+
+        4. QUALITY CHECK
+        - Improve unclear instructions.
+        - Make tasks meaningful and non-trivial.
+        - Ensure the test is usable by a teacher.
+
+        === OUTPUT FORMAT ===
+
+        You MUST return EXACTLY the same JSON structure as in TEST.
+
+        CRITICAL RULES:
+        - Return ONLY valid JSON.
+        - DO NOT add any text before or after JSON.
+        - DO NOT add markdown (no ```json).
+        - DO NOT return JSON as a string.
+        - DO NOT wrap JSON in quotes.
+        - DO NOT escape quotes.
+
+        - DO NOT add new fields.
+        - DO NOT remove fields.
+        - ONLY modify values where necessary.
+
+        - Preserve ALL keys (especially "task_type").
+        - Ensure every exercise has "instruction", "body", and "task_type".
+
+        - Return the FULL test. Do NOT truncate anything.
+
+        === VALIDATION ===
+
+        Before returning, internally check:
+        - Is this valid JSON?
+        - Can it be parsed by a standard JSON parser?
+
+        If not → fix it before returning.
+
+        === IMPORTANT ===
+
+        If the test is already correct → return it unchanged.
+        Otherwise → return FULLY FIXED version.
+
+        If your output is not valid JSON, your answer is incorrect.
+        """
     def clean_json_response(self, response: str) -> str:
         """
         Cleans the AI response by removing markdown code blocks and extra text.
@@ -493,4 +574,6 @@ class SystemPrompts:
             return response[start_idx:end_idx + 1].strip()
             
         return response.strip()
+
+    
 

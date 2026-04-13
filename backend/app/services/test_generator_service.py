@@ -63,11 +63,11 @@ class TestGeneratorService:
                     reading_data.append(self.search_service.search(query))
                     reading_enabled = True
                 
-                if query.lower() == "writing":
+                elif query.lower() == "writing":
                     writing_data.append(self.search_service.search(query))
                     writing_enabled = True
-                
-                data.append(self.search_service.search(query))
+                else:
+                    data.append(self.search_service.search(query))
 
             generation_prompt = self.prompts.get_generation_prompt(data, parsed_prompt)
             generated_test_raw = self.ai_service.ask(generation_prompt)
@@ -103,8 +103,14 @@ class TestGeneratorService:
                         generated_test = writing_data_parsed
                     else:
                         generated_test['exercises'] = writing_data_parsed['exercises']
+            
+            checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), parsed_prompt)
 
-            return json.dumps(generated_test)
+            checked_generated_test_raw = self.ai_service.ask(checked_generated_test_prompt)
+            checked_generated_test_json = self.__clean_json_response(checked_generated_test_raw)
+            checked_generated_test: GeneratedTest = GeneratedTest(**json.loads(checked_generated_test_json))
+
+            return checked_generated_test.model_dump_json()
         else:
             raise ValueError("Prompt classification failed. Unrecognized prompt format.")
 
