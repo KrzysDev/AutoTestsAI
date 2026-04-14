@@ -43,35 +43,6 @@ class SystemPrompts:
 
     Message: {text}"""
 
-
-    def get_generation_prompt(self, retrieval, parsed_prompt: ParsedPrompt):
-        return f"""You are an expert English test designer. Generate a complete English test.
-
-        PRIORITY: Teacher input overrides everything. RAG data is inspiration only.
-
-        MANDATORY RULES:
-        - Generate EXACTLY {parsed_prompt.total_amount} exercises
-        - Each exercise: 6–10 questions (unless teacher specified otherwise)
-        - Cover ALL teacher-requested topics; each topic in at least one exercise
-        - Skip reading, listening, and writing exercises
-        - Distribute topics evenly; no topic exceeds 40% of the test
-        - Each exercise has ONE primary grammar/skill focus
-        - All questions must be unique (different sentence, vocabulary, context)
-        - Use varied formats: multiple choice, gap fill, transformation, matching, error correction, ordering — no format repeated more than twice
-
-        Difficulty:
-        - A2: simple vocab, direct grammar, short texts
-        - B1/B2: distractors, context-based grammar
-        - C1: paraphrasing, ambiguity, advanced vocab
-
-        Output schema (return ONLY valid JSON, no markdown):
-        {GeneratedTest.model_json_schema()}
-
-        The LAST exercise MUST be the Answer Key: {{"instruction": "Answer Key", "body": "..."}}
-
-        Teacher input: {parsed_prompt}
-        RAG context: {retrieval}"""
-
     def get_combined_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: ParsedPrompt, reading_enabled: bool, writing_enabled: bool):
         # Count how many sections are grammar/vocabulary (non-reading, non-writing)
         grammar_vocab_sections = [s for s in parsed_prompt.sections if s.task_type not in ("reading", "writing")]

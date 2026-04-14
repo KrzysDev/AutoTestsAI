@@ -86,7 +86,7 @@ class TestGeneratorService:
                     data.append(res)
                     retrival_metadata.regular += json.dumps(res) + "\n"
 
-            # 2. Combined Generation (grammar/vocab + reading + writing in a single AI call)
+            # 2. Combined Generation using Gemini 1.5 Flash (high speed)
             combined_prompt = self.prompts.get_combined_generation_prompt(
                 retrieval=data,
                 reading_data=reading_data,
@@ -97,7 +97,13 @@ class TestGeneratorService:
             )
             total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask(combined_prompt)
+            # Using Gemini for the heavy lifting
+            print("[INFO] Starting generation with Gemini 1.5 Flash...")
+            gen_start = time.time()
+            generated_test_raw = self.ai_service.ask_gemini(combined_prompt)
+            gen_end = time.time()
+            print(f"[INFO] Gemini generation completed in {gen_end - gen_start:.2f} seconds")
+            
             total_tokens += self.__count_tokens(generated_test_raw)
 
             print(f"[DEBUG] Raw AI response length: {len(generated_test_raw) if generated_test_raw else 0}")
@@ -117,11 +123,15 @@ class TestGeneratorService:
 
 
             
-            # 3. Test Checking
+            # 3. Test Checking (using Gemini for speed)
             checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), classification)
             total_tokens += self.__count_tokens(checked_generated_test_prompt)
             
-            checked_generated_test_raw = self.ai_service.ask(checked_generated_test_prompt)
+            print("[INFO] Starting test validation with Gemini 1.5 Flash...")
+            check_start = time.time()
+            checked_generated_test_raw = self.ai_service.ask_gemini(checked_generated_test_prompt)
+            check_end = time.time()
+            print(f"[INFO] Gemini validation completed in {check_end - check_start:.2f} seconds")
             total_tokens += self.__count_tokens(checked_generated_test_raw)
             
             checked_generated_test_json = self.__clean_json_response(checked_generated_test_raw)
