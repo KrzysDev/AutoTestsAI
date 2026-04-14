@@ -86,51 +86,36 @@ class TestGeneratorService:
                     data.append(res)
                     retrival_metadata.regular += json.dumps(res) + "\n"
 
-            # 2. Main Generation
-            generation_prompt = self.prompts.get_generation_prompt(data, classification)
-            total_tokens += self.__count_tokens(generation_prompt)
+            # 2. Combined Generation (grammar/vocab + reading + writing in a single AI call)
+            combined_prompt = self.prompts.get_combined_generation_prompt(
+                retrieval=data,
+                reading_data=reading_data,
+                writing_data=writing_data,
+                parsed_prompt=classification,
+                reading_enabled=reading_enabled,
+                writing_enabled=writing_enabled
+            )
+            total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask(generation_prompt)
+            generated_test_raw = self.ai_service.ask(combined_prompt)
             total_tokens += self.__count_tokens(generated_test_raw)
+
+            print(f"[DEBUG] Raw AI response length: {len(generated_test_raw) if generated_test_raw else 0}")
+            print(f"[DEBUG] Raw AI response (first 500 chars): {generated_test_raw[:500] if generated_test_raw else 'EMPTY'}")
             
             generated_test_json = self.__clean_json_response(generated_test_raw)
-            generated_test = json.loads(generated_test_json)
+            
+            print(f"[DEBUG] Cleaned JSON length: {len(generated_test_json) if generated_test_json else 0}")
+            print(f"[DEBUG] Cleaned JSON (first 500 chars): {generated_test_json[:500] if generated_test_json else 'EMPTY'}")
+            
+            try:
+                generated_test = json.loads(generated_test_json)
+            except json.JSONDecodeError as e:
+                print(f"[ERROR] Failed to parse AI response as JSON: {e}")
+                print(f"[ERROR] Full cleaned response: {generated_test_json}")
+                raise ValueError(f"AI returned invalid JSON. Error: {e}. Response preview: {generated_test_json[:200]}")
 
-            if reading_enabled:
-                reading_prompt = self.prompts.get_reading_prompt(reading_data, classification)
-                total_tokens += self.__count_tokens(reading_prompt)
-                
-                reading_raw = self.ai_service.ask(reading_prompt)
-                total_tokens += self.__count_tokens(reading_raw)
-                
-                reading_json = self.__clean_json_response(reading_raw)
-                reading_data_parsed = json.loads(reading_json)
 
-                # Merge exercises lists
-                if 'exercises' in generated_test and 'exercises' in reading_data_parsed:
-                    generated_test['exercises'].extend(reading_data_parsed['exercises'])
-                elif 'exercises' in reading_data_parsed:
-                    # Fallback if generated_test has weird structure
-                    generated_test = reading_data_parsed
-
-            if writing_enabled:
-                writing_prompt = self.prompts.get_writing_prompt(writing_data, classification)
-                total_tokens += self.__count_tokens(writing_prompt)
-                
-                writing_raw = self.ai_service.ask(writing_prompt)
-                total_tokens += self.__count_tokens(writing_raw)
-                
-                writing_json = self.__clean_json_response(writing_raw)
-                writing_data_parsed = json.loads(writing_json)
-
-                # Merge exercises lists
-                if 'exercises' in generated_test and 'exercises' in writing_data_parsed:
-                    generated_test['exercises'].extend(writing_data_parsed['exercises'])
-                elif 'exercises' in writing_data_parsed:
-                    if not generated_test:
-                        generated_test = writing_data_parsed
-                    else:
-                        generated_test['exercises'] = writing_data_parsed['exercises']
             
             # 3. Test Checking
             checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), classification)
