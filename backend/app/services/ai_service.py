@@ -42,21 +42,15 @@ class AiService:
             self.gemini_client = None
 
     def ask(self, text: str):
-        """
-        Unified method to submit a prompt to the primary AI engine (Gemini 1.5 Flash).
-        """
         return self.ask_gemini(text)
 
     def ask_gemini(self, text: str):
-        """
-        Submits a prompt to Google Gemini 1.5 Flash for high-speed inference.
-        """
         if not self.gemini_client:
             raise RuntimeError("Gemini is not configured. Please add GOOGLE_API_KEY to .env")
             
         try:
             response = self.gemini_client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=text
             )
             return response.text
@@ -64,36 +58,7 @@ class AiService:
             print(f"Error calling Gemini: {e}")
             raise RuntimeError(f"Failed to get response from Gemini: {e}")
 
-    def ask_gemini_with_photo(self, text: str, photo_path: str):
-        """
-        Submits a prompt with an image to Google Gemini 1.5 Flash (Vision).
-        """
-        if not self.gemini_client:
-            raise RuntimeError("Gemini is not configured. Please add GOOGLE_API_KEY to .env")
-            
-        try:
-            with open(photo_path, "rb") as f:
-                image_data = f.read()
-            
-            # Gemini SDK handles raw bytes directly in contents list if specified correctly
-            # Or we can use types.Part.from_bytes if we had imported it
-            from google.genai import types
-            response = self.gemini_client.models.generate_content(
-                model='gemini-1.5-flash',
-                contents=[
-                    types.Part.from_bytes(data=image_data, mime_type="image/jpeg"),
-                    text
-                ]
-            )
-            return response.text
-        except Exception as e:
-            print(f"Error calling Gemini Vision: {e}")
-            raise RuntimeError(f"Failed to get vision response from Gemini: {e}")
-
     def __classify_text(self, text: str):
-        """
-        Classifies user prompt using Gemini.
-        """
         prompt = self.prompts.get_classification_prompt(text)
         response_text = self.ask_gemini(prompt)
         
@@ -109,23 +74,6 @@ class AiService:
                 'content': text,
             },
         ])
-        return response['message']['content']
-
-    def __ask_ollama_local_with_photo(self, text: str, photo_path: str):
-        with open(photo_path, "rb") as f:
-            photo_data = f.read()
-
-        response = self.local_client.chat(
-            model='qwen3.5',
-            messages=[
-                {
-                    'role': 'user',
-                    'content': text,
-                    'images': [photo_data],
-                }
-            ],
-            stream=False
-        )
         return response['message']['content']
 
     def __ask_ollama_cloud(self, text: str, model: str, retries=5):
@@ -163,18 +111,3 @@ class AiService:
                     time.sleep(wait)
 
         return "Error: Could not connect to Ollama"
-    
-    def __ask_ollama_cloud_with_photo(self, text: str, photo_path: str, model: str):
-        with open(photo_path, "rb") as f:
-            photo_data = f.read()
-
-        message = [
-            {
-                'role': 'user',
-                'content': text,
-                'images': [photo_data],
-            },
-        ]
-
-        response = self.cloud_client.chat(model, messages=message)
-        return response['message']['content']
