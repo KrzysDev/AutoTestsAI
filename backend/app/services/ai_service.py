@@ -1,6 +1,6 @@
 import os
 from ollama import Client
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 import json
 from backend.app.models.prompts import SystemPrompts
@@ -36,31 +36,71 @@ class AiService:
         # Gemini configuration
         gemini_api_key = os.environ.get('GOOGLE_API_KEY')
         if gemini_api_key:
-            genai.configure(api_key=gemini_api_key)
-            self.gemini_model = genai.GenerativeModel('gemini-1.5-flash')
+            self.gemini_client = genai.Client(api_key=gemini_api_key)
         else:
             print("Warning: No GOOGLE_API_KEY found. Gemini functions will fail.")
-            self.gemini_model = None
+            self.gemini_client = None
 
     def ask(self, text: str):
-        if os.environ.get('AI_CLOUD_MODE') == 'true':
-            return self.__ask_ollama_cloud(text, 'gemma4:31b-cloud')
-        else:
-            return self.__ask_ollama_local(text, 'gemma3:4b')
+        """
+        Unified method to submit a prompt to the primary AI engine (Gemini 1.5 Flash).
+        """
+        return self.ask_gemini(text)
 
     def ask_gemini(self, text: str):
         """
         Submits a prompt to Google Gemini 1.5 Flash for high-speed inference.
         """
-        if not self.gemini_model:
+        if not self.gemini_client:
             raise RuntimeError("Gemini is not configured. Please add GOOGLE_API_KEY to .env")
             
         try:
-            response = self.gemini_model.generate_content(text)
+            response = self.gemini_client.models.generate_content(
+                model='gemini-1.5-flash',
+                contents=text
+            )
             return response.text
         except Exception as e:
             print(f"Error calling Gemini: {e}")
             raise RuntimeError(f"Failed to get response from Gemini: {e}")
+
+    def ask_gemini_with_photo(self, text: str, photo_path: str):
+        """
+        Submits a prompt with an image to Google Gemini 1.5 Flash (Vision).
+        """
+        if not self.gemini_client:
+            raise RuntimeError("Gemini is not configured. Please add GOOGLE_API_KEY to .env")
+            
+        try:
+            with open(photo_path, "rb") as f:
+                image_data = f.read()
+            
+            # Gemini SDK handles raw bytes directly in contents list if specified correctly
+            # Or we can use types.Part.from_bytes if we had imported it
+            from google.genai import types
+            response = self.gemini_client.models.generate_content(
+                model='gemini-1.5-flash',
+                contents=[
+                    types.Part.from_bytes(data=image_data, mime_type="image/jpeg"),
+                    text
+                ]
+            )
+            return response.text
+        except Exception as e:
+            print(f"Error calling Gemini Vision: {e}")
+            raise RuntimeError(f"Failed to get vision response from Gemini: {e}")
+
+    def __classify_text(self, text: str):
+        """
+        Classifies user prompt using Gemini.
+        """
+        prompt = self.prompts.get_classification_prompt(text)
+        response_text = self.ask_gemini(prompt)
+        
+        # We assume classification logic handles the string response
+        return response_text
+
+    # --- Legacy / Internal Methods ---
 
     def __ask_ollama_local(self, text: str, model: str):
         response = self.local_client.chat(model=model, messages=[
@@ -70,22 +110,6 @@ class AiService:
             },
         ])
         return response['message']['content']
-
-    def __classify_text(self, text: str):
-        message = [
-            {
-                'role': 'user',
-                'content': self.prompts.get_classification_prompt(text)
-            },
-        ]
-
-        response = self.cloud_client.chat('gemma3:4b-cloud', messages=message)
-        classification = TeacherRequestClassification(
-            text=text,
-            classification=response['message']['content']
-        )
-
-        return classification.classification
 
     def __ask_ollama_local_with_photo(self, text: str, photo_path: str):
         with open(photo_path, "rb") as f:
@@ -153,4 +177,4 @@ class AiService:
         ]
 
         response = self.cloud_client.chat(model, messages=message)
-        return response['message']['content']
+        return response['message']['content']

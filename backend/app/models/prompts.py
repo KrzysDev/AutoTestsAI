@@ -222,7 +222,7 @@ class SystemPrompts:
         Requirements: {parsed_prompt.model_dump_json(indent=2)}"""
 
     def get_test_fixing_prompt(self, test: GeneratedTest, teacher_prompt: str):
-            return f"""Modify the English test according to the teacher's instructions. Return ONLY valid JSON, no markdown.
+        return f"""Modify the English test according to the teacher's instructions. Return ONLY valid JSON, no markdown.
 
         Rules:
         - Apply all teacher-requested changes

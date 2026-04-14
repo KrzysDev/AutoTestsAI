@@ -86,7 +86,6 @@ class TestGeneratorService:
                     data.append(res)
                     retrival_metadata.regular += json.dumps(res) + "\n"
 
-            # 2. Combined Generation using Gemini 1.5 Flash (high speed)
             combined_prompt = self.prompts.get_combined_generation_prompt(
                 retrieval=data,
                 reading_data=reading_data,
@@ -97,12 +96,9 @@ class TestGeneratorService:
             )
             total_tokens += self.__count_tokens(combined_prompt)
             
-            # Using Gemini for the heavy lifting
-            print("[INFO] Starting generation with Gemini 1.5 Flash...")
             gen_start = time.time()
             generated_test_raw = self.ai_service.ask_gemini(combined_prompt)
             gen_end = time.time()
-            print(f"[INFO] Gemini generation completed in {gen_end - gen_start:.2f} seconds")
             
             total_tokens += self.__count_tokens(generated_test_raw)
 
