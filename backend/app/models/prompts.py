@@ -214,41 +214,6 @@ class SystemPrompts:
 
         return combined_prompt
 
-    def get_reading_prompt(self, retrieval, parsed_prompt):
-        return f"""Generate reading comprehension exercises ONLY. Return ONLY valid JSON, no markdown.
-
-        Rules:
-        - Generate 1–2 reading exercises (unless teacher specified otherwise)
-        - Each exercise: a text (500–700 words for B1-B2, longer for C1) + 5–8 comprehension questions
-        - Questions must mix: main idea, detail, inference, vocabulary in context
-        - No grammar exercises; one passage per exercise
-
-        Difficulty same as standard levels (A2/B1-B2/C1).
-
-        Output schema: {GeneratedTest.model_json_schema()}
-        Last exercise MUST be: {{"instruction": "Answer Key", "body": "..."}}
-
-        Teacher input: {parsed_prompt}
-        RAG context: {retrieval}"""
-
-            def get_writing_prompt(self, retrieval, parsed_prompt):
-                return f"""Generate writing exercises ONLY (emaiL, letter writing, or matching headings). Return ONLY valid JSON, no markdown.
-
-        Rules:
-        - Generate 1 exercise (unless teacher specified otherwise)
-        - Include: clear instructions, context (recipient + purpose), 3–4 bullet points to address, word count:
-        A1-A2: 50–80 | B1: 100–120 | B2: 300–350 | C1: 400–600
-        - Prompt must be realistic, state formal/informal tone clearly
-        - No grammar or reading exercises
-
-        Level: {parsed_prompt.level}
-
-        Output schema: {GeneratedTest.model_json_schema()}
-        Last exercise MUST be a model answer: {{"instruction": "Answer Key", "body": "..."}}
-
-        Teacher input: {parsed_prompt}
-        RAG context: {retrieval}"""
-
     def get_test_restructuring_prompt(self, test_data: GeneratedTest):
         return f"""Restructure the raw GeneratedTest into PDFTest format. Return ONLY valid JSON, no markdown.
 
@@ -285,8 +250,8 @@ class SystemPrompts:
         Test: {test.model_dump_json(indent=2)}
         Requirements: {parsed_prompt.model_dump_json(indent=2)}"""
 
-            def get_test_fixing_prompt(self, test: GeneratedTest, teacher_prompt: str):
-                return f"""Modify the English test according to the teacher's instructions. Return ONLY valid JSON, no markdown.
+    def get_test_fixing_prompt(self, test: GeneratedTest, teacher_prompt: str):
+            return f"""Modify the English test according to the teacher's instructions. Return ONLY valid JSON, no markdown.
 
         Rules:
         - Apply all teacher-requested changes
