@@ -139,3 +139,22 @@ class PDFTest(BaseModel):
     exercises: list[PDFExercise]
 
 
+class TestGeneratorResponseMetadataRetrival(BaseModel):
+    regular: str
+    writing: str
+    reading: str
+
+
+class TestGeneratorResponseMetadata(BaseModel):
+    prompt: str
+    parsed_prompt: str
+    tokens: int
+    time: float
+    average_time: float
+    retrival: TestGeneratorResponseMetadataRetrival
+
+class TestGeneratorResponse(BaseModel):
+    response: GeneratedTest
+
+
+
