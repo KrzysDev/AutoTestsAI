@@ -7,6 +7,20 @@ from typing import Literal, Union, Optional
 
 class PromptTestSection(BaseModel):
     task_type: Literal["vocabulary", "grammar", "reading", "writing"]
+    subject: Literal[
+        "Present Simple",
+        "Present Continuous",
+        "Present Perfect",
+        "Present Perfect Continuous",
+        "Past Simple",
+        "Past Continuous",
+        "Past Perfect",
+        "Past Perfect Continuous",
+        "Future Simple",
+        "Future Continuous",
+        "Future Perfect",
+        "Future Perfect Continuous"
+    ]
     amount : int
 
 class Exercise(BaseModel):

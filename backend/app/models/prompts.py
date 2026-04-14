@@ -22,6 +22,19 @@ class SystemPrompts:
     - level: CEFR only — A1, A2, B1, B2, C1, C2
     - age_group: one of — kids, teens, adults
     - sections: list where task_type is one of — vocabulary, grammar, reading, writing; amount = number of such sections
+    - subject (in test section) - one of the given: 
+            "Present Simple",
+            "Present Continuous",
+            "Present Perfect",
+            "Present Perfect Continuous",
+            "Past Simple",
+            "Past Continuous",
+            "Past Perfect",
+            "Past Perfect Continuous",
+            "Future Simple",
+            "Future Continuous",
+            "Future Perfect",
+            "Future Perfect Continuous"
     - total_amount: total exercises count
     If any field is unclear → make a reasonable assumption, do NOT return "general".
 

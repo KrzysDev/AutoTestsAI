@@ -42,12 +42,8 @@ class TestGeneratorService:
             classification = ParsedPrompt(**classification)
 
         if isinstance(classification, ParsedPrompt):
-
-
-            retrieval_prompt = self.prompts.get_retrival_prompt(classification)
-            queries_json = self.ai_service.ask(retrieval_prompt)
-            queries = json.loads(self.__clean_json_response(queries_json))
-
+            queries = []
+            
             data = []
 
             reading_data = []
@@ -55,6 +51,10 @@ class TestGeneratorService:
 
             reading_enabled = False
             writing_enabled = False
+
+            for section in classification.sections:
+                queries.append(section.subject)
+
 
             for query in queries:
                 if query.lower() == "reading":
