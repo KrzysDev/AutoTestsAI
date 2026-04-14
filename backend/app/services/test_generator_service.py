@@ -7,8 +7,9 @@ import ast
 from typing import Literal
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
-from backend.app.models.schemas import ParsedPrompt, GeneratedTest, PDFTest
+from backend.app.models.schemas import ParsedPrompt, GeneratedTest, PDFTest, TestGeneratorResponse, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival, Exercise
 import re
+import os
 
 import time
 # <summary>
@@ -28,13 +29,20 @@ class TestGeneratorService:
                       prompt: str, 
                       level: Literal['A1', 'A2', 'B1', 'B2', 'C1', 'C2'], 
                       age_group: Literal["kids", "teens", "adults"],
-                      total_amount: int) -> str:
+                      total_amount: int) -> TestGeneratorResponse:
         """
         Generates a test based on the user prompt and configuration.
         """
         
         start = time.time()
+        total_tokens = 0
+        
+        # 1. Classification
+        classification_prompt = self.prompts.get_classification_prompts(prompt)
+        total_tokens += self.__count_tokens(classification_prompt)
+        
         classification = self.classification_service.classify(prompt)
+        total_tokens += self.__count_tokens(classification)
         print(classification)
 
         if(classification != "general"):
@@ -55,26 +63,46 @@ class TestGeneratorService:
             for section in classification.sections:
                 queries.append(section.subject)
 
+            retrival_metadata = TestGeneratorResponseMetadataRetrival(
+                regular="",
+                writing="",
+                reading=""
+            )
 
             for query in queries:
                 if query.lower() == "reading":
-                    reading_data.append(self.search_service.search(query))
+                    res = self.search_service.search(query)
+                    reading_data.append(res)
+                    retrival_metadata.reading += json.dumps(res) + "\n"
                     reading_enabled = True
                 
                 elif query.lower() == "writing":
-                    writing_data.append(self.search_service.search(query))
+                    res = self.search_service.search(query)
+                    writing_data.append(res)
+                    retrival_metadata.writing += json.dumps(res) + "\n"
                     writing_enabled = True
                 else:
-                    data.append(self.search_service.search(query))
+                    res = self.search_service.search(query)
+                    data.append(res)
+                    retrival_metadata.regular += json.dumps(res) + "\n"
 
+            # 2. Main Generation
             generation_prompt = self.prompts.get_generation_prompt(data, classification)
+            total_tokens += self.__count_tokens(generation_prompt)
+            
             generated_test_raw = self.ai_service.ask(generation_prompt)
+            total_tokens += self.__count_tokens(generated_test_raw)
+            
             generated_test_json = self.__clean_json_response(generated_test_raw)
             generated_test = json.loads(generated_test_json)
 
             if reading_enabled:
                 reading_prompt = self.prompts.get_reading_prompt(reading_data, classification)
+                total_tokens += self.__count_tokens(reading_prompt)
+                
                 reading_raw = self.ai_service.ask(reading_prompt)
+                total_tokens += self.__count_tokens(reading_raw)
+                
                 reading_json = self.__clean_json_response(reading_raw)
                 reading_data_parsed = json.loads(reading_json)
 
@@ -87,14 +115,16 @@ class TestGeneratorService:
 
             if writing_enabled:
                 writing_prompt = self.prompts.get_writing_prompt(writing_data, classification)
+                total_tokens += self.__count_tokens(writing_prompt)
+                
                 writing_raw = self.ai_service.ask(writing_prompt)
+                total_tokens += self.__count_tokens(writing_raw)
+                
                 writing_json = self.__clean_json_response(writing_raw)
                 writing_data_parsed = json.loads(writing_json)
 
                 # Merge exercises lists
                 if 'exercises' in generated_test and 'exercises' in writing_data_parsed:
-                    # If there's an answer key in generated_test, we might want to put writing before it
-                    # but simple extend is what reading does
                     generated_test['exercises'].extend(writing_data_parsed['exercises'])
                 elif 'exercises' in writing_data_parsed:
                     if not generated_test:
@@ -102,21 +132,54 @@ class TestGeneratorService:
                     else:
                         generated_test['exercises'] = writing_data_parsed['exercises']
             
+            # 3. Test Checking
             checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), classification)
-
+            total_tokens += self.__count_tokens(checked_generated_test_prompt)
+            
             checked_generated_test_raw = self.ai_service.ask(checked_generated_test_prompt)
+            total_tokens += self.__count_tokens(checked_generated_test_raw)
+            
             checked_generated_test_json = self.__clean_json_response(checked_generated_test_raw)
             checked_generated_test: GeneratedTest = GeneratedTest(**json.loads(checked_generated_test_json))
 
             end = time.time()
-
             timer = end - start
-
             print("test generated in [", timer, "] seconds")
 
-            return checked_generated_test.model_dump_json()
+            average_time = self.__get_and_update_average_time(timer)
+
+            metadata = TestGeneratorResponseMetadata(
+                prompt=prompt,
+                parsed_prompt=classification.model_dump_json() if isinstance(classification, ParsedPrompt) else str(classification),
+                tokens=total_tokens,
+                time=timer,
+                average_time=average_time,
+                retrival=retrival_metadata
+            )
+
+            return TestGeneratorResponse(
+                response=checked_generated_test,
+                metadata=metadata
+            )
         else:
-            return self.ai_service.ask(self.prompts.get_general_question_prompt(prompt))
+            res = self.ai_service.ask(self.prompts.get_general_question_prompt(prompt))
+            end = time.time()
+            timer = end - start
+            average_time = self.__get_and_update_average_time(timer)
+            
+            # For general questions, we wrap the response in a GeneratedTest with one exercise
+            gen_prompt = self.prompts.get_general_question_prompt(prompt)
+            return TestGeneratorResponse(
+                response=GeneratedTest(exercises=[Exercise(instruction="AI Response", body=res)]),
+                metadata=TestGeneratorResponseMetadata(
+                    prompt=prompt,
+                    parsed_prompt="general",
+                    tokens=self.__count_tokens(res) + self.__count_tokens(gen_prompt),
+                    time=timer,
+                    average_time=average_time,
+                    retrival=TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
+                )
+            )
 
     def generate_beautified_test(self, generated_test_json: str) -> bytes:
         """
@@ -167,3 +230,46 @@ class TestGeneratorService:
             return response[start_idx:end_idx + 1].strip()
             
         return response.strip()
+
+    def __count_tokens(self, text: str) -> int:
+        """
+        Estimates the number of tokens in the given text.
+        Calculation: 1 word = 1.5 tokens (Gemma model estimate).
+        """
+        if not text:
+            return 0
+        word_count = len(text.split())
+        return int(word_count * 1.5)
+
+    def __get_and_update_average_time(self, current_time: float) -> float:
+        """
+        Reads, updates and returns the average response time from statistics/response/average_response_time.json.
+        """
+        file_path = "statistics/response/average_response_time.json"
+        
+        try:
+            # Ensure directory exists
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            
+            if os.path.exists(file_path):
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            else:
+                data = {"average": 0.0, "total_requests": 0}
+            
+            old_avg = data.get("average", 0.0)
+            total_req = data.get("total_requests", 0)
+            
+            new_total_req = total_req + 1
+            new_avg = (old_avg * total_req + current_time) / new_total_req
+            
+            data["average"] = new_avg
+            data["total_requests"] = new_total_req
+            
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4)
+                
+            return new_avg
+        except Exception as e:
+            print(f"Error updating average response time: {e}")
+            return current_time

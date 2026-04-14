@@ -155,6 +155,7 @@ class TestGeneratorResponseMetadata(BaseModel):
 
 class TestGeneratorResponse(BaseModel):
     response: GeneratedTest
+    metadata: TestGeneratorResponseMetadata
 
 
 
