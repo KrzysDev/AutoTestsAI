@@ -43,7 +43,7 @@ class AiService:
             self.gemini_client = None
 
     def ask(self, text: str):
-        if os.environ.get('AI_CLOUD_MODE', 'false').lower() == 'true':
+        if os.environ.get('AI_CLOUD_MODE').lower() == 'true':
             return self.__ask_ollama_cloud(text, 'gemma4:31b-cloud')
         else:
             return self.__ask_ollama_local(text, model="gemma4:latest")         
