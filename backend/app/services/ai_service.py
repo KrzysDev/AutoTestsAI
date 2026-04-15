@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import json
 from backend.app.models.prompts import SystemPrompts
 
+import os
 
 import time
 
@@ -42,9 +43,12 @@ class AiService:
             self.gemini_client = None
 
     def ask(self, text: str):
-        return self.ask_gemini(text)
+        if os.environ.get('AI_CLOUD_MODE', 'false').lower() == 'true':
+            return self.__ask_ollama_cloud(text, 'gemma4:31b-cloud')
+        else:
+            return self.__ask_ollama_local(text, model="gemma4:latest")         
 
-    def ask_gemini(self, text: str):
+    def __ask_gemini(self, text: str):
         if not self.gemini_client:
             raise RuntimeError("Gemini is not configured. Please add GOOGLE_API_KEY to .env")
             

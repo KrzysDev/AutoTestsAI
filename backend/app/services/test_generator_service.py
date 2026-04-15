@@ -97,18 +97,12 @@ class TestGeneratorService:
             total_tokens += self.__count_tokens(combined_prompt)
             
             gen_start = time.time()
-            generated_test_raw = self.ai_service.ask_gemini(combined_prompt)
+            generated_test_raw = self.ai_service.ask(combined_prompt)
             gen_end = time.time()
             
             total_tokens += self.__count_tokens(generated_test_raw)
-
-            print(f"[DEBUG] Raw AI response length: {len(generated_test_raw) if generated_test_raw else 0}")
-            print(f"[DEBUG] Raw AI response (first 500 chars): {generated_test_raw[:500] if generated_test_raw else 'EMPTY'}")
             
             generated_test_json = self.__clean_json_response(generated_test_raw)
-            
-            print(f"[DEBUG] Cleaned JSON length: {len(generated_test_json) if generated_test_json else 0}")
-            print(f"[DEBUG] Cleaned JSON (first 500 chars): {generated_test_json[:500] if generated_test_json else 'EMPTY'}")
             
             try:
                 generated_test = json.loads(generated_test_json)
@@ -123,11 +117,9 @@ class TestGeneratorService:
             checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), classification)
             total_tokens += self.__count_tokens(checked_generated_test_prompt)
             
-            print("[INFO] Starting test validation with Gemini 1.5 Flash...")
             check_start = time.time()
-            checked_generated_test_raw = self.ai_service.ask_gemini(checked_generated_test_prompt)
+            checked_generated_test_raw = self.ai_service.ask(checked_generated_test_prompt)
             check_end = time.time()
-            print(f"[INFO] Gemini validation completed in {check_end - check_start:.2f} seconds")
             total_tokens += self.__count_tokens(checked_generated_test_raw)
             
             checked_generated_test_json = self.__clean_json_response(checked_generated_test_raw)
@@ -135,7 +127,6 @@ class TestGeneratorService:
 
             end = time.time()
             timer = end - start
-            print("test generated in [", timer, "] seconds")
 
             average_time = self.__get_and_update_average_time(timer)
 
@@ -171,33 +162,6 @@ class TestGeneratorService:
                     retrival=TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
                 )
             )
-
-    def generate_beautified_test(self, generated_test_json: str) -> bytes:
-        """
-        Restructures a raw generated test and converts it to a beautified PDF.
-        """
-        # Parse the raw test to ensure it's valid
-        raw_test_data = json.loads(generated_test_json)
-        generated_test = GeneratedTest(**raw_test_data)
-
-        # Get the restructuring prompt
-        restructure_prompt = self.prompts.get_test_restructuring_prompt(generated_test)
-        
-        # Ask AI to restructure
-        restructured_raw = self.ai_service.ask(restructure_prompt)
-        restructured_json = self.__clean_json_response(restructured_raw)
-        
-        try:
-            # Parse into PDFTest model
-            pdf_test = PDFTest(**json.loads(restructured_json))
-            
-            # Convert to PDF
-            pdf_bytes = self.json_test_converting_service.convert_to_pdf(pdf_test)
-            return pdf_bytes
-        except Exception as e:
-            # Fallback or error handling
-            print(f"Error during restructuring or PDF generation: {e}")
-            raise ValueError(f"Failed to generate beautified PDF: {e}")
 
     def __clean_json_response(self, response: str) -> str:
         """

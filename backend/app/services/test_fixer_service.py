@@ -12,17 +12,13 @@ class TestFixerService:
         """
         Fixes the test based on teacher's prompt and returns it as GeneratedTest object.
         """
-        # Get the prompt
         fixing_prompt = self.prompts.get_test_fixing_prompt(test, teacher_prompt)
         
-        # Ask AI to fix
         fixed_test_raw = self.ai_service.ask(fixing_prompt)
         
-        # Clean and parse JSON
         fixed_test_json = self.prompts.clean_json_response(fixed_test_raw)
         
         try:
-            # Parse into GeneratedTest model
             fixed_test = GeneratedTest(**json.loads(fixed_test_json))
             return fixed_test
         except Exception as e:
