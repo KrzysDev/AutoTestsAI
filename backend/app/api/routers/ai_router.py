@@ -10,18 +10,7 @@ ai_service = AiService()
 
 last_requests_cloud = defaultdict(lambda: datetime.min)
 
-@router.post("/v1/rag/ask/local")
-def ask_ollama_local(text: str = Body(..., description="Query for the local AI")):
-    if not text.strip():
-        raise HTTPException(status_code=400, detail="Input text cannot be empty")
-    try:
-        return ai_service.ask_ollama_local(text)
-    except ollama.ResponseError as e:
-        raise HTTPException(status_code=e.status_code, detail=f"Ollama error: {e.error}")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Unexpected local model error.")
-
-@router.post("/v1/rag/ask/cloud")
+@router.post("/v1/rag/ask")
 def ask_ollama_cloud(request: Request, text: str = Body(..., description="Query for the cloud AI")):
     client_ip = request.client.host
     now = datetime.now()
@@ -35,8 +24,8 @@ def ask_ollama_cloud(request: Request, text: str = Body(..., description="Query 
     if not text.strip():
         raise HTTPException(status_code=400, detail="Input text cannot be empty")
     try:
-        return ai_service.ask_ollama_cloud(text, model='gpt-oss:120b')
+        return ai_service.ask(text)
     except ollama.ResponseError as e:
         raise HTTPException(status_code=e.status_code, detail=f"Ollama error: {e.error}")
     except Exception as e:
-        raise HTTPException(status_code=500, detail="An unexpected server error occurred.")
+        raise HTTPException(status_code=500, detail=f"An unexpected server error occurred. Error: {e}")

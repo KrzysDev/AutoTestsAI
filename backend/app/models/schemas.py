@@ -7,6 +7,20 @@ from typing import Literal, Union, Optional
 
 class PromptTestSection(BaseModel):
     task_type: Literal["vocabulary", "grammar", "reading", "writing"]
+    subject: Literal[
+        "Present Simple",
+        "Present Continuous",
+        "Present Perfect",
+        "Present Perfect Continuous",
+        "Past Simple",
+        "Past Continuous",
+        "Past Perfect",
+        "Past Perfect Continuous",
+        "Future Simple",
+        "Future Continuous",
+        "Future Perfect",
+        "Future Perfect Continuous"
+    ]
     amount : int
 
 class Exercise(BaseModel):
@@ -123,5 +137,25 @@ PDFExercise = Union[
 
 class PDFTest(BaseModel):
     exercises: list[PDFExercise]
+
+
+class TestGeneratorResponseMetadataRetrival(BaseModel):
+    regular: str
+    writing: str
+    reading: str
+
+
+class TestGeneratorResponseMetadata(BaseModel):
+    prompt: str
+    parsed_prompt: str
+    tokens: int
+    time: float
+    average_time: float
+    retrival: TestGeneratorResponseMetadataRetrival
+
+class TestGeneratorResponse(BaseModel):
+    response: GeneratedTest
+    metadata: TestGeneratorResponseMetadata
+
 
 
