@@ -11,10 +11,10 @@ class SystemPrompts:
     def get_classification_prompts(self, text: str):
         return f"""
         You are processing a teacher's test generation request. You have to classify it into one of the given classes:
-        - general - if it contains general questions or not enough data to generate a test
-        - request - if it contains question directly sugesting a test generation (examples: create.. generate... make.... a test/exam/classwork...)
+        - general - if it is just a casual chat or a general question.
+        - request - if it contains question directly sugesting a test generation (examples: create.. generate... make.... a test/exam/classwork...), even if some parameters are not explicitly stated.
 
-        Data needed to generate a test:
+        Data needed to generate a test (you will deduce missing ones later):
             -prompt
             -CEFR LEVEL (A1, A2, B1, B2, C1, C2)
             -target age group (kids, teens or adults?)
@@ -24,7 +24,8 @@ class SystemPrompts:
             -you MUST ONLY respond with either "general" or "request".
             -you CANNOT say anything before or after legal words.
             - "general" or "request" answer ONLY. EVERY OTHER RESPONSE IS FORBIDDED STRICTLY.
-            - before returning answer make sure you teachers request is either "request" and you can find all neccesary data in his text or "general" if you cannot.
+            - If it looks like a request to generate a test, output "request", do NOT require all data to be explicitly present.
+            - YOU ABSOLUTELY MUST AVOID MARKDOWN SIGNS LIKE ```JSON ``` AND ANY OTHER. NO TEXT BEFORE AND AFTER JSON
 
         Message: 
         {text}
@@ -43,6 +44,28 @@ class SystemPrompts:
          - you must ALWAYS return valid json. No mistakes, no markdown sighns like ``` or ```json
          - YOU MUST return ONLY valid JSON. NO markdown. NO code fences. NO extra text before or after the JSON.
          - YOU MUST follow this EXACT schema — any deviation WILL result in rejection
+        
+        #IMPORTANT INFORMATION
+        1.Sections in provided format look like this:
+            {json.dumps(PromptTestSection.model_json_schema(), indent=2)}
+
+        2. They represent sections of a test. Possible values:
+                task_type: Literal["vocabulary", "grammar", "reading", "writing"]
+                subject: Literal[
+                    "Present Simple",
+                    "Present Continuous",
+                    "Present Perfect",
+                    "Present Perfect Continuous",
+                    "Past Simple",
+                    "Past Continuous",
+                    "Past Perfect",
+                    "Past Perfect Continuous",
+                    "Future Simple",
+                    "Future Continuous",
+                    "Future Perfect",
+                    "Future Perfect Continuous"
+                ]
+                amount : int
         
         #Teacher's request:
         {text}

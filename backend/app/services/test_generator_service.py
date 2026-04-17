@@ -29,7 +29,8 @@ class TestGeneratorService:
         """
         Generates a test based on the user prompt.
         """
-        
+        print("function start")
+
         start = time.time()
         total_tokens = 0
         
@@ -37,11 +38,11 @@ class TestGeneratorService:
         classification_prompt = self.prompts.get_classification_prompts(prompt)
 
         total_tokens += self.__count_tokens(classification_prompt)
-        classification : str = self.ai_service.ask_model(classification_prompt, "gemma3:4b-cloud")
+        classification : str = self.ai_service.ask_model(classification_prompt, "gemma4:31b-cloud")
         
         total_tokens += self.__count_tokens(classification)
 
-        if classification.lower() == "request":
+        if "request" in classification.lower():
             queries = []
             
             data = []
@@ -54,18 +55,22 @@ class TestGeneratorService:
 
             parsing_prompt = self.prompts.get_parsing_prompt(prompt)
 
-            parsed_prompt = self.ai_service.ask_model(parsing_prompt)
-
-            max_tries = 0
-
-            parsed_prompt = ""
+            max_tries = 3
+            parsed_prompt = None
 
             for i in range(max_tries):
+                parsed_prompt_raw = self.ai_service.ask_model(parsing_prompt, "gemma4:31b-cloud")
+                print(f"Parsed prompt raw response (Attempt {i+1}):\n{parsed_prompt_raw}")
+                
                 try:
-                    parsed_prompt = ParsedPrompt(**parsed_prompt)
+                    cleaned_json = self.__clean_json_response(parsed_prompt_raw)
+                    parsed_dict = json.loads(cleaned_json)
+                    parsed_prompt = ParsedPrompt(**parsed_dict)
                     break
-                except ValueError as e:
-                    raise ValueError("Model returned invalid parsed prompt json: ", e)
+                except (ValueError, json.JSONDecodeError, TypeError) as e:
+                    print(f"Failed to parse JSON on attempt {i+1}: {e}")
+                    if i == max_tries - 1:
+                        raise ValueError(f"Model returned invalid parsed prompt json: {e}")
 
             for section in parsed_prompt.sections:
                 queries.append(section.subject)
@@ -97,7 +102,7 @@ class TestGeneratorService:
                 retrieval=data,
                 reading_data=reading_data,
                 writing_data=writing_data,
-                parsed_prompt=classification,
+                parsed_prompt=parsed_prompt,
                 reading_enabled=reading_enabled,
                 writing_enabled=writing_enabled
             )
@@ -118,7 +123,7 @@ class TestGeneratorService:
                 print(f"[ERROR] Full cleaned response: {generated_test_json}")
                 raise ValueError(f"AI returned invalid JSON. Error: {e}. Response preview: {generated_test_json[:200]}")
 
-            checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), classification)
+            checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), parsed_prompt)
             total_tokens += self.__count_tokens(checked_generated_test_prompt)
             
             check_start = time.time()
@@ -136,7 +141,7 @@ class TestGeneratorService:
 
             metadata = TestGeneratorResponseMetadata(
                 prompt=prompt,
-                parsed_prompt=classification.model_dump_json() if isinstance(classification, ParsedPrompt) else str(classification),
+                parsed_prompt=parsed_prompt.model_dump_json() if parsed_prompt else "",
                 tokens=total_tokens,
                 time=timer,
                 average_time=average_time,

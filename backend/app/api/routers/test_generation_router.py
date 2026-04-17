@@ -23,13 +23,10 @@ def fix_test(request: TestFixRequest):
         raise HTTPException(status_code=500, detail=str(e))
         
 @router.post("/v1/rag/test/generate")
-def generate_test(request: TestGeneratorRequest):
+def generate_test(request: str):
     try:
-        response = test_generator_service.generate_test(
-            prompt=request.prompt,
-            level=request.level,
-            age_group=request.age_group,
-            total_amount=request.total_amount
+        response = test_generator_service.generate_test_from_prompt(
+            prompt=request
         )
         return response
     except Exception as e:
