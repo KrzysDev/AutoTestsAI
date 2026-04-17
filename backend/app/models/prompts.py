@@ -1,4 +1,5 @@
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection, GeneratedTest, Exercise, PDFTest
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection, GeneratedTest, Exercise, PDFTest, Form
+from typing import Union
 import json
 
 # <summary>
@@ -72,7 +73,7 @@ class SystemPrompts:
 
         """
 
-    def get_combined_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: ParsedPrompt, reading_enabled: bool, writing_enabled: bool):
+    def get_combined_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: Union[ParsedPrompt, Form], reading_enabled: bool, writing_enabled: bool):
         # Count how many sections are grammar/vocabulary (non-reading, non-writing)
         grammar_vocab_sections = [s for s in parsed_prompt.sections if s.task_type not in ("reading", "writing")]
         reading_sections = [s for s in parsed_prompt.sections if s.task_type == "reading"]
@@ -232,7 +233,7 @@ class SystemPrompts:
 
         Input: {test_data.model_dump_json()}"""
 
-    def get_test_checking_prompt(self, test: GeneratedTest, parsed_prompt: ParsedPrompt):
+    def get_test_checking_prompt(self, test: GeneratedTest, parsed_prompt: Union[ParsedPrompt, Form]):
         return f"""You are a Test Validator and Fixer. Analyze the test and fix any issues. Return ONLY the corrected test as valid JSON — no markdown, no extra text.
 
         Fix if needed:

@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from backend.app.services.test_generator_service import TestGeneratorService
 from backend.app.services.test_fixer_service import TestFixerService
-from backend.app.models.schemas import TestGeneratorRequest, TestFixRequest
+from backend.app.models.schemas import TestGeneratorRequest, TestFixRequest, TestSurveyRequest
 import json
 import io
 
@@ -22,11 +22,21 @@ def fix_test(request: TestFixRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
         
-@router.post("/v1/rag/test/generate")
-def generate_test(request: str):
+@router.post("/v1/rag/test/generate/by_prompt")
+def generate_with_prompt(request: str):
     try:
         response = test_generator_service.generate_test_from_prompt(
             prompt=request
+        )
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/v1/rag/test/generate/by_survey")
+def generate_with_survey(request: TestSurveyRequest):
+    try:
+        response = test_generator_service.generate_test_from_survey(
+            form=request.form
         )
         return response
     except Exception as e:
