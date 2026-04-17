@@ -41,3 +41,11 @@ def generate_with_survey(request: TestSurveyRequest):
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+        
+@router.post("/v1/rag/test/generate_html/by_prompt")
+def generate_html_test_with_prompt(request: str):
+    try:
+        response = test_generator_service.generate_html_test_from_prompt(request)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

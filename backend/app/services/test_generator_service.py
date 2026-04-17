@@ -269,42 +269,77 @@ class TestGeneratorService:
         )
 
     def generate_html_test_from_prompt(self, prompt: str):
+        """
+        Generates a test based on the structured survey form, skipping the AI classification and parsing steps.
+        """
+        print("generate_test_from_survey start")
+
         start = time.time()
         total_tokens = 0
         
-        # 1. Classification
-        classification_prompt = self.prompts.get_classification_prompts(prompt)
+        queries = []
+        data = []
+        reading_data = []
+        writing_data = []
+        reading_enabled = False
+        writing_enabled = False
 
-        total_tokens += self.__count_tokens(classification_prompt)
-        classification : str = self.ai_service.ask_model(classification_prompt, "gemma4:31b-cloud")
+        for section in form.sections:
+            queries.append(section.subject)
+
+        retrival_metadata = TestGeneratorResponseMetadataRetrival(
+            regular="",
+            writing="",
+            reading=""
+        )
+
+        for query in queries:
+            if query.lower() == "reading":
+                res = self.search_service.search(query)
+                reading_data.append(res)
+                retrival_metadata.reading += json.dumps(res) + "\n"
+                reading_enabled = True
+            
+            elif query.lower() == "writing":
+                res = self.search_service.search(query)
+                writing_data.append(res)
+                retrival_metadata.writing += json.dumps(res) + "\n"
+                writing_enabled = True
+            else:
+                res = self.search_service.search(query)
+                data.append(res)
+                retrival_metadata.regular += json.dumps(res) + "\n"
+
+        combined_prompt = self.prompts.get_combined_html_generation_prompt(
+            retrieval=data,
+            reading_data=reading_data,
+            writing_data=writing_data,
+            parsed_prompt=form,
+            reading_enabled=reading_enabled,
+            writing_enabled=writing_enabled
+        )
+        total_tokens += self.__count_tokens(combined_prompt)
         
-        total_tokens += self.__count_tokens(classification)
+        gen_start = time.time()
+        generated_test_raw = self.ai_service.ask(combined_prompt)
+        gen_end = time.time()
+        
+        total_tokens += self.__count_tokens(generated_test_raw)
+        
 
-        if "request" in classification.lower():
-                retrival_metadata = TestGeneratorResponseMetadataRetrival(
-                regular="",
-                writing="",
-                reading=""
-            )
+        metadata = TestGeneratorResponseMetadata(
+            prompt="Survey Generated Test",
+            parsed_prompt=form.model_dump_json(),
+            tokens=total_tokens,
+            time=timer,
+            average_time=average_time,
+            retrival=retrival_metadata
+        )
 
-            for query in queries:
-                if query.lower() == "reading":
-                    res = self.search_service.search(query)
-                    reading_data.append(res)
-                    retrival_metadata.reading += json.dumps(res) + "\n"
-                    reading_enabled = True
-                
-                elif query.lower() == "writing":
-                    res = self.search_service.search(query)
-                    writing_data.append(res)
-                    retrival_metadata.writing += json.dumps(res) + "\n"
-                    writing_enabled = True
-                else:
-                    res = self.search_service.search(query)
-                    data.append(res)
-                    retrival_metadata.regular += json.dumps(res) + "\n"
-        else:
-            pass
+        return TestGeneratorResponse(
+            response=generated_test_raw,
+            metadata=metadata
+        )
 
 
     def __clean_json_response(self, response: str) -> str:
