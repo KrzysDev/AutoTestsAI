@@ -25,13 +25,9 @@ class TestGeneratorService:
         self.prompt_parser_service = PromptParserService()
         self.json_test_converting_service = JsonTestConvertingService()
 
-    def generate_test(self, 
-                      prompt: str, 
-                      level: Literal['A1', 'A2', 'B1', 'B2', 'C1', 'C2'], 
-                      age_group: Literal["kids", "teens", "adults"],
-                      total_amount: int) -> TestGeneratorResponse:
+    def generate_test_from_prompt(self, prompt: str, ) -> TestGeneratorResponse:
         """
-        Generates a test based on the user prompt and configuration.
+        Generates a test based on the user prompt.
         """
         
         start = time.time()
@@ -39,17 +35,13 @@ class TestGeneratorService:
         
         # 1. Classification
         classification_prompt = self.prompts.get_classification_prompts(prompt)
+
         total_tokens += self.__count_tokens(classification_prompt)
+        classification : str = self.ai_service.ask_model(classification_prompt, "gemma3:4b-cloud")
         
-        classification = self.classification_service.classify(prompt)
         total_tokens += self.__count_tokens(classification)
-        print(classification)
 
-        if(classification != "general"):
-            classification = json.loads(classification)
-            classification = ParsedPrompt(**classification)
-
-        if isinstance(classification, ParsedPrompt):
+        if classification.lower() == "request":
             queries = []
             
             data = []
@@ -60,7 +52,22 @@ class TestGeneratorService:
             reading_enabled = False
             writing_enabled = False
 
-            for section in classification.sections:
+            parsing_prompt = self.prompts.get_parsing_prompt(prompt)
+
+            parsed_prompt = self.ai_service.ask_model(parsing_prompt)
+
+            max_tries = 0
+
+            parsed_prompt = ""
+
+            for i in range(max_tries):
+                try:
+                    parsed_prompt = ParsedPrompt(**parsed_prompt)
+                    break
+                except ValueError as e:
+                    raise ValueError("Model returned invalid parsed prompt json: ", e)
+
+            for section in parsed_prompt.sections:
                 queries.append(section.subject)
 
             retrival_metadata = TestGeneratorResponseMetadataRetrival(
@@ -111,9 +118,6 @@ class TestGeneratorService:
                 print(f"[ERROR] Full cleaned response: {generated_test_json}")
                 raise ValueError(f"AI returned invalid JSON. Error: {e}. Response preview: {generated_test_json[:200]}")
 
-
-            
-            # 3. Test Checking (using Gemini for speed)
             checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), classification)
             total_tokens += self.__count_tokens(checked_generated_test_prompt)
             

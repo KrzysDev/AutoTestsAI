@@ -48,6 +48,12 @@ class AiService:
         else:
             return self.__ask_ollama_local(text, model="gemma4:latest")         
 
+    def ask_model(self, text: str, model: str):
+        if os.environ.get('AI_CLOUD_MODE').lower() == 'true':
+            return self.__ask_ollama_cloud(text, model)
+        else:
+            return self.__ask_ollama_local(text, model) 
+
     def __ask_gemini(self, text: str):
         if not self.gemini_client:
             raise RuntimeError("Gemini is not configured. Please add GOOGLE_API_KEY to .env")

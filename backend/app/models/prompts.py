@@ -31,6 +31,24 @@ class SystemPrompts:
         
         """
 
+    def get_parsing_prompt(self, text: str):
+        return f"""
+        You are processing a teacher's request for test generation. You have to iterate through it and extract all necessary data, then return it in provided format.
+
+        #PROVIDED FORMAT
+        {json.dumps(ParsedPrompt.model_json_schema(), indent=2)}
+
+        #RULES
+         - you MUST ALWAYS return ANSWER IN PROVIDED FORMAT. Never return answer diffrently 
+         - you must ALWAYS return valid json. No mistakes, no markdown sighns like ``` or ```json
+         - YOU MUST return ONLY valid JSON. NO markdown. NO code fences. NO extra text before or after the JSON.
+         - YOU MUST follow this EXACT schema — any deviation WILL result in rejection
+        
+        #Teacher's request:
+        {text}
+
+        """
+
     def get_combined_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: ParsedPrompt, reading_enabled: bool, writing_enabled: bool):
         # Count how many sections are grammar/vocabulary (non-reading, non-writing)
         grammar_vocab_sections = [s for s in parsed_prompt.sections if s.task_type not in ("reading", "writing")]
