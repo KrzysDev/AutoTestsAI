@@ -9,39 +9,27 @@ class SystemPrompts:
         pass
 
     def get_classification_prompts(self, text: str):
-        return f"""You are processing a teacher's message. 
+        return f"""
+        You are processing a teacher's test generation request. You have to classify it into one of the given classes:
+        - general - if it contains general questions or not enough data to generate a test
+        - request - if it contains question directly sugesting a test generation (examples: create.. generate... make.... a test/exam/classwork...)
 
-    FIRST: Does the message express intent to CREATE a test or exam?
-    Intent = any of: create, make, generate, write, prepare, give me, build + test, exam, quiz, classwork, worksheet.
+        Data needed to generate a test:
+            -prompt
+            -CEFR LEVEL (A1, A2, B1, B2, C1, C2)
+            -target age group (kids, teens or adults?)
+            -total_amount (how many exercises teacher wants to have on exam)
+        
+        Rules:
+            -you MUST ONLY respond with either "general" or "request".
+            -you CANNOT say anything before or after legal words.
+            - "general" or "request" answer ONLY. EVERY OTHER RESPONSE IS FORBIDDED STRICTLY.
+            - before returning answer make sure you teachers request is either "request" and you can find all neccesary data in his text or "general" if you cannot.
 
-    If YES → extract parameters and return ONLY this JSON (no markdown, no extra text):
-    {ParsedPrompt.model_json_schema()}
-
-    Field rules:
-    - task: teacher's original request verbatim
-    - level: CEFR only — A1, A2, B1, B2, C1, C2
-    - age_group: one of — kids, teens, adults
-    - sections: list where task_type is one of — vocabulary, grammar, reading, writing; amount = number of such sections
-    - subject (in test section) - one of the given: 
-            "Present Simple",
-            "Present Continuous",
-            "Present Perfect",
-            "Present Perfect Continuous",
-            "Past Simple",
-            "Past Continuous",
-            "Past Perfect",
-            "Past Perfect Continuous",
-            "Future Simple",
-            "Future Continuous",
-            "Future Perfect",
-            "Future Perfect Continuous"
-    - total_amount: total exercises count
-    - exercises amount MUST be equal to total amount of exercises. Example: if total_amount = 20 then, sum of sections.amounts MUST BE EQUAL 20
-    If any field is unclear → make a reasonable assumption, do NOT return "general".
-
-    If NO (purely general question, no test creation intent) → return ONLY the word: general
-
-    Message: {text}"""
+        Message: 
+        {text}
+        
+        """
 
     def get_combined_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: ParsedPrompt, reading_enabled: bool, writing_enabled: bool):
         # Count how many sections are grammar/vocabulary (non-reading, non-writing)
