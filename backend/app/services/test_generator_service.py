@@ -29,7 +29,6 @@ class TestGeneratorService:
         """
         Generates a test based on the user prompt.
         """
-        print("function start")
 
         start = time.time()
         total_tokens = 0
@@ -268,6 +267,45 @@ class TestGeneratorService:
             response=checked_generated_test,
             metadata=metadata
         )
+
+    def generate_html_test_from_prompt(self, prompt: str):
+        start = time.time()
+        total_tokens = 0
+        
+        # 1. Classification
+        classification_prompt = self.prompts.get_classification_prompts(prompt)
+
+        total_tokens += self.__count_tokens(classification_prompt)
+        classification : str = self.ai_service.ask_model(classification_prompt, "gemma4:31b-cloud")
+        
+        total_tokens += self.__count_tokens(classification)
+
+        if "request" in classification.lower():
+                retrival_metadata = TestGeneratorResponseMetadataRetrival(
+                regular="",
+                writing="",
+                reading=""
+            )
+
+            for query in queries:
+                if query.lower() == "reading":
+                    res = self.search_service.search(query)
+                    reading_data.append(res)
+                    retrival_metadata.reading += json.dumps(res) + "\n"
+                    reading_enabled = True
+                
+                elif query.lower() == "writing":
+                    res = self.search_service.search(query)
+                    writing_data.append(res)
+                    retrival_metadata.writing += json.dumps(res) + "\n"
+                    writing_enabled = True
+                else:
+                    res = self.search_service.search(query)
+                    data.append(res)
+                    retrival_metadata.regular += json.dumps(res) + "\n"
+        else:
+            pass
+
 
     def __clean_json_response(self, response: str) -> str:
         """
