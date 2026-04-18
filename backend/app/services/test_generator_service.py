@@ -143,6 +143,36 @@ class TestGeneratorService:
             metadata=metadata
         )
 
+    def generate_html_test_from_survey(self, form: Form) -> TestGeneratorHTMLResponse:
+        """
+        Generates an HTML test based on the structured survey form.
+        """
+        print("generate_html_test_from_survey start")
+        start = time.time()
+        total_tokens = 0
+
+        data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(form.sections)
+
+        combined_prompt = self.prompts.get_combined_html_generation_prompt(
+            retrieval=data,
+            reading_data=reading_data,
+            writing_data=writing_data,
+            parsed_prompt=form,
+            reading_enabled=reading_enabled,
+            writing_enabled=writing_enabled
+        )
+        total_tokens += self.__count_tokens(combined_prompt)
+        
+        generated_test_raw = self.ai_service.ask(combined_prompt)
+        total_tokens += self.__count_tokens(generated_test_raw)
+        
+        metadata = self.__build_metadata(start, "Survey Generated HTML Test", form.model_dump_json(), total_tokens, retrival_metadata)
+
+        return TestGeneratorHTMLResponse(
+            response=generated_test_raw,
+            metadata=metadata
+        )
+
     # --- Sub-methods for Refactoring ---
 
     def __ask_model_for_json(self, prompt: str, model: str, schema, max_tries: int = 3) -> tuple:

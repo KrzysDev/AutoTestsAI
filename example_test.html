@@ -1,8 +1,3 @@
-from backend.app.services.html_test_converter_service import HtmlConvertingService
-
-service = HtmlConvertingService()
-
-pdf = service.convert_html_to_pdf("""
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -342,7 +337,3 @@ pdf = service.convert_html_to_pdf("""
 
 </body>
 </html>
-
-""")
-with open("output.pdf", "wb") as f:
-    f.write(pdf)
