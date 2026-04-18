@@ -157,6 +157,10 @@ class TestGeneratorResponse(BaseModel):
     response: GeneratedTest
     metadata: TestGeneratorResponseMetadata
 
+class TestGeneratorHTMLResponse(BaseModel):
+    response: str
+    metadata: TestGeneratorResponseMetadata
+
 
 class FormSection(BaseModel):
     task_type: Literal["vocabulary", "grammar", "reading", "writing", "other"]

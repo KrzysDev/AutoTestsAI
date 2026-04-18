@@ -7,7 +7,7 @@ import ast
 from typing import Literal
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
-from backend.app.models.schemas import ParsedPrompt, GeneratedTest, PDFTest, TestGeneratorResponse, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival, Exercise, Form
+from backend.app.models.schemas import ParsedPrompt, GeneratedTest, PDFTest, TestGeneratorResponse, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival, Exercise, Form, TestGeneratorHTMLResponse
 import re
 import os
 
@@ -272,7 +272,7 @@ class TestGeneratorService:
         """
         Generates a test based on the structured survey form, skipping the AI classification and parsing steps.
         """
-        print("generate_test_from_survey start")
+        print("generate_html_test_from_prompt start")
 
         start = time.time()
         total_tokens = 0
@@ -284,7 +284,29 @@ class TestGeneratorService:
         reading_enabled = False
         writing_enabled = False
 
-        for section in form.sections:
+        parsing_prompt = self.prompts.get_parsing_prompt(prompt)
+        total_tokens += self.__count_tokens(parsing_prompt)
+
+        max_tries = 3
+        parsed_prompt = None
+
+        for i in range(max_tries):
+            parsed_prompt_raw = self.ai_service.ask_model(parsing_prompt, "gemma4:31b-cloud")
+            print(f"Parsed prompt raw response (Attempt {i+1}):\n{parsed_prompt_raw}")
+            
+            try:
+                cleaned_json = self.__clean_json_response(parsed_prompt_raw)
+                parsed_dict = json.loads(cleaned_json)
+                parsed_prompt = ParsedPrompt(**parsed_dict)
+                break
+            except (ValueError, json.JSONDecodeError, TypeError) as e:
+                print(f"Failed to parse JSON on attempt {i+1}: {e}")
+                if i == max_tries - 1:
+                    raise ValueError(f"Model returned invalid parsed prompt json: {e}")
+
+        total_tokens += self.__count_tokens(parsed_prompt.model_dump_json())
+
+        for section in parsed_prompt.sections:
             queries.append(section.subject)
 
         retrival_metadata = TestGeneratorResponseMetadataRetrival(
@@ -314,7 +336,7 @@ class TestGeneratorService:
             retrieval=data,
             reading_data=reading_data,
             writing_data=writing_data,
-            parsed_prompt=form,
+            parsed_prompt=parsed_prompt,
             reading_enabled=reading_enabled,
             writing_enabled=writing_enabled
         )
@@ -326,17 +348,20 @@ class TestGeneratorService:
         
         total_tokens += self.__count_tokens(generated_test_raw)
         
+        end = time.time()
+        timer = end - start
+        average_time = self.__get_and_update_average_time(timer)
 
         metadata = TestGeneratorResponseMetadata(
-            prompt="Survey Generated Test",
-            parsed_prompt=form.model_dump_json(),
+            prompt=prompt,
+            parsed_prompt=parsed_prompt.model_dump_json(),
             tokens=total_tokens,
             time=timer,
             average_time=average_time,
             retrival=retrival_metadata
         )
 
-        return TestGeneratorResponse(
+        return TestGeneratorHTMLResponse(
             response=generated_test_raw,
             metadata=metadata
         )
