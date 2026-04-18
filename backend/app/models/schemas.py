@@ -3,6 +3,15 @@ from pydantic import BaseModel, field_validator, Field, ConfigDict
 from typing import Literal, Union, Optional
 
 
+class PromptRequest(BaseModel):
+    prompt: str
+
+
+class HtmlRequest(BaseModel):
+    html: str
+
+
+
 #data types needed to generate test as a raw text
 
 class PromptTestSection(BaseModel):
