@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm 2cm;
+            @bottom-center {
+                content: "— " counter(page) " —";
+                font-size: 9pt;
+                color: #999;
+            }
+        }
+
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: #ffffff; 
+            font-family: Georgia, 'Times New Roman', serif; 
+            font-size: 11pt; 
+            color: #333;
+        }
+
+        .test-container { width: 100%; }
+
+        /* Header */
+        .header-bar {
+            background-color: #1a2744;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 4px solid #c0392b;
+        }
+        .header-bar h1 {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 18pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0 0 10px 0;
+        }
+        .header-meta {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 10pt;
+            letter-spacing: 1px;
+        }
+
+        /* Student Info */
+        .student-info {
+            display: table;
+            width: 100%;
+            background-color: #f5f5f5;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        .info-cell {
+            display: table-cell;
+            width: 33.33%;
+            vertical-align: middle;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 10pt;
+        }
+        .info-field {
+            border-bottom: 1.5px dotted #333;
+            display: inline-block;
+            width: 60%;
+            margin-left: 5px;
+            height: 1.2em;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            background-color: #1a2744;
+            color: #ffffff;
+            text-align: center;
+            padding: 8px;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 10pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* Exercise Block */
+        .exercise {
+            background-color: #ffffff;
+            border: 1.5px solid #ddd;
+            padding: 16px;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+            position: relative;
+        }
+        .ex-tag {
+            float: right;
+            background-color: #c0392b;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 9pt;
+            padding: 3px 8px;
+            font-weight: bold;
+        }
+        .score-tag {
+            float: right;
+            font-style: italic;
+            font-size: 9pt;
+            color: #666666;
+            margin-right: 10px;
+        }
+        .ex-title {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 12pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #1a2744;
+            border-left: 4px solid #c0392b;
+            padding-left: 8px;
+            margin-bottom: 10px;
+            clear: both;
+        }
+        .ex-instructions {
+            font-style: italic;
+            color: #666666;
+            font-size: 10pt;
+            margin-bottom: 15px;
+        }
+        .question {
+            font-size: 10.5pt;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .options {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        .option {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        .circle {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .gap-fill {
+            border-bottom: 1px solid #aaa;
+            display: inline-block;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        /* Answer Key */
+        .answer-key {
+            page-break-before: always;
+        }
+        .ak-header {
+            background-color: #1a2744;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-weight: bold;
+            border-top: 4px solid #c0392b;
+        }
+        .ak-container {
+            display: table;
+            width: 100%;
+            margin-top: 20px;
+            border-spacing: 10px;
+        }
+        .ak-box {
+            display: table-cell;
+            width: 33.33%;
+            border: 1px solid #444;
+            padding: 10px;
+            background-color: #1e3055;
+            color: #ffffff;
+            vertical-align: top;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 10pt;
+        }
+        .ak-box strong {
+            display: block;
+            border-bottom: 1px solid #ffffff;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="test-container">
+    <!-- HEADER -->
+    <div class="header-bar">
+        <h1>English Language Assessment</h1>
+        <div class="header-meta">
+            Level: B1 | Age Group: Teens | Total Score: 12 pts
+        </div>
+    </div>
+
+    <!-- STUDENT INFO -->
+    <div class="student-info">
+        <div class="info-cell">Name: <span class="info-field"></span></div>
+        <div class="info-cell">Date: <span class="info-field"></span></div>
+        <div class="info-cell">Class: <span class="info-field"></span></div>
+    </div>
+
+    <!-- SECTION A -->
+    <div class="section-divider">SECTION A — GRAMMAR & VOCABULARY</div>
+
+    <!-- EXERCISE 1: PRESENT SIMPLE -->
+    <div class="exercise">
+        <span class="score-tag">( 6 pts )</span>
+        <span class="ex-tag">Ex. 1</span>
+        <div class="ex-title">Present Simple: Daily Routines</div>
+        <div class="ex-instructions">Choose the correct option (A, B, or C) that best completes the sentence.</div>
+        
+        <div class="question">
+            1. My best friend ________ to the gym three times a week to stay fit.
+            <div class="options">
+                <span class="option"><span class="circle"></span> A) go</span>
+                <span class="option"><span class="circle"></span> B) goes</span>
+                <span class="option"><span class="circle"></span> C) going</span>
+            </div>
+        </div>
+
+        <div class="question">
+            2. We usually ________ our homework together in the library after school.
+            <div class="options">
+                <span class="option"><span class="circle"></span> A) do</span>
+                <span class="option"><span class="circle"></span> B) does</span>
+                <span class="option"><span class="circle"></span> C) doing</span>
+            </div>
+        </div>
+
+        <div class="question">
+            3. ________ your brother play any online games on the weekend?
+            <div class="options">
+                <span class="option"><span class="circle"></span> A) Do</span>
+                <span class="option"><span class="circle"></span> B) Is</span>
+                <span class="option"><span class="circle"></span> C) Does</span>
+            </div>
+        </div>
+
+        <div class="question">
+            4. I ________ very much about the new Marvel movie; it sounds boring.
+            <div class="options">
+                <span class="option"><span class="circle"></span> A) don't care</span>
+                <span class="option"><span class="circle"></span> B) doesn't care</span>
+                <span class="option"><span class="circle"></span> C) not care</span>
+            </div>
+        </div>
+
+        <div class="question">
+            5. The school bus ________ at exactly 7:30 AM every morning.
+            <div class="options">
+                <span class="option"><span class="circle"></span> A) arrive</span>
+                <span class="option"><span class="circle"></span> B) arrives</span>
+                <span class="option"><span class="circle"></span> C) arriving</span>
+            </div>
+        </div>
+
+        <div class="question">
+            6. Sarah and Tom ________ a lot of TikTok videos in their free time.
+            <div class="options">
+                <span class="option"><span class="circle"></span> A) record</span>
+                <span class="option"><span class="circle"></span> B) records</span>
+                <span class="option"><span class="circle"></span> C) recording</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXERCISE 2: SCHOOL & EDUCATION -->
+    <div class="exercise">
+        <span class="score-tag">( 6 pts )</span>
+        <span class="ex-tag">Ex. 2</span>
+        <div class="ex-title">Vocabulary: School and Education</div>
+        <div class="ex-instructions">Fill in the gaps with the most appropriate word from your vocabulary of school and learning.</div>
+        
+        <div class="question">
+            1. I need to study hard because I have a very important <span class="gap-fill"></span> tomorrow.
+        </div>
+        <div class="question">
+            2. My favorite <span class="gap-fill"></span> is History because I love learning about the past.
+        </div>
+        <div class="question">
+            3. If you don't understand the lesson, you should ask the <span class="gap-fill"></span> for help.
+        </div>
+        <div class="question">
+            4. We use a <span class="gap-fill"></span> to look up the meanings of difficult English words.
+        </div>
+        <div class="question">
+            5. I always take notes in my <span class="gap-fill"></span> during the lecture.
+        </div>
+        <div class="question">
+            6. To get a high <span class="gap-fill"></span>, you must complete all your assignments on time.
+        </div>
+    </div>
+
+    <!-- ANSWER KEY -->
+    <div class="answer-key">
+        <div class="ak-header">ANSWER KEY — FOR TEACHER USE ONLY</div>
+        <div class="ak-container">
+            <div class="ak-box">
+                <strong>Ex. 1 (Grammar)</strong>
+                1. B (goes)<br>
+                2. A (do)<br>
+                3. C (Does)<br>
+                4. A (don't care)<br>
+                5. B (arrives)<br>
+                6. A (record)
+            </div>
+            <div class="ak-box">
+                <strong>Ex. 2 (Vocabulary)</strong>
+                1. exam / test<br>
+                2. subject<br>
+                3. teacher<br>
+                4. dictionary<br>
+                5. notebook<br>
+                6. grade / mark
+            </div>
+            <div class="ak-box">
+                <strong>Scoring</strong>
+                Total: 12 pts<br>
+                Ex 1: 6 pts<br>
+                Ex 2: 6 pts
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

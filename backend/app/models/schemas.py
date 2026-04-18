@@ -157,5 +157,25 @@ class TestGeneratorResponse(BaseModel):
     response: GeneratedTest
     metadata: TestGeneratorResponseMetadata
 
+class TestGeneratorHTMLResponse(BaseModel):
+    response: str
+    metadata: TestGeneratorResponseMetadata
 
 
+class FormSection(BaseModel):
+    task_type: Literal["vocabulary", "grammar", "reading", "writing", "other"]
+    subject: str
+    amount: int
+    additional_comment: Optional[str] = None
+
+
+class Form(BaseModel):
+    level: Literal['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+    age_group: Literal["kids", "teens", "adults"]
+    sections: list[FormSection]
+    total_amount: Optional[int] = None
+    additional_notes: Optional[str] = None
+
+
+class TestSurveyRequest(BaseModel):
+    form: Form
