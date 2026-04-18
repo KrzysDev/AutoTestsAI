@@ -328,9 +328,19 @@ class SystemPrompts:
 
         REQUIRED CSS PATTERNS:
             - Multi-column layouts (student info, answer key): display: table on parent, display: table-cell with explicit width on children
-            - page-break-inside: avoid  on EVERY .exercise block
-            - page-break-before: always  on the Answer Key section
             - All widths of inner content elements: use % or explicit px, never vw
+
+        PAGE BREAK RULES — CRITICAL, FOLLOW EXACTLY OR LAYOUT WILL BREAK:
+            - ONLY the Answer Key gets: page-break-before: always
+            - Every .exercise gets: page-break-inside: avoid — NOTHING ELSE
+            - Every .section-divider gets BOTH:
+                page-break-after: avoid      ← glues divider to the first exercise after it
+                page-break-inside: avoid
+                page-break-before: auto      ← NEVER use always on dividers
+            - Every .exercise-title gets: page-break-after: avoid  ← title never orphaned from questions
+            - NEVER use page-break-before: always on anything except .answer-key-section
+            - NEVER use page-break-after: always anywhere
+            - This ensures section dividers are NEVER alone on a page
 
         ═══════════════════════════════════════════════════════════════
         VISUAL DESIGN — MAKE IT LOOK LIKE A REAL PRINTED TEST
@@ -379,6 +389,10 @@ class SystemPrompts:
         SECTION DIVIDERS (between Grammar / Reading / Writing):
             - Full-width bar: background #1a2744, color white, text-align center, padding 8px
             - Text: "SECTION A — GRAMMAR & VOCABULARY" etc., uppercase, letter-spacing 2px, font-size 10pt
+            - MANDATORY page-break CSS on every .section-divider:
+                page-break-before: auto;
+                page-break-after: avoid;
+                page-break-inside: avoid;
 
         MULTIPLE CHOICE options:
             - Display on same line or indented block, format: A) ... B) ... C) ...
