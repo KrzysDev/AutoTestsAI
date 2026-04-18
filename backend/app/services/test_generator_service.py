@@ -111,37 +111,63 @@ class TestGeneratorService:
 
     def generate_html_test_from_prompt(self, prompt: str):
         """
-        Generates a test based on the structured survey form, skipping the AI classification and parsing steps.
+        Generates an HTML test based on the user prompt. Includes AI classification.
         """
         print("generate_html_test_from_prompt start")
         start = time.time()
         total_tokens = 0
 
-        parsing_prompt = self.prompts.get_parsing_prompt(prompt)
-        parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, "gemma4:31b-cloud", ParsedPrompt)
-        total_tokens += tokens_used
+        # 1. Classification
+        classification_prompt = self.prompts.get_classification_prompts(prompt)
+        total_tokens += self.__count_tokens(classification_prompt)
+        classification : str = self.ai_service.ask_model(classification_prompt, "gemma4:31b-cloud")
+        total_tokens += self.__count_tokens(classification)
 
-        data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(parsed_prompt.sections)
+        if "request" in classification.lower():
+            parsing_prompt = self.prompts.get_parsing_prompt(prompt)
+            parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, "gemma4:31b-cloud", ParsedPrompt)
+            total_tokens += tokens_used
 
-        combined_prompt = self.prompts.get_combined_html_generation_prompt(
-            retrieval=data,
-            reading_data=reading_data,
-            writing_data=writing_data,
-            parsed_prompt=parsed_prompt,
-            reading_enabled=reading_enabled,
-            writing_enabled=writing_enabled
-        )
-        total_tokens += self.__count_tokens(combined_prompt)
-        
-        generated_test_raw = self.ai_service.ask(combined_prompt)
-        total_tokens += self.__count_tokens(generated_test_raw)
-        
-        metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
+            data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(parsed_prompt.sections)
 
-        return TestGeneratorHTMLResponse(
-            response=generated_test_raw,
-            metadata=metadata
-        )
+            combined_prompt = self.prompts.get_combined_html_generation_prompt(
+                retrieval=data,
+                reading_data=reading_data,
+                writing_data=writing_data,
+                parsed_prompt=parsed_prompt,
+                reading_enabled=reading_enabled,
+                writing_enabled=writing_enabled
+            )
+            total_tokens += self.__count_tokens(combined_prompt)
+            
+            generated_test_raw = self.ai_service.ask(combined_prompt)
+            total_tokens += self.__count_tokens(generated_test_raw)
+            
+            metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
+
+            return TestGeneratorHTMLResponse(
+                response=generated_test_raw,
+                metadata=metadata
+            )
+        else:
+            gen_prompt = self.prompts.get_general_question_prompt(prompt)
+            res = self.ai_service.ask(self.prompts.get_general_question_prompt(gen_prompt))
+            
+            timer = time.time() - start
+            average_time = self.__get_and_update_average_time(timer)
+            metadata = TestGeneratorResponseMetadata(
+                prompt=prompt,
+                parsed_prompt="general",
+                tokens=total_tokens + self.__count_tokens(res) + self.__count_tokens(gen_prompt),
+                time=timer,
+                average_time=average_time,
+                retrival=TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
+            )
+            
+            return TestGeneratorHTMLResponse(
+                response=res,
+                metadata=metadata
+            )
 
     def generate_html_test_from_survey(self, form: Form) -> TestGeneratorHTMLResponse:
         """

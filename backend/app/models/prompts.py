@@ -11,24 +11,45 @@ class SystemPrompts:
 
     def get_classification_prompts(self, text: str):
         return f"""
-        You are processing a teacher's test generation request. You have to classify it into one of the given classes:
-        - general - if it is just a casual chat or a general question.
-        - request - if it contains question directly sugesting a test generation (examples: create.. generate... make.... a test/exam/classwork...), even if some parameters are not explicitly stated.
+            You are a classifier.
 
-        Data needed to generate a test (you will deduce missing ones later):
-            -THERE MUST BE A CEFR LEVEL SPECIFIED (A1, A2, B1, B2, C1, C2)
-            -THERE MUST BE target age group (kids, teens or adults?)
-            -THERE MUST BE total_amount (how many exercises teacher wants to have on exam)
-        
-        Rules:
-            -you MUST ONLY respond with either "general" or "request".
-            -you CANNOT say anything before or after legal words.
-            - "general" or "request" answer ONLY. EVERY OTHER RESPONSE IS FORBIDDED STRICTLY.
-            - If it looks like a request to generate a test, output "request", do NOT require all data to be explicitly present.
-            - YOU ABSOLUTELY MUST AVOID MARKDOWN SIGNS LIKE ```JSON ``` AND ANY OTHER. NO TEXT BEFORE AND AFTER JSON
+            Your task is to classify the user's message into ONE of two labels:
 
-        Message: 
-        {text}
+            * "general" → casual conversation, questions, or anything NOT asking to create a test
+            * "request" → user wants to create/generate/make an English test or exam
+
+            ---
+
+            Examples:
+
+            Message: "Hi, how are you?"
+            Answer: general
+
+            Message: "Explain present perfect"
+            Answer: general
+
+            Message: "Create a B2 English test about travel"
+            Answer: request
+
+            Message: "Generate exam with grammar and reading tasks"
+            Answer: request
+
+            Message: "Make a test for teenagers"
+            Answer: request
+
+            ---
+
+            Rules:
+
+            * Output ONLY one word: general OR request
+            * No explanations
+            * No extra text
+
+            ---
+
+            Message:
+            {text}
+
         
         """
 

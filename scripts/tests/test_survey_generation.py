@@ -20,6 +20,18 @@ payload = {
                 "subject": "reading",
                 "amount": 1,
                 "additional_comment": "Keep the text engaging, maybe about travel."
+            },
+                        {
+                "task_type": "grammar",
+                "subject": "Present Perfect vs Past Simple",
+                "amount": 2,
+                "additional_comment": "Focus on the differences in usage."
+            },
+            {
+                "task_type": "writing",
+                "subject": "writing",
+                "amount": 1,
+                "additional_comment": "Email to friend about enviorment."
             }
         ],
         "total_amount": 3,
