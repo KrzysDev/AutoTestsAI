@@ -25,77 +25,25 @@ class TestGeneratorService:
         self.prompt_parser_service = PromptParserService()
         self.json_test_converting_service = JsonTestConvertingService()
 
-    def generate_test_from_prompt(self, prompt: str, ) -> TestGeneratorResponse:
+    def generate_test_from_prompt(self, prompt: str) -> TestGeneratorResponse:
         """
         Generates a test based on the user prompt.
         """
-
         start = time.time()
         total_tokens = 0
         
         # 1. Classification
         classification_prompt = self.prompts.get_classification_prompts(prompt)
-
         total_tokens += self.__count_tokens(classification_prompt)
         classification : str = self.ai_service.ask_model(classification_prompt, "gemma4:31b-cloud")
-        
         total_tokens += self.__count_tokens(classification)
 
         if "request" in classification.lower():
-            queries = []
-            
-            data = []
-
-            reading_data = []
-            writing_data = []
-
-            reading_enabled = False
-            writing_enabled = False
-
             parsing_prompt = self.prompts.get_parsing_prompt(prompt)
+            parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, "gemma4:31b-cloud", ParsedPrompt)
+            total_tokens += tokens_used
 
-            max_tries = 3
-            parsed_prompt = None
-
-            for i in range(max_tries):
-                parsed_prompt_raw = self.ai_service.ask_model(parsing_prompt, "gemma4:31b-cloud")
-                print(f"Parsed prompt raw response (Attempt {i+1}):\n{parsed_prompt_raw}")
-                
-                try:
-                    cleaned_json = self.__clean_json_response(parsed_prompt_raw)
-                    parsed_dict = json.loads(cleaned_json)
-                    parsed_prompt = ParsedPrompt(**parsed_dict)
-                    break
-                except (ValueError, json.JSONDecodeError, TypeError) as e:
-                    print(f"Failed to parse JSON on attempt {i+1}: {e}")
-                    if i == max_tries - 1:
-                        raise ValueError(f"Model returned invalid parsed prompt json: {e}")
-
-            for section in parsed_prompt.sections:
-                queries.append(section.subject)
-
-            retrival_metadata = TestGeneratorResponseMetadataRetrival(
-                regular="",
-                writing="",
-                reading=""
-            )
-
-            for query in queries:
-                if query.lower() == "reading":
-                    res = self.search_service.search(query)
-                    reading_data.append(res)
-                    retrival_metadata.reading += json.dumps(res) + "\n"
-                    reading_enabled = True
-                
-                elif query.lower() == "writing":
-                    res = self.search_service.search(query)
-                    writing_data.append(res)
-                    retrival_metadata.writing += json.dumps(res) + "\n"
-                    writing_enabled = True
-                else:
-                    res = self.search_service.search(query)
-                    data.append(res)
-                    retrival_metadata.regular += json.dumps(res) + "\n"
+            data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(parsed_prompt.sections)
 
             combined_prompt = self.prompts.get_combined_generation_prompt(
                 retrieval=data,
@@ -105,47 +53,11 @@ class TestGeneratorService:
                 reading_enabled=reading_enabled,
                 writing_enabled=writing_enabled
             )
-            total_tokens += self.__count_tokens(combined_prompt)
             
-            gen_start = time.time()
-            generated_test_raw = self.ai_service.ask(combined_prompt)
-            gen_end = time.time()
-            
-            total_tokens += self.__count_tokens(generated_test_raw)
-            
-            generated_test_json = self.__clean_json_response(generated_test_raw)
-            
-            try:
-                generated_test = json.loads(generated_test_json)
-            except json.JSONDecodeError as e:
-                print(f"[ERROR] Failed to parse AI response as JSON: {e}")
-                print(f"[ERROR] Full cleaned response: {generated_test_json}")
-                raise ValueError(f"AI returned invalid JSON. Error: {e}. Response preview: {generated_test_json[:200]}")
+            checked_generated_test, tokens_used_gen = self.__generate_and_check_json_test(combined_prompt, parsed_prompt)
+            total_tokens += tokens_used_gen
 
-            checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), parsed_prompt)
-            total_tokens += self.__count_tokens(checked_generated_test_prompt)
-            
-            check_start = time.time()
-            checked_generated_test_raw = self.ai_service.ask(checked_generated_test_prompt)
-            check_end = time.time()
-            total_tokens += self.__count_tokens(checked_generated_test_raw)
-            
-            checked_generated_test_json = self.__clean_json_response(checked_generated_test_raw)
-            checked_generated_test: GeneratedTest = GeneratedTest(**json.loads(checked_generated_test_json))
-
-            end = time.time()
-            timer = end - start
-
-            average_time = self.__get_and_update_average_time(timer)
-
-            metadata = TestGeneratorResponseMetadata(
-                prompt=prompt,
-                parsed_prompt=parsed_prompt.model_dump_json() if parsed_prompt else "",
-                tokens=total_tokens,
-                time=timer,
-                average_time=average_time,
-                retrival=retrival_metadata
-            )
+            metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
 
             return TestGeneratorResponse(
                 response=checked_generated_test,
@@ -153,22 +65,21 @@ class TestGeneratorService:
             )
         else:
             res = self.ai_service.ask(self.prompts.get_general_question_prompt(prompt))
-            end = time.time()
-            timer = end - start
-            average_time = self.__get_and_update_average_time(timer)
-            
-            # For general questions, we wrap the response in a GeneratedTest with one exercise
             gen_prompt = self.prompts.get_general_question_prompt(prompt)
+            
+            timer = time.time() - start
+            average_time = self.__get_and_update_average_time(timer)
+            metadata = TestGeneratorResponseMetadata(
+                prompt=prompt,
+                parsed_prompt="general",
+                tokens=self.__count_tokens(res) + self.__count_tokens(gen_prompt),
+                time=timer,
+                average_time=average_time,
+                retrival=TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
+            )
             return TestGeneratorResponse(
                 response=GeneratedTest(exercises=[Exercise(instruction="AI Response", body=res)]),
-                metadata=TestGeneratorResponseMetadata(
-                    prompt=prompt,
-                    parsed_prompt="general",
-                    tokens=self.__count_tokens(res) + self.__count_tokens(gen_prompt),
-                    time=timer,
-                    average_time=average_time,
-                    retrival=TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
-                )
+                metadata=metadata
             )
 
     def generate_test_from_survey(self, form: Form) -> TestGeneratorResponse:
@@ -176,42 +87,9 @@ class TestGeneratorService:
         Generates a test based on the structured survey form, skipping the AI classification and parsing steps.
         """
         print("generate_test_from_survey start")
-
         start = time.time()
-        total_tokens = 0
         
-        queries = []
-        data = []
-        reading_data = []
-        writing_data = []
-        reading_enabled = False
-        writing_enabled = False
-
-        for section in form.sections:
-            queries.append(section.subject)
-
-        retrival_metadata = TestGeneratorResponseMetadataRetrival(
-            regular="",
-            writing="",
-            reading=""
-        )
-
-        for query in queries:
-            if query.lower() == "reading":
-                res = self.search_service.search(query)
-                reading_data.append(res)
-                retrival_metadata.reading += json.dumps(res) + "\n"
-                reading_enabled = True
-            
-            elif query.lower() == "writing":
-                res = self.search_service.search(query)
-                writing_data.append(res)
-                retrival_metadata.writing += json.dumps(res) + "\n"
-                writing_enabled = True
-            else:
-                res = self.search_service.search(query)
-                data.append(res)
-                retrival_metadata.regular += json.dumps(res) + "\n"
+        data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(form.sections)
 
         combined_prompt = self.prompts.get_combined_generation_prompt(
             retrieval=data,
@@ -221,47 +99,10 @@ class TestGeneratorService:
             reading_enabled=reading_enabled,
             writing_enabled=writing_enabled
         )
-        total_tokens += self.__count_tokens(combined_prompt)
         
-        gen_start = time.time()
-        generated_test_raw = self.ai_service.ask(combined_prompt)
-        gen_end = time.time()
-        
-        total_tokens += self.__count_tokens(generated_test_raw)
-        
-        generated_test_json = self.__clean_json_response(generated_test_raw)
-        
-        try:
-            generated_test = json.loads(generated_test_json)
-        except json.JSONDecodeError as e:
-            print(f"[ERROR] Failed to parse AI response as JSON: {e}")
-            print(f"[ERROR] Full cleaned response: {generated_test_json}")
-            raise ValueError(f"AI returned invalid JSON. Error: {e}. Response preview: {generated_test_json[:200]}")
+        checked_generated_test, total_tokens = self.__generate_and_check_json_test(combined_prompt, form)
 
-        checked_generated_test_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test), form)
-        total_tokens += self.__count_tokens(checked_generated_test_prompt)
-        
-        check_start = time.time()
-        checked_generated_test_raw = self.ai_service.ask(checked_generated_test_prompt)
-        check_end = time.time()
-        total_tokens += self.__count_tokens(checked_generated_test_raw)
-        
-        checked_generated_test_json = self.__clean_json_response(checked_generated_test_raw)
-        checked_generated_test: GeneratedTest = GeneratedTest(**json.loads(checked_generated_test_json))
-
-        end = time.time()
-        timer = end - start
-
-        average_time = self.__get_and_update_average_time(timer)
-
-        metadata = TestGeneratorResponseMetadata(
-            prompt="Survey Generated Test",
-            parsed_prompt=form.model_dump_json(),
-            tokens=total_tokens,
-            time=timer,
-            average_time=average_time,
-            retrival=retrival_metadata
-        )
+        metadata = self.__build_metadata(start, "Survey Generated Test", form.model_dump_json(), total_tokens, retrival_metadata)
 
         return TestGeneratorResponse(
             response=checked_generated_test,
@@ -273,64 +114,14 @@ class TestGeneratorService:
         Generates a test based on the structured survey form, skipping the AI classification and parsing steps.
         """
         print("generate_html_test_from_prompt start")
-
         start = time.time()
         total_tokens = 0
-        
-        queries = []
-        data = []
-        reading_data = []
-        writing_data = []
-        reading_enabled = False
-        writing_enabled = False
 
         parsing_prompt = self.prompts.get_parsing_prompt(prompt)
-        total_tokens += self.__count_tokens(parsing_prompt)
+        parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, "gemma4:31b-cloud", ParsedPrompt)
+        total_tokens += tokens_used
 
-        max_tries = 3
-        parsed_prompt = None
-
-        for i in range(max_tries):
-            parsed_prompt_raw = self.ai_service.ask_model(parsing_prompt, "gemma4:31b-cloud")
-            print(f"Parsed prompt raw response (Attempt {i+1}):\n{parsed_prompt_raw}")
-            
-            try:
-                cleaned_json = self.__clean_json_response(parsed_prompt_raw)
-                parsed_dict = json.loads(cleaned_json)
-                parsed_prompt = ParsedPrompt(**parsed_dict)
-                break
-            except (ValueError, json.JSONDecodeError, TypeError) as e:
-                print(f"Failed to parse JSON on attempt {i+1}: {e}")
-                if i == max_tries - 1:
-                    raise ValueError(f"Model returned invalid parsed prompt json: {e}")
-
-        total_tokens += self.__count_tokens(parsed_prompt.model_dump_json())
-
-        for section in parsed_prompt.sections:
-            queries.append(section.subject)
-
-        retrival_metadata = TestGeneratorResponseMetadataRetrival(
-            regular="",
-            writing="",
-            reading=""
-        )
-
-        for query in queries:
-            if query.lower() == "reading":
-                res = self.search_service.search(query)
-                reading_data.append(res)
-                retrival_metadata.reading += json.dumps(res) + "\n"
-                reading_enabled = True
-            
-            elif query.lower() == "writing":
-                res = self.search_service.search(query)
-                writing_data.append(res)
-                retrival_metadata.writing += json.dumps(res) + "\n"
-                writing_enabled = True
-            else:
-                res = self.search_service.search(query)
-                data.append(res)
-                retrival_metadata.regular += json.dumps(res) + "\n"
+        data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(parsed_prompt.sections)
 
         combined_prompt = self.prompts.get_combined_html_generation_prompt(
             retrieval=data,
@@ -342,28 +133,90 @@ class TestGeneratorService:
         )
         total_tokens += self.__count_tokens(combined_prompt)
         
-        gen_start = time.time()
         generated_test_raw = self.ai_service.ask(combined_prompt)
-        gen_end = time.time()
-        
         total_tokens += self.__count_tokens(generated_test_raw)
         
-        end = time.time()
-        timer = end - start
-        average_time = self.__get_and_update_average_time(timer)
-
-        metadata = TestGeneratorResponseMetadata(
-            prompt=prompt,
-            parsed_prompt=parsed_prompt.model_dump_json(),
-            tokens=total_tokens,
-            time=timer,
-            average_time=average_time,
-            retrival=retrival_metadata
-        )
+        metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
 
         return TestGeneratorHTMLResponse(
             response=generated_test_raw,
             metadata=metadata
+        )
+
+    # --- Sub-methods for Refactoring ---
+
+    def __ask_model_for_json(self, prompt: str, model: str, schema, max_tries: int = 3) -> tuple:
+        total_tokens = self.__count_tokens(prompt)
+        for i in range(max_tries):
+            raw_response = self.ai_service.ask_model(prompt, model)
+            total_tokens += self.__count_tokens(raw_response)
+            print(f"__ask_model_for_json (Attempt {i+1}):\n{raw_response}")
+            try:
+                cleaned = self.__clean_json_response(raw_response)
+                parsed_dict = json.loads(cleaned)
+                return schema(**parsed_dict), total_tokens
+            except (ValueError, json.JSONDecodeError, TypeError) as e:
+                print(f"Failed to parse JSON on attempt {i+1}: {e}")
+                if i == max_tries - 1:
+                    raise ValueError(f"Model returned invalid json: {e}")
+        return None, total_tokens
+
+    def __perform_retrieval(self, sections) -> tuple[list, list, list, bool, bool, TestGeneratorResponseMetadataRetrival]:
+        data, reading_data, writing_data = [], [], []
+        reading_enabled, writing_enabled = False, False
+        retrival_metadata = TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
+
+        for section in sections:
+            query = section.subject
+            res = self.search_service.search(query)
+            
+            if query.lower() == "reading":
+                reading_data.append(res)
+                retrival_metadata.reading += json.dumps(res) + "\n"
+                reading_enabled = True
+            elif query.lower() == "writing":
+                writing_data.append(res)
+                retrival_metadata.writing += json.dumps(res) + "\n"
+                writing_enabled = True
+            else:
+                data.append(res)
+                retrival_metadata.regular += json.dumps(res) + "\n"
+
+        return data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata
+
+    def __generate_and_check_json_test(self, combined_prompt: str, check_context) -> tuple[GeneratedTest, int]:
+        tokens_used = self.__count_tokens(combined_prompt)
+        
+        # 1st Pass: Generation
+        raw_test = self.ai_service.ask(combined_prompt)
+        tokens_used += self.__count_tokens(raw_test)
+        cleaned_test = self.__clean_json_response(raw_test)
+        try:
+            generated_test_dict = json.loads(cleaned_test)
+        except json.JSONDecodeError as e:
+            print(f"[ERROR] Failed to parse AI response as JSON: {e}")
+            raise ValueError(f"AI returned invalid JSON. Error: {e}. Response preview: {cleaned_test[:200]}")
+        
+        # 2nd Pass: Checking
+        check_prompt = self.prompts.get_test_checking_prompt(GeneratedTest(**generated_test_dict), check_context)
+        tokens_used += self.__count_tokens(check_prompt)
+        
+        checked_test_raw = self.ai_service.ask(check_prompt)
+        tokens_used += self.__count_tokens(checked_test_raw)
+        cleaned_checked_test = self.__clean_json_response(checked_test_raw)
+        
+        return GeneratedTest(**json.loads(cleaned_checked_test)), tokens_used
+
+    def __build_metadata(self, start_time: float, prompt: str, parsed_prompt_json: str, total_tokens: int, retrival_metadata: TestGeneratorResponseMetadataRetrival) -> TestGeneratorResponseMetadata:
+        elapsed_time = time.time() - start_time
+        average_time = self.__get_and_update_average_time(elapsed_time)
+        return TestGeneratorResponseMetadata(
+            prompt=prompt,
+            parsed_prompt=parsed_prompt_json,
+            tokens=total_tokens,
+            time=elapsed_time,
+            average_time=average_time,
+            retrival=retrival_metadata
         )
 
 

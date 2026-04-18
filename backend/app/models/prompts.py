@@ -16,10 +16,9 @@ class SystemPrompts:
         - request - if it contains question directly sugesting a test generation (examples: create.. generate... make.... a test/exam/classwork...), even if some parameters are not explicitly stated.
 
         Data needed to generate a test (you will deduce missing ones later):
-            -prompt
-            -CEFR LEVEL (A1, A2, B1, B2, C1, C2)
-            -target age group (kids, teens or adults?)
-            -total_amount (how many exercises teacher wants to have on exam)
+            -THERE MUST BE A CEFR LEVEL SPECIFIED (A1, A2, B1, B2, C1, C2)
+            -THERE MUST BE target age group (kids, teens or adults?)
+            -THERE MUST BE total_amount (how many exercises teacher wants to have on exam)
         
         Rules:
             -you MUST ONLY respond with either "general" or "request".
@@ -316,6 +315,8 @@ class SystemPrompts:
         - Each exercise MUST have ONE primary grammar or skill focus — YOU ARE FORBIDDEN FROM mixing multiple grammar topics in a single exercise
         - ALL questions MUST be unique — every single question MUST have a different sentence, different vocabulary, and different context. YOU ARE ABSOLUTELY FORBIDDEN FROM creating duplicate or near-duplicate questions
         - YOU MUST use varied exercise formats: multiple choice, gap fill, transformation, matching, error correction, ordering — NO format is allowed to be repeated more than twice across the entire grammar/vocabulary section
+        - YOU MUST USE VALID NUMBER EXERCISES - example: you NEVER will make ex 1 then 11 out of nowhere. AVOID WRONG NUMERATION.
+        - EXERCISES ALWAYS SHOULD HAVE DEFINED SCORE THAT SUM UP TO TOTAL SCORE IN THE HEADING OF THE PAGE.
 
         GRAMMAR/VOCABULARY DIFFICULTY CALIBRATION — YOU MUST FOLLOW THESE EXACTLY:
         - A2: simple vocabulary, direct grammar application, short and clear sentences
@@ -431,6 +432,13 @@ class SystemPrompts:
         Answer very shortly, do not talk to much. Direct answers only.
         
         Always answer in user language.
+        
+        Rules:
+            - if the teacher is asking about test generation, his message is probably not specified enough. If that is so ask for missing data. The following generating prompt must contain:
+                -THERE MUST BE A CEFR LEVEL SPECIFIED (A1, A2, B1, B2, C1, C2)
+                -THERE MUST BE target age group (kids, teens or adults?)
+                -THERE MUST BE total_amount (how many exercises teacher wants to have on exam)
+            - if THERE IS NOT probably such data provided so ask teacher to clarify.
 
         question : {prompt}
         
