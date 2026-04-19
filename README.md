@@ -10,6 +10,21 @@
 
 The system is built around an **agentic pipeline**: the AI first creates a plan of action, retrieves relevant content using semantic search, and then generates questions tailored to the student's proficiency level (e.g. B2).
 
+---
+
+## 📺 Demo
+
+Experience **AutoTests AI** in action:
+
+<div align="center">
+  <video src="demos/videos/Demo_video.mov" width="100%" controls muted loop autoplay>
+    Your browser does not support the video tag.
+  </video>
+  <p><i>A quick walkthrough of generating a language test from a teacher's prompt.</i></p>
+</div>
+
+---
+
 ## The problem
 My sister and my mom are teachers, and I've seen how they prepare tests for their students. It takes a lot of time and is quite boring and repetitive, especially when they need to create multiple versions of the same test to prevent cheating. I realized I could help them by creating a tool that automatically generates such tests. If programmers can vibe-code and then review their code, why can't teachers vibe-create and then review tests?
 
@@ -138,10 +153,6 @@ Contributions are welcome! Feel free to open an issue or submit a pull request.
 ---
 
 ---
-
-##💫PLANS FOR FUTURE
-- website instead of application with pretty frontend
-- deployment of backend
 
 ## 📜 License
 
