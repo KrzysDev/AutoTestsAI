@@ -17,9 +17,7 @@ The system is built around an **agentic pipeline**: the AI first creates a plan 
 Experience **AutoTests AI** in action:
 
 <div align="center">
-  <video src="demos/videos/Demo_video.mov" width="100%" controls muted loop autoplay>
-    Your browser does not support the video tag.
-  </video>
+  <img src="demos/videos/Demo_video.gif" width="100%" alt="AutoTests AI Demo">
   <p><i>A quick walkthrough of generating a language test from a teacher's prompt.</i></p>
 </div>
 
