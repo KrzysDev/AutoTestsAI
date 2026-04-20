@@ -35,12 +35,12 @@ class TestGeneratorService:
         # 1. Classification
         classification_prompt = self.prompts.get_classification_prompts(prompt)
         total_tokens += self.__count_tokens(classification_prompt)
-        classification : str = self.ai_service.ask_model(classification_prompt, "gemma4:31b-cloud")
+        classification : str = self.ai_service.ask(classification_prompt)
         total_tokens += self.__count_tokens(classification)
 
         if "request" in classification.lower():
             parsing_prompt = self.prompts.get_parsing_prompt(prompt)
-            parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, "gemma4:31b-cloud", ParsedPrompt)
+            parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, ParsedPrompt)
             total_tokens += tokens_used
 
             data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(parsed_prompt.sections)
@@ -113,19 +113,18 @@ class TestGeneratorService:
         """
         Generates an HTML test based on the user prompt. Includes AI classification.
         """
-        print("generate_html_test_from_prompt start")
         start = time.time()
         total_tokens = 0
 
         # 1. Classification
         classification_prompt = self.prompts.get_classification_prompts(prompt)
         total_tokens += self.__count_tokens(classification_prompt)
-        classification : str = self.ai_service.ask_model(classification_prompt, "gemma4:31b-cloud")
+        classification : str = self.ai_service.ask(classification_prompt)
         total_tokens += self.__count_tokens(classification)
 
         if "request" in classification.lower():
             parsing_prompt = self.prompts.get_parsing_prompt(prompt)
-            parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, "gemma4:31b-cloud", ParsedPrompt)
+            parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, ParsedPrompt)
             total_tokens += tokens_used
 
             data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(parsed_prompt.sections)
@@ -139,11 +138,9 @@ class TestGeneratorService:
                 writing_enabled=writing_enabled
             )
 
-            print(combined_prompt)
-
             total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask_model(combined_prompt, "gemma4:31b")
+            generated_test_raw = self.ai_service.ask(combined_prompt)
             total_tokens += self.__count_tokens(generated_test_raw)
             
             metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
@@ -204,10 +201,10 @@ class TestGeneratorService:
 
     # --- Sub-methods for Refactoring ---
 
-    def __ask_model_for_json(self, prompt: str, model: str, schema, max_tries: int = 3) -> tuple:
+    def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3) -> tuple:
         total_tokens = self.__count_tokens(prompt)
         for i in range(max_tries):
-            raw_response = self.ai_service.ask_model(prompt, model)
+            raw_response = self.ai_service.ask(prompt)
             total_tokens += self.__count_tokens(raw_response)
             print(f"__ask_model_for_json (Attempt {i+1}):\n{raw_response}")
             try:
