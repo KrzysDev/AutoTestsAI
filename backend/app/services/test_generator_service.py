@@ -138,9 +138,12 @@ class TestGeneratorService:
                 reading_enabled=reading_enabled,
                 writing_enabled=writing_enabled
             )
+
+            print(combined_prompt)
+
             total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask(combined_prompt)
+            generated_test_raw = self.ai_service.ask_model(combined_prompt, "gemma4:31b")
             total_tokens += self.__count_tokens(generated_test_raw)
             
             metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)

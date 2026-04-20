@@ -2,8 +2,508 @@ from backend.app.services.html_test_converter_service import HtmlConvertingServi
 
 service = HtmlConvertingService()
 
-pdf = service.convert_html_to_pdf("""
-<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>English Language Proficiency Test - B2</title>\n    <style>\n        @page {\n            size: A4;\n            margin: 1.5cm 2cm;\n            @bottom-center {\n                content: \"— \" counter(page) \" —\";\n                font-size: 9pt;\n                color: #999;\n            }\n        }\n\n        * { box-sizing: border-box; }\n        body { \n            margin: 0; \n            padding: 0; \n            background: #ffffff; \n            font-family: Georgia, 'Times New Roman', serif; \n            font-size: 11pt; \n            color: #333;\n        }\n\n        .test-container { width: 100%; }\n\n        /* Header */\n        .header-bar {\n            background-color: #1a2744;\n            color: #ffffff;\n            text-align: center;\n            padding: 20px 0;\n            border-bottom: 4px solid #c0392b;\n        }\n        .header-bar h1 {\n            font-family: 'Segoe UI', Tahoma, sans-serif;\n            font-size: 18pt;\n            font-weight: bold;\n            text-transform: uppercase;\n            letter-spacing: 3px;\n            margin: 0 0 10px 0;\n        }\n        .header-meta {\n            font-family: 'Segoe UI', Tahoma, sans-serif;\n            font-size: 10pt;\n            letter-spacing: 1px;\n        }\n\n        /* Student Info */\n        .student-info-bar {\n            display: table;\n            width: 100%;\n            background-color: #f5f5f5;\n            padding: 10px;\n            margin-bottom: 20px;\n        }\n        .info-cell {\n            display: table-cell;\n            width: 33.33%;\n            font-family: 'Segoe UI', Tahoma, sans-serif;\n            font-size: 10pt;\n            vertical-align: middle;\n        }\n        .info-field {\n            border-bottom: 1.5px dotted #333;\n            display: inline-block;\n            width: 60%;\n            margin-left: 5px;\n        }\n\n        /* Section Dividers */\n        .section-divider {\n            background-color: #1a2744;\n            color: #ffffff;\n            text-align: center;\n            padding: 8px;\n            font-family: 'Segoe UI', Tahoma, sans-serif;\n            font-size: 10pt;\n            text-transform: uppercase;\n            letter-spacing: 2px;\n            margin-bottom: 20px;\n            page-break-before: auto;\n            page-break-after: avoid;\n            page-break-inside: avoid;\n        }\n\n        /* Exercise Blocks */\n        .exercise {\n            background-color: #ffffff;\n            border: 1.5px solid #ddd;\n            padding: 16px;\n            margin-bottom: 20px;\n            page-break-inside: avoid;\n            position: relative;\n        }\n        .ex-number {\n            float: right;\n            background-color: #c0392b;\n            color: #ffffff;\n            font-family: 'Segoe UI', Tahoma, sans-serif;\n            font-size: 9pt;\n            padding: 3px 8px;\n            font-weight: bold;\n        }\n        .ex-score {\n            float: right;\n            font-style: italic;\n            font-size: 9pt;\n            color: #666666;\n            margin-right: 10px;\n        }\n        .exercise-title {\n            font-family: 'Segoe UI', Tahoma, sans-serif;\n            font-size: 12pt;\n            font-weight: bold;\n            text-transform: uppercase;\n            color: #1a2744;\n            border-left: 4px solid #c0392b;\n            padding-left: 8px;\n            margin-bottom: 10px;\n            page-break-after: avoid;\n        }\n        .instructions {\n            font-style: italic;\n            color: #666666;\n            font-size: 10pt;\n            margin-bottom: 15px;\n        }\n        .question {\n            font-size: 10.5pt;\n            line-height: 1.7;\n            margin-bottom: 12px;\n        }\n        .answer-line {\n            border-bottom: 1px solid #aaa;\n            display: inline-block;\n            min-width: 150px;\n            text-align: center;\n        }\n\n        /* Multiple Choice */\n        .options-container {\n            margin-left: 20px;\n            margin-bottom: 10px;\n        }\n        .option {\n            display: inline-block;\n            margin-right: 20px;\n            font-size: 10.5pt;\n        }\n        .circle {\n            display: inline-block;\n            width: 12px;\n            height: 12px;\n            border: 1px solid #333;\n            border-radius: 50%;\n            margin-right: 5px;\n        }\n\n        /* Reading Passage */\n        .reading-passage {\n            background-color: #f5f5f5;\n            border-left: 4px solid #1a2744;\n            padding: 15px;\n            margin-bottom: 20px;\n            font-style: normal;\n            line-height: 1.6;\n        }\n        .passage-title {\n            font-weight: bold;\n            font-size: 12pt;\n            margin-bottom: 10px;\n            display: block;\n        }\n\n        /* Writing Box */\n        .writing-box {\n            border: 1.5px solid #aaa;\n            width: 100%;\n            min-height: 400px;\n            background-color: #ffffff;\n            background-image: repeating-linear-gradient(transparent, transparent 30px, #eee 30px, #eee 31px);\n            line-height: 31px;\n            padding: 0 10px;\n        }\n\n        /* Answer Key */\n        .answer-key-section {\n            page-break-before: always;\n        }\n        .ak-header {\n            background-color: #1a2744;\n            color: #ffffff;\n            text-align: center;\n            padding: 10px;\n            font-family: 'Segoe UI', Tahoma, sans-serif;\n            border-top: 4px solid #c0392b;\n        }\n        .ak-grid {\n            display: table;\n            width: 100%;\n            margin-top: 20px;\n            border-spacing: 10px;\n        }\n        .ak-box {\n            display: table-cell;\n            width: 33.33%;\n            border: 1px solid #444;\n            padding: 10px;\n            background-color: #1e3055;\n            color: #ffffff;\n            vertical-align: top;\n            font-size: 10pt;\n        }\n        .ak-box b {\n            display: block;\n            border-bottom: 1px solid #ffffff;\n            margin-bottom: 5px;\n            color: #ffcc00;\n        }\n    </style>\n</head>\n<body>\n\n<div class=\"test-container\">\n    <!-- HEADER -->\n    <div class=\"header-bar\">\n        <h1>English Proficiency Exam</h1>\n        <div class=\"header-meta\">LEVEL: B2 | AGE GROUP: ADULTS | TOTAL SCORE: 65 PTS</div>\n    </div>\n\n    <!-- STUDENT INFO -->\n    <div class=\"student-info-bar\">\n        <div class=\"info-cell\">NAME: <span class=\"info-field\"></span></div>\n        <div class=\"info-cell\">DATE: <span class=\"info-field\"></span></div>\n        <div class=\"info-cell\">CLASS: <span class=\"info-field\"></span></div>\n    </div>\n\n    <!-- SECTION A -->\n    <div class=\"section-divider\">SECTION A — GRAMMAR & VOCABULARY</div>\n\n    <div class=\"exercise\">\n        <span class=\"ex-number\">Ex. 1</span>\n        <span class=\"ex-score\">( 8 pts )</span>\n        <div class=\"exercise-title\">Tense Contrast: Present Perfect vs Past Simple</div>\n        <div class=\"instructions\">Complete the sentences with the correct form of the verb in brackets.</div>\n        \n        <div class=\"question\">1. I <span class=\"answer-line\"></span> (never / be) to Japan, but I visited South Korea three years ago.</div>\n        <div class=\"question\">2. Sarah <span class=\"answer-line\"></span> (work) for this company since 2015, but she started her career in a small agency.</div>\n        <div class=\"question\">3. <span class=\"answer-line\"></span> (you / see) the new documentary on Netflix last night?</div>\n        <div class=\"question\">4. We <span class=\"answer-line\"></span> (already / finish) the report, so we can leave the office now.</div>\n        <div class=\"question\">5. The last time I <span class=\"answer-line\"></span> (meet) him, he was living in Berlin.</div>\n        <div class=\"question\">6. My brother <span class=\"answer-line\"></span> (lose) his passport while he was traveling through Asia last summer.</div>\n        <div class=\"question\">7. I <span class=\"answer-line\"></span> (not / hear) from her since we graduated from university.</div>\n        <div class=\"question\">8. How many times <span class=\"answer-line\"></span> (you / visit) New York so far?</div>\n    </div>\n\n    <div class=\"exercise\">\n        <span class=\"ex-number\">Ex. 2</span>\n        <span class=\"ex-score\">( 6 pts )</span>\n        <div class=\"exercise-title\">Multiple Choice: Contextual Usage</div>\n        <div class=\"instructions\">Choose the most appropriate option to complete the sentence.</div>\n        \n        <div class=\"question\">1. I can't believe it! I <span class=\"answer-line\"></span> my keys again!\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) lost</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) have lost</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) was losing</span>\n            </div>\n        </div>\n        <div class=\"question\">2. The company <span class=\"answer-line\"></span> a huge profit in 2022, despite the economic crisis.\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) has made</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) made</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) makes</span>\n            </div>\n        </div>\n        <div class=\"question\">3. <span class=\"answer-line\"></span> you ever <span class=\"answer-line\"></span> a marathon?\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) Did / run</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) Have / run</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) Had / run</span>\n            </div>\n        </div>\n        <div class=\"question\">4. We <span class=\"answer-line\"></span> in this city for a decade, and we love it here.\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) lived</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) have lived</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) were living</span>\n            </div>\n        </div>\n        <div class=\"question\">5. She <span class=\"answer-line\"></span> her degree in Architecture in 2010.\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) has completed</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) completed</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) completes</span>\n            </div>\n        </div>\n        <div class=\"question\">6. I <span class=\"answer-line\"></span> that book last week, and it was absolutely fascinating.\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) have read</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) read</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) was reading</span>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"exercise\">\n        <span class=\"ex-number\">Ex. 3</span>\n        <span class=\"ex-score\">( 6 pts )</span>\n        <div class=\"exercise-title\">Error Correction</div>\n        <div class=\"instructions\">Each sentence contains ONE mistake. Rewrite the sentence correctly.</div>\n        \n        <div class=\"question\">1. I have seen that movie two days ago. <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">2. She has lived in London since three years. <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">3. Did you ever tried sushi before? <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">4. I didn't saw him at the party last night. <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">5. We have went to the beach every summer when I was a child. <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">6. Has you finished your homework yet? <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n    </div>\n\n    <div class=\"exercise\">\n        <span class=\"ex-number\">Ex. 4</span>\n        <span class=\"ex-score\">( 6 pts )</span>\n        <div class=\"exercise-title\">Sentence Transformation</div>\n        <div class=\"instructions\">Rewrite the sentence using the word in brackets so that the meaning remains the same.</div>\n        \n        <div class=\"question\">1. It's been a long time since I last saw her. (FOR) <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">2. I started learning English in 2010. (SINCE) <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">3. This is the first time I've ever flown in a helicopter. (NEVER) <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">4. He moved to New York five years ago. (FOR) <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">5. I haven't visited my grandparents for months. (LAST) <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n        <div class=\"question\">6. When did you first meet your best friend? (KNOWN) <br> <span class=\"answer-line\" style=\"width: 100%;\"></span></div>\n    </div>\n\n    <!-- SECTION B -->\n    <div class=\"section-divider\">SECTION B — READING COMPREHENSION</div>\n\n    <div class=\"exercise\">\n        <span class=\"ex-number\">Ex. 5</span>\n        <span class=\"ex-score\">( 12 pts )</span>\n        <div class=\"exercise-title\">Reading: The Evolution of Modern Travel</div>\n        <div class=\"instructions\">Read the text and answer the questions that follow.</div>\n\n        <div class=\"reading-passage\">\n            <span class=\"passage-title\">The Shift in Global Tourism</span>\n            <p>For decades, the quintessential holiday consisted of a meticulously planned itinerary, a physical map, and a hotel reservation made months in advance. Travelers sought the \"classic\" experience: visiting the Eiffel Tower in Paris, the Colosseum in Rome, or the beaches of Bali. This era of tourism was characterized by a desire for stability and the pursuit of iconic landmarks, often mediated by travel agents who held the keys to the most exclusive destinations.</p>\n            <p>However, the digital revolution has fundamentally altered the landscape of exploration. The rise of the \"digital nomad\" and the proliferation of social media platforms like Instagram and TikTok have shifted the focus from stability to \"authenticity.\" Modern travelers, particularly millennials and Gen Z, are less interested in the curated tours of yesterday. Instead, they seek \"off-the-beaten-path\" experiences—hidden cafes in Kyoto, remote villages in the Andes, or sustainable eco-lodges in Costa Rica. The goal is no longer just to see a place, but to \"experience\" it in a way that feels raw and unscripted.</p>\n            <p>This shift has led to the phenomenon of \"overtourism\" in some areas while breathing life into previously ignored regions. While the \"Instagrammability\" of a location can lead to a sudden surge of visitors, it often results in a superficial engagement with the local culture. Many visitors spend more time capturing the perfect shot than interacting with the residents. Conversely, the trend toward sustainable travel has encouraged a more mindful approach, where tourists prioritize low-carbon footprints and support local artisans over international hotel chains.</p>\n            <p>Despite these changes, the core motivation for travel remains the same: a fundamental human curiosity to explore the unknown. Whether it is through a luxury cruise or a backpacking trip through Southeast Asia, the drive to expand one's horizons persists. The only difference lies in the tools we use and the stories we choose to tell upon our return.</p>\n        </div>\n\n        <div class=\"question\">1. What was the primary characteristic of traditional tourism mentioned in the first paragraph?\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) A preference for spontaneous trips</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) A reliance on digital maps and apps</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) A focus on stability and famous landmarks</span>\n                <span class=\"option\"><span class=\"circle\"></span>D) A desire to avoid travel agents</span>\n            </div>\n        </div>\n        <div class=\"question\">2. According to the text, how has social media influenced the goals of modern travelers?\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) It has made them prefer luxury hotels over eco-lodges.</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) It has pushed them to seek more authentic, less curated experiences.</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) It has encouraged them to return to classic itineraries.</span>\n                <span class=\"option\"><span class=\"circle\"></span>D) It has decreased the overall desire to travel.</span>\n            </div>\n        </div>\n        <div class=\"question\">3. What is the author's view on the \"Instagrammability\" of destinations?\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) It is the best way to promote local artisans.</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) It leads to a deeper understanding of local cultures.</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) It can result in a shallow connection with the place being visited.</span>\n                <span class=\"option\"><span class=\"circle\"></span>D) It has completely eliminated the problem of overtourism.</span>\n            </div>\n        </div>\n        <div class=\"question\">4. Which of the following best describes the \"sustainable travel\" trend?\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) Prioritizing international chains for safety.</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) Focusing on high-carbon luxury cruises.</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) Reducing environmental impact and supporting locals.</span>\n                <span class=\"option\"><span class=\"circle\"></span>D) Avoiding all forms of digital technology while traveling.</span>\n            </div>\n        </div>\n        <div class=\"question\">5. What does the author conclude about the fundamental nature of travel?\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) It has changed completely due to technology.</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) The basic human drive to explore remains constant.</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) Backpacking is the only true way to experience the world.</span>\n                <span class=\"option\"><span class=\"circle\"></span>D) Modern tools have destroyed the spirit of curiosity.</span>\n            </div>\n        </div>\n        <div class=\"question\">6. In the context of the second paragraph, what does \"off-the-beaten-path\" most likely mean?\n            <div class=\"options-container\">\n                <span class=\"option\"><span class=\"circle\"></span>A) Locations that are easy to find on a map.</span>\n                <span class=\"option\"><span class=\"circle\"></span>B) Places that are popular with most tourists.</span>\n                <span class=\"option\"><span class=\"circle\"></span>C) Unconventional or less-visited destinations.</span>\n                <span class=\"option\"><span class=\"circle\"></span>D) Areas that are strictly regulated by the government.</span>\n            </div>\n        </div>\n    </div>\n\n    <!-- SECTION C -->\n    <div class=\"section-divider\">SECTION C — WRITING</div>\n\n    <div class=\"exercise\">\n        <span class=\"ex-number\">Ex. 6</span>\n        <span class=\"ex-score\">( 15 pts )</span>\n        <div class=\"exercise-title\">Writing Task: Informal Email</div>\n        <div class=\"instructions\">\n            Write an email to an English-speaking friend (approx. 300–350 words) about environmental issues. \n            Your email must include the following:\n            <ul>\n                <li>Describe a specific environmental problem in your hometown or country.</li>\n                <li>Explain what you have personally done recently to help the environment.</li>\n                <li>Suggest two activities your friend could do to be more eco-friendly.</li>\n                <li>Ask your friend for their opinion on whether individual actions can actually stop climate change.</li>\n            </ul>\n            Use an <b>informal tone</b>.\n        </div>\n        <div class=\"writing-box\"></div>\n    </div>\n\n    <!-- ANSWER KEY -->\n    <div class=\"answer-key-section\">\n        <div class=\"ak-header\">ANSWER KEY — FOR TEACHER USE ONLY</div>\n        <div class=\"ak-grid\">\n            <div class=\"ak-box\">\n                <b>Ex. 1 (Grammar)</b>\n                1. have never been<br>\n                2. has worked<br>\n                3. Did you see<br>\n                4. have already finished<br>\n                5. met<br>\n                6. lost<br>\n                7. haven't heard<br>\n                8. have you visited\n            </div>\n            <div class=\"ak-box\">\n                <b>Ex. 2 (MCQ)</b>\n                1. B (have lost)<br>\n                2. B (made)<br>\n                3. B (Have / run)<br>\n                4. B (have lived)<br>\n                5. B (completed)<br>\n                6. B (read)\n            </div>\n            <div class=\"ak-box\">\n                <b>Ex. 3 (Error)</b>\n                1. I saw that movie two days ago.<br>\n                2. ...for three years.<br>\n                3. Have you ever tried...<br>\n                4. I didn't see him...<br>\n                5. We went to the beach...<br>\n                6. Have you finished...\n            </div>\n            <div class=\"ak-box\">\n                <b>Ex. 4 (Transf.)</b>\n                1. I haven't seen her for a long time.<br>\n                2. I have learned English since 2010.<br>\n                3. I have never flown in a helicopter before.<br>\n                4. He has lived in NY for five years.<br>\n                5. I last visited my grandparents months ago.<br>\n                6. How long have you known your best friend?\n            </div>\n            <div class=\"ak-box\">\n                <b>Ex. 5 (Reading)</b>\n                1. C<br>\n                2. B<br>\n                3. C<br>\n                4. C<br>\n                5. B<br>\n                6. C\n            </div>\n            <div class=\"ak-box\">\n                <b>Ex. 6 (Writing)</b>\n                B2 Criteria: 300-350 words, informal register, all 4 bullet points addressed, coherent structure, appropriate B2 vocabulary.\n            </div>\n        </div>\n    </div>\n</div>\n\n</body>\n</html>
-""")
+pdf = service.convert_html_to_pdf("""<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>English Language Assessment - Past Simple</title>
+<style>
+@page {
+size: A4;
+margin: 1.5cm 2cm;
+@bottom-center {
+content: "— " counter(page) " —";
+font-size: 9pt;
+color: #999;
+}
+}
+
+    * { box-sizing: border-box; }
+    body { 
+        margin: 0; 
+        padding: 0; 
+        background: #ffffff; 
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 11pt;
+        color: #333;
+    }
+
+    .test-container { width: 100%; }
+
+    /* Header Styles */
+    .header-bar {
+        background: #1a2744;
+        color: #ffffff;
+        padding: 20px;
+        text-align: center;
+        border-bottom: 4px solid #c0392b;
+    }
+    .header-bar h1 {
+        margin: 0;
+        font-size: 18pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    .header-info {
+        margin-top: 10px;
+        font-size: 10pt;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    /* Student Info Bar */
+    .student-info {
+        display: table;
+        width: 100%;
+        background: #f5f5f5;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-collapse: separate;
+    }
+    .info-cell {
+        display: table-cell;
+        width: 33.33%;
+        padding: 5px 10px;
+    }
+    .info-label {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        font-weight: bold;
+        font-size: 9pt;
+        margin-right: 5px;
+    }
+    .info-dotted {
+        border-bottom: 1.5px dotted #333;
+        display: inline-block;
+        width: 70%;
+        height: 14px;
+    }
+
+    /* Section Dividers */
+    .section-divider {
+        background: #1a2744;
+        color: white;
+        text-align: center;
+        padding: 8px;
+        margin: 20px 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 10pt;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        page-break-before: auto;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* Exercise Blocks */
+    .exercise {
+        background: #ffffff;
+        border: 1.5px solid #ddd;
+        padding: 16px;
+        margin-bottom: 20px;
+        page-break-inside: avoid;
+        position: relative;
+    }
+    .ex-tag {
+        background: #c0392b;
+        color: white;
+        font-size: 9pt;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        padding: 3px 8px;
+        float: right;
+        margin-left: 10px;
+    }
+    .score-tag {
+        font-style: italic;
+        font-size: 9pt;
+        color: #666666;
+        float: right;
+    }
+    .exercise-title {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        font-size: 12pt;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #1a2744;
+        border-left: 4px solid #c0392b;
+        padding-left: 8px;
+        margin-bottom: 10px;
+        page-break-after: avoid;
+    }
+    .instructions {
+        font-style: italic;
+        color: #666;
+        font-size: 10pt;
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    /* Question Styles */
+    .question-list {
+        list-style-type: decimal;
+        padding-left: 25px;
+        margin: 0;
+    }
+    .question-item {
+        font-size: 10.5pt;
+        line-height: 1.7;
+        margin-bottom: 8px;
+    }
+    .gap-fill {
+        border-bottom: 1px solid #aaa;
+        display: inline-block;
+        min-width: 120px;
+        text-align: center;
+    }
+    
+    /* Multiple Choice */
+    .mc-option {
+        display: inline-block;
+        margin-right: 15px;
+    }
+    .circle {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 1px solid #333;
+        border-radius: 50%;
+        vertical-align: middle;
+        margin-right: 4px;
+    }
+
+    /* Writing Box */
+    .writing-box {
+        border: 1.5px solid #aaa;
+        width: 100%;
+        min-height: 400px;
+        background: white;
+        background-image: repeating-linear-gradient(white, white 24px, #e5e5e5 25px);
+        padding: 5px 10px;
+        line-height: 25px;
+    }
+
+    /* Answer Key */
+    .answer-key-section {
+        page-break-before: always;
+        border-top: 4px solid #c0392b;
+    }
+    .ak-header {
+        background: #1a2744;
+        color: white;
+        padding: 10px;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        font-weight: bold;
+        text-align: center;
+    }
+    .ak-table {
+        display: table;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 5px;
+    }
+    .ak-row { display: table-row; }
+    .ak-cell {
+        display: table-cell;
+        width: 33%;
+        border: 1px solid #444;
+        padding: 10px;
+        background: #1e3055;
+        color: white;
+        font-size: 9pt;
+        vertical-align: top;
+    }
+    .ak-title {
+        font-weight: bold;
+        color: #c0392b;
+        margin-bottom: 5px;
+        display: block;
+    }
+</style>
+</head>
+<body>
+
+<div class="test-container">
+<div class="header-bar">
+<h1>Past Simple Mastery Test</h1>
+<div class="header-info">
+LEVEL: B1 | AGE GROUP: TEENS | TOTAL SCORE: 75 PTS
+</div>
+</div>
+
+<div class="student-info">
+    <div class="info-cell">
+        <span class="info-label">NAME:</span>
+        <span class="info-dotted"></span>
+    </div>
+    <div class="info-cell">
+        <span class="info-label">DATE:</span>
+        <span class="info-dotted"></span>
+    </div>
+    <div class="info-cell">
+        <span class="info-label">CLASS:</span>
+        <span class="info-dotted"></span>
+    </div>
+</div>
+
+<div class="section-divider">SECTION A — GRAMMAR & VOCABULARY</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 1</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Multiple Choice: Social Media & Tech</div>
+    <span class="instructions">Choose the correct past form of the verb to complete the sentence.</span>
+    <ol class="question-list">
+        <li class="question-item">Tom __________ a photo of his lunch on Instagram an hour ago.
+            <br>
+            <span class="mc-option"><span class="circle"></span> A) postted</span>
+            <span class="mc-option"><span class="circle"></span> B) posted</span>
+            <span class="mc-option"><span class="circle"></span> C) posts</span>
+        </li>
+        <li class="question-item">I __________ my laptop yesterday because it was broken.
+            <br>
+            <span class="mc-option"><span class="circle"></span> A) don't use</span>
+            <span class="mc-option"><span class="circle"></span> B) didn't used</span>
+            <span class="mc-option"><span class="circle"></span> C) didn't use</span>
+        </li>
+        <li class="question-item">They __________ to the new podcast during their break.
+            <br>
+            <span class="mc-option"><span class="circle"></span> A) listened</span>
+            <span class="mc-option"><span class="circle"></span> B) listen</span>
+            <span class="mc-option"><span class="circle"></span> C) listening</span>
+        </li>
+        <li class="question-item">__________ you see that viral video last night?
+            <br>
+            <span class="mc-option"><span class="circle"></span> A) Do</span>
+            <span class="mc-option"><span class="circle"></span> B) Were</span>
+            <span class="mc-option"><span class="circle"></span> C) Did</span>
+        </li>
+        <li class="question-item">Sarah __________ her password after the security alert.
+            <br>
+            <span class="mc-option"><span class="circle"></span> A) changed</span>
+            <span class="mc-option"><span class="circle"></span> B) changeed</span>
+            <span class="mc-option"><span class="circle"></span> C) change</span>
+        </li>
+        <li class="question-item">We __________ the online game together on Friday.
+            <br>
+            <span class="mc-option"><span class="circle"></span> A) winned</span>
+            <span class="mc-option"><span class="circle"></span> B) won</span>
+            <span class="mc-option"><span class="circle"></span> C) win</span>
+        </li>
+    </ol>
+</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 2</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Irregular Verbs: School Life</div>
+    <span class="instructions">Complete the sentences with the Past Simple form of the verbs in brackets.</span>
+    <ol class="question-list">
+        <li class="question-item">I (see) <span class="gap-fill"></span> my teacher at the cinema last Saturday.</li>
+        <li class="question-item">The students (buy) <span class="gap-fill"></span> some snacks for the class party.</li>
+        <li class="question-item">He (write) <span class="gap-fill"></span> a long essay for his English project.</li>
+        <li class="question-item">We (go) <span class="gap-fill"></span> to the library to study for the test.</li>
+        <li class="question-item">My best friend (give) <span class="gap-fill"></span> me a cool birthday present.</li>
+        <li class="question-item">The school bell (ring) <span class="gap-fill"></span> exactly at 8:00 AM.</li>
+    </ol>
+</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 3</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Negative Transformations: Hobbies</div>
+    <span class="instructions">Rewrite the positive sentences in the negative form.</span>
+    <ol class="question-list">
+        <li class="question-item">Mark played football after school. <br> ________________________________________________________</li>
+        <li class="question-item">I understood the instructions for the guitar lesson. <br> ________________________________________________________</li>
+        <li class="question-item">They went to the rock concert last month. <br> ________________________________________________________</li>
+        <li class="question-item">The girls took many photos at the art gallery. <br> ________________________________________________________</li>
+        <li class="question-item">We visited the new skatepark on Sunday. <br> ________________________________________________________</li>
+        <li class="question-item">She spoke to the coach about the team. <br> ________________________________________________________</li>
+    </ol>
+</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 4</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Interrogative Form: Travel</div>
+    <span class="instructions">Put the words in the correct order to make questions.</span>
+    <ol class="question-list">
+        <li class="question-item">you / did / where / go / summer / last / ? <br> ________________________________________________________</li>
+        <li class="question-item">stay / they / in / hotel / a / did / ? <br> ________________________________________________________</li>
+        <li class="question-item">time / did / arrive / what / the / train / ? <br> ________________________________________________________</li>
+        <li class="question-item">buy / souvenirs / any / you / did / ? <br> ________________________________________________________</li>
+        <li class="question-item">she / like / did / the / local / food / ? <br> ________________________________________________________</li>
+        <li class="question-item">many / photos / how / take / did / he / ? <br> ________________________________________________________</li>
+    </ol>
+</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 5</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Error Correction: Daily Routine</div>
+    <span class="instructions">Each sentence contains ONE mistake. Rewrite the sentence correctly.</span>
+    <ol class="question-list">
+        <li class="question-item">I didn't went to the park yesterday. <br> ________________________________________________________</li>
+        <li class="question-item">She eated a huge pizza for dinner. <br> ________________________________________________________</li>
+        <li class="question-item">Did you saw the news this morning? <br> ________________________________________________________</li>
+        <li class="question-item">They was very happy about the results. <br> ________________________________________________________</li>
+        <li class="question-item">We builded a treehouse last summer. <br> ________________________________________________________</li>
+        <li class="question-item">He don't like the film we watched. <br> ________________________________________________________</li>
+    </ol>
+</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 6</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Sentence Completion: My Weekend</div>
+    <span class="instructions">Complete the sentences about YOURSELF using Past Simple.</span>
+    <ol class="question-list">
+        <li class="question-item">Last Saturday morning, I <span class="gap-fill"></span>.</li>
+        <li class="question-item">For breakfast yesterday, I <span class="gap-fill"></span>.</li>
+        <li class="question-item">The last movie I watched <span class="gap-fill"></span>.</li>
+        <li class="question-item">Two days ago, I didn't <span class="gap-fill"></span>.</li>
+        <li class="question-item">Last night, my friends and I <span class="gap-fill"></span>.</li>
+        <li class="question-item">I (learn) <span class="gap-fill"></span> something new in class on Monday.</li>
+    </ol>
+</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 7</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Matching: Action & Reaction</div>
+    <span class="instructions">Match the verb (1-6) with the correct object (A-F) to create a past simple sentence.</span>
+    <div style="display: table; width: 100%;">
+        <div style="display: table-cell; width: 50%;">
+            1. I lost ___ <br>
+            2. We drank ___ <br>
+            3. She found ___ <br>
+            4. They met ___ <br>
+            5. He broke ___ <br>
+            6. You told ___
+        </div>
+        <div style="display: table-cell; width: 50%;">
+            A. a new friend at the mall. <br>
+            B. my keys on the bus. <br>
+            C. some cold lemonade. <br>
+            D. a funny secret. <br>
+            E. a ten-euro note in the street. <br>
+            F. his phone screen.
+        </div>
+    </div>
+</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 8</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Vocabulary: Past Time Expressions</div>
+    <span class="instructions">Choose the correct time expression to complete the sentence.</span>
+    <ol class="question-list">
+        <li class="question-item">I finished my homework two hours (ago / last).</li>
+        <li class="question-item">We went to Paris (yesterday / last) year.</li>
+        <li class="question-item">Did you talk to him (yesterday / ago) afternoon?</li>
+        <li class="question-item">She started her blog (in / on) 2022.</li>
+        <li class="question-item">They left the party (at / last) midnight.</li>
+        <li class="question-item">I bought these shoes (last / yesterday) week.</li>
+    </ol>
+</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 9</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Verb Transformation: Technology</div>
+    <span class="instructions">Fill the gaps with the correct Past Simple form of the verb in brackets.</span>
+    <ol class="question-list">
+        <li class="question-item">The battery (die) <span class="gap-fill"></span> while I was playing.</li>
+        <li class="question-item">I (forget) <span class="gap-fill"></span> to charge my phone last night.</li>
+        <li class="question-item">We (download) <span class="gap-fill"></span> a new app for our trip.</li>
+        <li class="question-item">He (send) <span class="gap-fill"></span> me a text message five minutes ago.</li>
+        <li class="question-item">They (not / find) <span class="gap-fill"></span> the charger in the drawer.</li>
+        <li class="question-item">My brother (take) <span class="gap-fill"></span> my headphones without asking!</li>
+    </ol>
+</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 10</span>
+    <span class="score-tag">( 6 pts )</span>
+    <div class="exercise-title">Revision: A Busy Day</div>
+    <span class="instructions">Choose the correct form to complete the story.</span>
+    <p style="font-size: 10.5pt; line-height: 1.8;">
+        Yesterday (1) (was / were) a very busy day. I (2) (woke / waked) up early and (3) (have / had) a quick breakfast. 
+        Then, I (4) (run / ran) to catch the bus. At school, we (5) (did / doed) a science experiment. 
+        After school, I (6) (meet / met) my friends at the park.
+    </p>
+</div>
+
+<div class="section-divider">SECTION B — WRITING</div>
+
+<div class="exercise">
+    <span class="ex-tag">Ex. 11</span>
+    <span class="score-tag">( 15 pts )</span>
+    <div class="exercise-title">Email Writing: An Amazing Weekend</div>
+    <span class="instructions">Write an email (80-100 words) to a friend about a weekend trip you took recently. 
+    Use the Past Simple and include: where you went, what you did, and how you felt.</span>
+    <div class="writing-box">
+        To: <br>
+        Subject: My weekend trip! <br><br>
+        Hi!
+    </div>
+</div>
+
+<div class="answer-key-section">
+    <div class="ak-header">ANSWER KEY — FOR TEACHER USE ONLY</div>
+    <div class="ak-table">
+        <div class="ak-row">
+            <div class="ak-cell">
+                <span class="ak-title">Ex 1: Multiple Choice</span>
+                1. B (posted)<br>2. C (didn't use)<br>3. A (listened)<br>4. C (Did)<br>5. A (changed)<br>6. B (won)
+            </div>
+            <div class="ak-cell">
+                <span class="ak-title">Ex 2: Irregular Verbs</span>
+                1. saw<br>2. bought<br>3. wrote<br>4. went<br>5. gave<br>6. rang
+            </div>
+            <div class="ak-cell">
+                <span class="ak-title">Ex 3: Negative</span>
+                1. Mark didn't play...<br>2. I didn't understand...<br>3. They didn't go...<br>4. The girls didn't take...<br>5. We didn't visit...<br>6. She didn't speak...
+            </div>
+        </div>
+        <div class="ak-row">
+            <div class="ak-cell">
+                <span class="ak-title">Ex 4: Questions</span>
+                1. Where did you go last summer?<br>2. Did they stay in a hotel?<br>3. What time did the train arrive?<br>4. Did you buy any souvenirs?<br>5. Did she like the local food?<br>6. How many photos did he take?
+            </div>
+            <div class="ak-cell">
+                <span class="ak-title">Ex 5: Error Correction</span>
+                1. ...didn't go...<br>2. ...ate...<br>3. Did you see...<br>4. They were...<br>5. ...built...<br>6. He didn't like...
+            </div>
+            <div class="ak-cell">
+                <span class="ak-title">Ex 6: Personal</span>
+                (Student's own answers - check for correct V2 form)
+            </div>
+        </div>
+        <div class="ak-row">
+            <div class="ak-cell">
+                <span class="ak-title">Ex 7: Matching</span>
+                1-B, 2-C, 3-E, 4-A, 5-F, 6-D
+            </div>
+            <div class="ak-cell">
+                <span class="ak-title">Ex 8: Signal Words</span>
+                1. ago, 2. last, 3. yesterday, 4. in, 5. at, 6. last
+            </div>
+            <div class="ak-cell">
+                <span class="ak-title">Ex 9 & 10</span>
+                Ex 9: 1. died, 2. forgot, 3. downloaded, 4. sent, 5. didn't find, 6. took.<br>
+                Ex 10: 1. was, 2. woke, 3. had, 4. ran, 5. did, 6. met.
+            </div>
+        </div>
+    </div>
+    <div style="padding: 10px; color: white; background: #c0392b; margin-top: 5px; font-size: 9pt;">
+        <strong>WRITING (Ex 11):</strong> Mark for: Content (5), Grammar/Past Simple (5), Vocabulary (3), Length (2).
+    </div>
+</div>
+</div>
+
+</body>
+</html>""")
 with open("output.pdf", "wb") as f:
     f.write(pdf)

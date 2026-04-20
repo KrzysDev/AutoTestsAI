@@ -36,6 +36,8 @@ from fastapi import Body
 
 @router.post("/v1/rag/test/convert/html")
 def convert_html_to_pdf(request: HtmlRequest):
+
+    request.html = "\n".join(request.html)
     pdf_bytes = html_converting_service.convert_html_to_pdf(request.html)
 
 

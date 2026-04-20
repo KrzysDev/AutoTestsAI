@@ -1,6 +1,5 @@
 import os
 from ollama import Client
-from google import genai
 from dotenv import load_dotenv
 import json
 from backend.app.models.prompts import SystemPrompts
@@ -11,9 +10,8 @@ import time
 
 load_dotenv()
 
-# <summary>
-# Service for interacting with LLM APIs (Ollama and Gemini), handling both local and cloud inference.
-# Provides text and document analysis capabilities and classification utility methods.
+# Service for interacting with LLM APIs (Ollama), handling both local and cloud inference.
+# Provides text and document analysis capabilities.
 # </summary>
 class AiService:
     def __init__(self):
@@ -34,14 +32,6 @@ class AiService:
             host="http://localhost:11434",
         )
 
-        # Gemini configuration
-        gemini_api_key = os.environ.get('GOOGLE_API_KEY')
-        if gemini_api_key:
-            self.gemini_client = genai.Client(api_key=gemini_api_key)
-        else:
-            print("Warning: No GOOGLE_API_KEY found. Gemini functions will fail.")
-            self.gemini_client = None
-
     def ask(self, text: str):
         if os.environ.get('AI_CLOUD_MODE').lower() == 'true':
             return self.__ask_ollama_cloud(text, 'gemma4:31b-cloud')
@@ -54,26 +44,6 @@ class AiService:
         else:
             return self.__ask_ollama_local(text, model) 
 
-    def __ask_gemini(self, text: str):
-        if not self.gemini_client:
-            raise RuntimeError("Gemini is not configured. Please add GOOGLE_API_KEY to .env")
-            
-        try:
-            response = self.gemini_client.models.generate_content(
-                model='gemini-2.0-flash',
-                contents=text
-            )
-            return response.text
-        except Exception as e:
-            print(f"Error calling Gemini: {e}")
-            raise RuntimeError(f"Failed to get response from Gemini: {e}")
-
-    def __classify_text(self, text: str):
-        prompt = self.prompts.get_classification_prompt(text)
-        response_text = self.ask_gemini(prompt)
-        
-        # We assume classification logic handles the string response
-        return response_text
 
     # --- Legacy / Internal Methods ---
 
