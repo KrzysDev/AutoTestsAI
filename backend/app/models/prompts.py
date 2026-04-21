@@ -317,24 +317,20 @@ Page break rules:
 - Never use page-break-before:always except on .answer-key-section
 - Never use page-break-after:always anywhere
 
-# VISUAL DESIGN (professional printed English exam style)
+# VISUAL DESIGN
+You have full creative freedom over colors, fonts, and aesthetic style. Design a professional, visually appealing printed exam. Choose a coherent color palette, readable fonts, and a polished look that fits the teacher's request.
 
-Typography:
-- Body: Georgia, 'Times New Roman', serif — 11pt
-- Headers/labels: 'Segoe UI', Tahoma, sans-serif
-- Questions: 10.5pt, line-height:1.7 | Exercise titles: 12pt bold uppercase | h1: 18pt bold uppercase, letter-spacing:3px
-
-Colors: primary=#1a2744 | accent=#c0392b | light-gray=#f5f5f5 | white=#fff | muted=#666
-
-Header: full-width #1a2744 bar, white text, title centered uppercase. Below: Level | Age Group | Total Score. Bottom border: 4px solid #c0392b.
-Student info: 3-col table layout, label+dotted underline (border-bottom:1.5px dotted #333), bg #f5f5f5, padding 10px.
-Exercise blocks: white bg, border:1.5px solid #ddd, padding:16px, margin-bottom:20px, page-break-inside:avoid. Number tag: #c0392b bg, white text, 9pt, float:right. Score: italic gray float:right "( X pts )". Title: bold uppercase #1a2744, border-left:4px solid #c0392b, padding-left:8px. Instructions: italic #666 10pt. Questions: numbered, 10.5pt, margin-bottom:8px. Answer lines: border-bottom:1px solid #aaa, inline-block, min-width:200px.
-Section dividers: #1a2744 bg, white text, center, padding 8px, uppercase, letter-spacing:2px, 10pt.
-MCQ options: A) B) C) format, styled circle spans.
-Gap fill: underscores, min-width 120px, border-bottom.
-Reading passage: #f5f5f5 bg, border-left:4px solid #1a2744, padding 15px, bold heading above.
-Writing box: border:1.5px solid #aaa, width:100%, min-height:200px, white bg, repeating-linear-gradient for lined paper.
-Answer Key: page-break-before:always, #1a2744 header "ANSWER KEY — FOR TEACHER USE ONLY", 4px solid #c0392b accent strip, 3-col table, exercise boxes: border 1px solid #444, padding 10px, bg #1e3055, white text.
+Mandatory structural rules (layout — do NOT deviate):
+- Body font-size: 10–12pt, line-height ≥ 1.5 for readability
+- Header: full-width bar with test title centered, below it: Level | Age Group | Total Score
+- Student info: 3-col layout using display:table/table-cell, label + underline for each field, padding ≥ 8px
+- Exercise blocks: padding ≥ 12px, margin-bottom ≥ 15px, page-break-inside:avoid. Must show score "( X pts )" and exercise number
+- Section dividers: full-width bar, centered uppercase text, must have page-break CSS from rules above
+- MCQ options: A) B) C) format
+- Gap fill blanks: border-bottom underline, min-width ≥ 100px
+- Reading passage: visually distinct container (e.g. background or border), padding ≥ 12px
+- Writing box: bordered, width:100%, min-height:200px
+- Answer Key: page-break-before:always, answers in multi-column table layout (display:table), clearly labeled per exercise
 
 # CONTENT STRUCTURE (follow this exact order)
 {structure_block}
