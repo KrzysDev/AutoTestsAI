@@ -239,237 +239,120 @@ class SystemPrompts:
 
     def get_combined_html_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: Union[ParsedPrompt, Form], reading_enabled: bool, writing_enabled: bool):
         grammar_vocab_sections = [s for s in parsed_prompt.sections if s.task_type not in ("reading", "writing")]
-        reading_sections = [s for s in parsed_prompt.sections if s.task_type == "reading"]
-        writing_sections = [s for s in parsed_prompt.sections if s.task_type == "writing"]
-
         grammar_vocab_amount = sum(s.amount for s in grammar_vocab_sections)
-        reading_amount = sum(s.amount for s in reading_sections) if reading_enabled else 0
-        writing_amount = sum(s.amount for s in writing_sections) if writing_enabled else 0
 
         reading_block = ""
         if reading_enabled:
+            rag_line = f"\nReading RAG context (inspiration only): {reading_data}" if reading_data else ""
             reading_block = f"""
-        ═══════════════════════════════════════════════════════════════
-        SECTION B: READING COMPREHENSION EXERCISES
-        ═══════════════════════════════════════════════════════════════
-
-        YOU MUST generate reading comprehension exercises as part of this test. This is NOT optional.
-
-        READING EXERCISE MANDATORY RULES:
-        - YOU MUST generate 1–2 reading exercises
-        - Each reading exercise MUST contain: a coherent passage (500–700 words for B1-B2, 700+ for C1) PLUS 5–8 comprehension questions
-        - Questions MUST be a mix of: main idea, detail, inference, and vocabulary-in-context
-        - YOU ARE FORBIDDEN FROM generating grammar exercises in this section
-        - Passage MUST be original, multi-paragraph text
-        - Questions MUST use paraphrasing — no copying exact phrases from passage into answer options
-        - YOU MUST create plausible but incorrect distractors for multiple choice questions
-
-        READING DIFFICULTY:
-        - A2: simple vocabulary, 300-400 words, direct comprehension
-        - B1/B2: moderate vocabulary, 500-700 words, context-based with distractors
-        - C1: advanced vocabulary, 700+ words, inference-heavy, nuanced
-
-        READING RAG CONTEXT (inspiration only):
-        {reading_data}
-        """
+## SECTION B: READING COMPREHENSION (mandatory)
+- Generate 1–2 reading exercises
+- Each: coherent original multi-paragraph passage + 5–8 comprehension questions
+- Question types: main idea, detail, inference, vocabulary-in-context
+- No grammar exercises in this section
+- Paraphrase in questions — never copy exact phrases from passage into answers
+- Create plausible incorrect distractors for MCQ
+- Passage length by level: A2: 300-400w | B1/B2: 500-700w | C1: 700+w{rag_line}
+"""
 
         writing_block = ""
         if writing_enabled:
+            rag_line = f"\nWriting RAG context (inspiration only): {writing_data}" if writing_data else ""
             writing_block = f"""
-        ═══════════════════════════════════════════════════════════════
-        SECTION C: WRITING EXERCISES
-        ═══════════════════════════════════════════════════════════════
+## SECTION C: WRITING (mandatory)
+- Generate 1 writing exercise (email, letter, or essay)
+- Include: clear instructions, context (recipient+purpose), 3–4 bullet points, word count requirement
+- Word count: A1-A2: 50–80w | B1: 100–120w | B2: 300–350w | C1: 400–600w
+- State formal/informal tone clearly
+- Render writing box as bordered box (min-height: 200px)
+- Level: {parsed_prompt.level}{rag_line}
+"""
 
-        YOU MUST generate writing exercises as part of this test. This is NOT optional.
+        rag_grammar_line = f"\nGrammar/Vocabulary RAG context (inspiration only): {retrieval}" if retrieval else ""
 
-        WRITING EXERCISE MANDATORY RULES:
-        - YOU MUST generate 1 writing exercise
-        - Types: email writing, letter writing, or essay
-        - Must include: clear instructions, context (recipient + purpose), 3–4 bullet points, word count requirement
-        - Word count by level: A1-A2: 50–80 words | B1: 100–120 words | B2: 300–350 words | C1: 400–600 words
-        - Must clearly state formal or informal tone
-        - Writing box must be rendered as a tall empty bordered box (min-height: 200px)
+        # Build numbered structure list
+        structure_items = [
+            "1. Header bar (title, level, age group, total score)",
+            "2. Student info bar (Name / Date / Class)",
+            '3. Section divider: "SECTION A — GRAMMAR & VOCABULARY"',
+            f"4. Grammar/vocabulary exercises (exactly {grammar_vocab_amount})",
+        ]
+        step = 5
+        if reading_enabled:
+            structure_items.append(f'{step}. Section divider: "SECTION B — READING COMPREHENSION"')
+            step += 1
+            structure_items.append(f'{step}. Reading exercises')
+            step += 1
+        if writing_enabled:
+            structure_items.append(f'{step}. Section divider: "SECTION C — WRITING"')
+            step += 1
+            structure_items.append(f'{step}. Writing exercise')
+            step += 1
+        structure_items.append(f"{step}. Answer Key (always last, page-break-before: always)")
+        structure_block = "\n".join(structure_items)
 
-        CURRENT LEVEL FOR WRITING: {parsed_prompt.level}
+        combined_prompt = f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML test file.
 
-        WRITING RAG CONTEXT (inspiration only):
-        {writing_data}
-        """
+# ABSOLUTE RULES (violation = rejection)
+1. Output ONLY raw HTML starting with <!DOCTYPE html>. No markdown, no code fences, no explanations.
+2. CSS+HTML only — zero JavaScript.
+3. Teacher input overrides everything. RAG data is inspiration only.
+4. Must be convertible to PDF via WeasyPrint.
 
-        combined_prompt = f"""YOU ARE AN EXPERT ENGLISH TEST DESIGNER AND WEB DESIGNER. GENERATE A COMPLETE, PRINT-READY HTML TEST FILE.
+# WEASYPRINT CSS
+Required @page rule:
+@page {{ size: A4; margin: 1.5cm 2cm; @bottom-center {{ content: "— " counter(page) " —"; font-size: 9pt; color: #999; }} }}
 
-        ═══════════════════════════════════════════════════════════════
-        ABSOLUTE RULES — VIOLATION = REJECTION
-        ═══════════════════════════════════════════════════════════════
-        1. Output ONLY raw HTML. No markdown. No code fences. No explanations. Start with <!DOCTYPE html>.
-        2. CSS and HTML only — NO JavaScript whatsoever.
-        3. Teacher input is supreme authority. RAG data is inspiration only.
-        4. The file must be immediately convertible to PDF via WeasyPrint.
+Required reset:
+* {{ box-sizing: border-box; }} body {{ margin:0; padding:0; background:#fff; }} .test-container {{ width:100%; }}
 
-        ═══════════════════════════════════════════════════════════════
-        WEASYPRINT CSS RULES — MANDATORY, NO EXCEPTIONS
-        ═══════════════════════════════════════════════════════════════
+FORBIDDEN CSS (breaks WeasyPrint): display:flex, display:grid, vw/vh units, max-width on .test-container, JS-dependent CSS.
+USE INSTEAD: display:table/table-cell for multi-column layouts. Use %, cm, pt, px for widths.
 
-        YOU MUST include this EXACT @page rule:
-            @page {{
-                size: A4;
-                margin: 1.5cm 2cm;
-            }}
+Page break rules:
+- .answer-key-section: page-break-before: always (ONLY element with this)
+- .exercise: page-break-inside: avoid
+- .section-divider: page-break-before:auto; page-break-after:avoid; page-break-inside:avoid
+- .exercise-title: page-break-after: avoid
+- Never use page-break-before:always except on .answer-key-section
+- Never use page-break-after:always anywhere
 
-        YOU MUST include this reset:
-            * {{ box-sizing: border-box; }}
-            body {{ margin: 0; padding: 0; background: #ffffff; }}
-            .test-container {{ width: 100%; }}
+# VISUAL DESIGN (professional printed English exam style)
 
-        FORBIDDEN CSS (WeasyPrint will break):
-            - display: flex  →  use display: table / table-cell instead
-            - display: grid  →  use display: table / table-row / table-cell instead
-            - vw, vh units   →  use %, cm, pt, px instead
-            - max-width on .test-container  →  always use width: 100%
-            - JavaScript-dependent CSS
+Typography:
+- Body: Georgia, 'Times New Roman', serif — 11pt
+- Headers/labels: 'Segoe UI', Tahoma, sans-serif
+- Questions: 10.5pt, line-height:1.7 | Exercise titles: 12pt bold uppercase | h1: 18pt bold uppercase, letter-spacing:3px
 
-        REQUIRED CSS PATTERNS:
-            - Multi-column layouts (student info, answer key): display: table on parent, display: table-cell with explicit width on children
-            - All widths of inner content elements: use % or explicit px, never vw
+Colors: primary=#1a2744 | accent=#c0392b | light-gray=#f5f5f5 | white=#fff | muted=#666
 
-        PAGE BREAK RULES — CRITICAL, FOLLOW EXACTLY OR LAYOUT WILL BREAK:
-            - ONLY the Answer Key gets: page-break-before: always
-            - Every .exercise gets: page-break-inside: avoid — NOTHING ELSE
-            - Every .section-divider gets BOTH:
-                page-break-after: avoid      ← glues divider to the first exercise after it
-                page-break-inside: avoid
-                page-break-before: auto      ← NEVER use always on dividers
-            - Every .exercise-title gets: page-break-after: avoid  ← title never orphaned from questions
-            - NEVER use page-break-before: always on anything except .answer-key-section
-            - NEVER use page-break-after: always anywhere
-            - This ensures section dividers are NEVER alone on a page
+Header: full-width #1a2744 bar, white text, title centered uppercase. Below: Level | Age Group | Total Score. Bottom border: 4px solid #c0392b.
+Student info: 3-col table layout, label+dotted underline (border-bottom:1.5px dotted #333), bg #f5f5f5, padding 10px.
+Exercise blocks: white bg, border:1.5px solid #ddd, padding:16px, margin-bottom:20px, page-break-inside:avoid. Number tag: #c0392b bg, white text, 9pt, float:right. Score: italic gray float:right "( X pts )". Title: bold uppercase #1a2744, border-left:4px solid #c0392b, padding-left:8px. Instructions: italic #666 10pt. Questions: numbered, 10.5pt, margin-bottom:8px. Answer lines: border-bottom:1px solid #aaa, inline-block, min-width:200px.
+Section dividers: #1a2744 bg, white text, center, padding 8px, uppercase, letter-spacing:2px, 10pt.
+MCQ options: A) B) C) format, styled circle spans.
+Gap fill: underscores, min-width 120px, border-bottom.
+Reading passage: #f5f5f5 bg, border-left:4px solid #1a2744, padding 15px, bold heading above.
+Writing box: border:1.5px solid #aaa, width:100%, min-height:200px, white bg, repeating-linear-gradient for lined paper.
+Answer Key: page-break-before:always, #1a2744 header "ANSWER KEY — FOR TEACHER USE ONLY", 4px solid #c0392b accent strip, 3-col table, exercise boxes: border 1px solid #444, padding 10px, bg #1e3055, white text.
 
-        ═══════════════════════════════════════════════════════════════
-        VISUAL DESIGN — MAKE IT LOOK LIKE A REAL PRINTED TEST
-        ═══════════════════════════════════════════════════════════════
+# CONTENT STRUCTURE (follow this exact order)
+{structure_block}
 
-        The test must look like a professionally printed English exam from a school or language institute.
-        Follow these design rules exactly:
+# SCORING
+- Every exercise shows score: "( X pts )" float right
+- Sum of scores = total score in header
+- Grammar/vocab: 1pt/question | Reading: 2pts/question | Writing: 15pts flat
+- Sequential numbering: Ex. 1, 2, 3… never skip or reset
 
-        TYPOGRAPHY:
-            - Primary font: Georgia, 'Times New Roman', serif  (body text, questions)
-            - Accent font: 'Segoe UI', Tahoma, sans-serif  (headers, exercise titles, labels)
-            - Body font-size: 11pt
-            - Questions: 10.5pt, line-height: 1.7
-            - Exercise titles: 12pt, bold, uppercase
-            - h1 test title: 18pt, bold, uppercase, letter-spacing: 3px
-
-        COLOR PALETTE — use EXACTLY these:
-            - Primary dark: #1a2744  (header bg, answer key bg, borders)
-            - Accent orange: #c0392b  (exercise number tags, section markers)
-            - Light gray: #f5f5f5  (exercise background, reading passage bg)
-            - White: #ffffff  (main page bg, writing box)
-            - Muted text: #666666  (score tags, instructions, italic notes)
-
-        HEADER (top of page):
-            - Full-width dark bar (#1a2744) with white text
-            - Test title centered, large, uppercase
-            - Below: Level | Age Group | Total Score — separated by  |  characters
-            - Thin bottom border: 4px solid #c0392b
-
-        STUDENT INFO BAR:
-            - 3 columns using display: table / table-cell
-            - Each field: label + dotted underline (use border-bottom: 1.5px dotted #333)
-            - Light gray background (#f5f5f5), padding 10px, margin-bottom 20px
-
-        EXERCISE BLOCKS:
-            - White background, border: 1.5px solid #ddd, padding: 16px
-            - Margin-bottom: 20px
-            - page-break-inside: avoid
-            - Exercise number tag: small box, bg #c0392b, white text, font 9pt, float: right, padding: 3px 8px
-            - Score tag: italic, small, gray, float: right — format: "( X pts )"
-            - Exercise title: bold, uppercase, color #1a2744, border-left: 4px solid #c0392b, padding-left: 8px
-            - Instructions: italic, color #666, font-size 10pt, margin-bottom 10px
-            - Questions: numbered, 10.5pt, margin-bottom 8px
-            - Answer lines: border-bottom: 1px solid #aaa, display: inline-block, min-width: 200px
-
-        SECTION DIVIDERS (between Grammar / Reading / Writing):
-            - Full-width bar: background #1a2744, color white, text-align center, padding 8px
-            - Text: "SECTION A — GRAMMAR & VOCABULARY" etc., uppercase, letter-spacing 2px, font-size 10pt
-            - MANDATORY page-break CSS on every .section-divider:
-                page-break-before: auto;
-                page-break-after: avoid;
-                page-break-inside: avoid;
-
-        MULTIPLE CHOICE options:
-            - Display on same line or indented block, format: A) ... B) ... C) ...
-            - Small circle before each: use a styled span with border-radius
-
-        GAP FILL blanks:
-            - Render as: _________________ (underscores, min-width 120px, border-bottom)
-
-        READING PASSAGE:
-            - Gray box (#f5f5f5), border-left: 4px solid #1a2744, padding 15px, font-style normal
-            - Heading in bold above the passage
-
-        WRITING BOX:
-            - border: 1.5px solid #aaa, width: 100%, min-height: 200px, background: white
-            - Lined paper effect: use repeating-linear-gradient for horizontal lines
-
-        ANSWER KEY (last section):
-            - page-break-before: always
-            - Dark header bar (#1a2744), white text "ANSWER KEY — FOR TEACHER USE ONLY"
-            - Red accent strip: 4px solid #c0392b above the section
-            - Answers in 3-column table layout (display: table)
-            - Each exercise answers in a box: border 1px solid #444, padding 10px, background #1e3055, color white
-            - Exercise label bold, answers below in readable format
-
-        FOOTER (bottom of each page using @page):
-            @page {{
-                @bottom-center {{
-                    content: "— " counter(page) " —";
-                    font-size: 9pt;
-                    color: #999;
-                }}
-            }}
-
-        ═══════════════════════════════════════════════════════════════
-        CONTENT STRUCTURE — FOLLOW THIS ORDER EXACTLY
-        ═══════════════════════════════════════════════════════════════
-
-        1. HEADER BAR (title, level, age group, total score)
-        2. STUDENT INFO BAR (Name / Date / Class)
-        3. SECTION DIVIDER: "SECTION A — GRAMMAR & VOCABULARY"
-        4. Grammar/vocabulary exercises (EXACTLY {grammar_vocab_amount} exercises)
-        {f'5. SECTION DIVIDER: "SECTION B — READING COMPREHENSION"' if reading_enabled else ''}
-        {f'6. Reading comprehension exercises' if reading_enabled else ''}
-        {f'7. SECTION DIVIDER: "SECTION C — WRITING"' if writing_enabled else ''}
-        {f'8. Writing exercise' if writing_enabled else ''}
-        9. ANSWER KEY (always last, page-break-before: always)
-
-        ═══════════════════════════════════════════════════════════════
-        SCORING RULES
-        ═══════════════════════════════════════════════════════════════
-
-        - Every exercise MUST show its score: format "( X pts )" float right, before the title
-        - The SUM of all exercise scores MUST equal the total score shown in the header
-        - Grammar/vocab: 1 pt per question
-        - Reading: 2 pts per question
-        - Writing: assign 15 pts flat
-        - Exercise numbering: sequential integers only — Ex. 1, 2, 3... NEVER skip or reset
-
-        ═══════════════════════════════════════════════════════════════
-        EXERCISE CONTENT RULES
-        ═══════════════════════════════════════════════════════════════
-
-        - Exactly {grammar_vocab_amount} grammar/vocabulary exercises
-        - Each exercise: 6–10 questions, one grammar focus, unique sentences
-        - Varied formats: multiple choice, gap fill, error correction, transformation, ordering, matching
-        - No format repeated more than twice across the whole test
-        - All contexts teen-relevant (school, travel, social media, sports, hobbies)
-        - Difficulty strictly matching: {parsed_prompt.level}
-        {reading_block}{writing_block}
-        ═══════════════════════════════════════════════════════════════
-        INPUT DATA
-        ═══════════════════════════════════════════════════════════════
-
-        Teacher input (PRIMARY SOURCE OF TRUTH): {parsed_prompt}
-        Grammar/Vocabulary RAG context (inspiration only): {retrieval}"""
+# GRAMMAR & VOCABULARY EXERCISES (Section A)
+- Exactly {grammar_vocab_amount} exercises, each 6–10 questions, one grammar focus, unique sentences
+- Formats: multiple choice, gap fill, error correction, transformation, ordering, matching — no format repeated 3+ times
+- Contexts relevant to age group
+- Difficulty: {parsed_prompt.level}
+{reading_block}{writing_block}
+# INPUT DATA
+Teacher input (primary source of truth): {parsed_prompt}{rag_grammar_line}"""
 
         return combined_prompt
 
