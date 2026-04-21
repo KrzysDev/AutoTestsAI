@@ -15,7 +15,7 @@ class AiService:
                 "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
             },
             json={
-                "model": "openai/gpt-5.2",
+                "model": "google/gemini-3.1-flash-lite-preview",
                 "messages": [
                     {
                         "role": "user",
