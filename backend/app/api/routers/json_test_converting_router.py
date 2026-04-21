@@ -11,7 +11,7 @@ ai_service = AiService()
 json_test_converting_service = JsonTestConvertingService()
 
 @router.post("/v1/rag/test/convert", response_class=StreamingResponse)
-def convert_test(test_data: GeneratedTest):
+async def convert_test(test_data: GeneratedTest):
     system_prompts = SystemPrompts()
     # Use the new structured prompt
     prompt = system_prompts.get_test_restructuring_prompt(test_data)

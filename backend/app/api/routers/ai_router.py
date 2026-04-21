@@ -11,7 +11,7 @@ ai_service = AiService()
 last_requests_cloud = defaultdict(lambda: datetime.min)
 
 @router.post("/v1/rag/ask")
-def ask_ollama_cloud(request: Request, text: str = Body(..., description="Query for the cloud AI")):
+async def ask_ollama_cloud(request: Request, text: str = Body(..., description="Query for the cloud AI")):
     client_ip = request.client.host
     now = datetime.now()
     delta = (now - last_requests_cloud[client_ip]).total_seconds()
