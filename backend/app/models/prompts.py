@@ -72,6 +72,7 @@ class SystemPrompts:
 
         2. They represent sections of a test. Possible values:
                 task_type: Literal["vocabulary", "grammar", "reading", "writing"]
+                description: string -> description of how exercise has to be created (implementation plan). Its either teachers idea or yours if teacher did not give enough information.
                 subject: Literal[
                     "Present Simple",
                     "Present Continuous",
@@ -86,6 +87,7 @@ class SystemPrompts:
                     "Future Perfect",
                     "Future Perfect Continuous"
                 ]
+                visuals: string -> description of how exercise has to look visually.
                 amount : int
         
         #Teacher's request:

@@ -16,6 +16,7 @@ class HtmlRequest(BaseModel):
 
 class PromptTestSection(BaseModel):
     task_type: Literal["vocabulary", "grammar", "reading", "writing"]
+    description: str
     subject: Literal[
         "Present Simple",
         "Present Continuous",
@@ -30,6 +31,7 @@ class PromptTestSection(BaseModel):
         "Future Perfect",
         "Future Perfect Continuous"
     ]
+    visuals: str
     amount : int
 
 class Exercise(BaseModel):
