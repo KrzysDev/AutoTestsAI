@@ -9,9 +9,9 @@ from backend.app.models.prompts import SystemPrompts
 # </summary>
 class PromptParserService:
 
-    def __init__(self):
+    def __init__(self, ai_service: AiService):
 
-        self.ai_service =AiService()
+        self.ai_service = ai_service
 
         self.prompts = SystemPrompts()
 
