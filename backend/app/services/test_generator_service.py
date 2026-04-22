@@ -17,12 +17,18 @@ import time
 # Includes classification, prompt parsing, retrieval, and final test generation.
 # </summary>
 class TestGeneratorService:
-    def __init__(self):
-        self.ai_service = AiService()
-        self.search_service = SearchService()
+    def __init__(
+        self,
+        ai_service: AiService,
+        search_service: SearchService,
+        classification_service: "ClassificationService",
+        prompt_parser_service: "PromptParserService",
+    ):
+        self.ai_service = ai_service
+        self.search_service = search_service
         self.prompts = SystemPrompts()
-        self.classification_service = ClassificationService()
-        self.prompt_parser_service = PromptParserService()
+        self.classification_service = classification_service
+        self.prompt_parser_service = prompt_parser_service
         self.json_test_converting_service = JsonTestConvertingService()
 
     def generate_test_from_prompt(self, prompt: str) -> TestGeneratorResponse:

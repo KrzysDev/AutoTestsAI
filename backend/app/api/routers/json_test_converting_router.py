@@ -1,17 +1,20 @@
 from backend.app.services.json_test_converting_service import JsonTestConvertingService
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 from backend.app.models.schemas import GeneratedTest, PDFTest
 from backend.app.services.ai_service import AiService
 from backend.app.models.prompts import SystemPrompts
+from backend.app.dependencies import get_ai_service, get_json_test_converting_service
 import io
 
 router = APIRouter()
-ai_service = AiService()
-json_test_converting_service = JsonTestConvertingService()
 
 @router.post("/v1/rag/test/convert", response_class=StreamingResponse)
-async def convert_test(test_data: GeneratedTest):
+async def convert_test(
+    test_data: GeneratedTest,
+    ai_service: AiService = Depends(get_ai_service),
+    json_test_converting_service: JsonTestConvertingService = Depends(get_json_test_converting_service),
+):
     system_prompts = SystemPrompts()
     # Use the new structured prompt
     prompt = system_prompts.get_test_restructuring_prompt(test_data)

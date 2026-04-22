@@ -1,17 +1,22 @@
-from fastapi import APIRouter, HTTPException, Request, Body
+from fastapi import APIRouter, HTTPException, Request, Body, Depends
 import ollama
 from backend.app.services.ai_service import AiService
+from backend.app.dependencies import get_ai_service
 from datetime import datetime
 from collections import defaultdict
 
 router = APIRouter()
 
-ai_service = AiService()
-
+# NOTE: last_requests_cloud remains global in-memory for now.
+# This will be replaced with a Redis-backed rate limiter in a future step (point 6).
 last_requests_cloud = defaultdict(lambda: datetime.min)
 
 @router.post("/v1/rag/ask")
-async def ask_ollama_cloud(request: Request, text: str = Body(..., description="Query for the cloud AI")):
+async def ask_ollama_cloud(
+    request: Request,
+    text: str = Body(..., description="Query for the cloud AI"),
+    ai_service: AiService = Depends(get_ai_service),
+):
     client_ip = request.client.host
     now = datetime.now()
     delta = (now - last_requests_cloud[client_ip]).total_seconds()

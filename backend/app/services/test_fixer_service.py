@@ -4,8 +4,8 @@ from backend.app.models.schemas import GeneratedTest
 import json
 
 class TestFixerService:
-    def __init__(self):
-        self.ai_service = AiService()
+    def __init__(self, ai_service: AiService):
+        self.ai_service = ai_service
         self.prompts = SystemPrompts()
 
     def fix_test(self, test: GeneratedTest, teacher_prompt: str) -> GeneratedTest:

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Response, Depends
 from fastapi.responses import StreamingResponse
 import io
 from backend.app.services.test_generator_service import TestGeneratorService
@@ -12,18 +12,21 @@ from backend.app.models.schemas import (
 )
 
 from backend.app.services.html_test_converter_service import HtmlConvertingService
+from backend.app.dependencies import (
+    get_test_generator_service,
+    get_test_fixer_service,
+    get_html_converting_service,
+)
 import json
 import io
 
 router = APIRouter()
 
-test_generator_service = TestGeneratorService()
-test_fixer_service = TestFixerService()
-
-html_converting_service = HtmlConvertingService()
-
 @router.post("/v1/rag/test/fix")
-async def fix_test(request: TestFixRequest):
+async def fix_test(
+    request: TestFixRequest,
+    test_fixer_service: TestFixerService = Depends(get_test_fixer_service),
+):
     try:
         fixed_test = test_fixer_service.fix_test(
             test=request.generated_test,
@@ -33,10 +36,11 @@ async def fix_test(request: TestFixRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-from fastapi import Body
-
 @router.post("/v1/rag/test/convert/html")
-async def convert_html_to_pdf(request: HtmlRequest):
+async def convert_html_to_pdf(
+    request: HtmlRequest,
+    html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
+):
 
     request.html = "\n".join(request.html)
     pdf_bytes = html_converting_service.convert_html_to_pdf(request.html)
@@ -51,7 +55,10 @@ async def convert_html_to_pdf(request: HtmlRequest):
     )
 
 @router.post("/v1/rag/test/generate/by_prompt")
-async def generate_with_prompt(request: PromptRequest):
+async def generate_with_prompt(
+    request: PromptRequest,
+    test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
+):
     try:
         response = test_generator_service.generate_test_from_prompt(
             prompt=request.prompt
@@ -62,7 +69,10 @@ async def generate_with_prompt(request: PromptRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/v1/rag/test/generate/by_survey")
-async def generate_with_survey(request: TestSurveyRequest):
+async def generate_with_survey(
+    request: TestSurveyRequest,
+    test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
+):
     try:
         response = test_generator_service.generate_test_from_survey(
             form=request.form
@@ -72,7 +82,11 @@ async def generate_with_survey(request: TestSurveyRequest):
         raise HTTPException(status_code=500, detail=str(e))
         
 @router.post("/v1/rag/test/generate_html/by_prompt")
-async def generate_html_test_with_prompt(request: PromptRequest):
+async def generate_html_test_with_prompt(
+    request: PromptRequest,
+    test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
+    html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
+):
     try:
         result = test_generator_service.generate_html_test_from_prompt(request.prompt)
         
@@ -93,7 +107,11 @@ async def generate_html_test_with_prompt(request: PromptRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/v1/rag/test/generate_html/by_survey")
-async def generate_html_test_with_survey(request: TestSurveyRequest):
+async def generate_html_test_with_survey(
+    request: TestSurveyRequest,
+    test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
+    html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
+):
     try:
         result = test_generator_service.generate_html_test_from_survey(request.form)
         
