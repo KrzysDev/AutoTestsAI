@@ -18,32 +18,26 @@ class SearchService:
         )
         
 
-    def search(self, subject: str):
-        all_points = []
-        offset = None
+def search(self, subject: str):
+    result = self.client.scroll(
+        collection_name="Grammar Collection",
+        limit=100,
+        with_payload=True,
+        with_vectors=False,
+        filter={
+            "must": [
+                {
+                    "key": "subject",
+                    "match": {
+                        "value": subject
+                    }
+                }
+            ]
+        }
+    )
 
-        while True:
-            batch, next_offset = self.client.scroll(
-                collection_name="Grammar Collection",
-                limit=100,
-                offset=offset,
-                with_payload=True,
-                with_vectors=True, 
-            )
-
-            all_points.extend(batch)
-
-            if next_offset is None:
-                break
-
-            offset = next_offset
-
-        filtered_points = [
-            point for point in all_points
-            if point.payload.get("subject").startswith(subject)
-        ]
-        
-        return [point.payload for point in filtered_points]
+    points, _ = result
+    return [point.payload for point in points]
        
 
 
