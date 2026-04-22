@@ -1,4 +1,4 @@
-import requests
+import httpx
 import os
 import dotenv
 from ollama import Client
@@ -28,21 +28,22 @@ class AiService:
             )
             return response["message"]["content"]
         else:
-            response = requests.post(
-                url="https://openrouter.ai/api/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
-                },
-                json={
-                    "model": self.model,
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": text
-                        }
-                    ]
-                }
-            )
-
-            data = response.json()
-            return data["choices"][0]["message"]["content"]
+            with httpx.Client(timeout=60.0) as client:
+                response = client.post(
+                    url="https://openrouter.ai/api/v1/chat/completions",
+                    headers={
+                        "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
+                    },
+                    json={
+                        "model": self.model,
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": text
+                            }
+                        ]
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data["choices"][0]["message"]["content"]
