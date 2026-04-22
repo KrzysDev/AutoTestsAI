@@ -5,7 +5,7 @@ from backend.app.dependencies import get_search_service
 router = APIRouter()
 
 @router.post("/v1/rag/search")
-async def search(
+def search(
     text: str,
     search_service: SearchService = Depends(get_search_service),
 ):

@@ -10,7 +10,7 @@ import io
 router = APIRouter()
 
 @router.post("/v1/rag/test/convert", response_class=StreamingResponse)
-async def convert_test(
+def convert_test(
     test_data: GeneratedTest,
     ai_service: AiService = Depends(get_ai_service),
     json_test_converting_service: JsonTestConvertingService = Depends(get_json_test_converting_service),

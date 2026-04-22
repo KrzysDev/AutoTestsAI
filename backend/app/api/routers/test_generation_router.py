@@ -23,7 +23,7 @@ import io
 router = APIRouter()
 
 @router.post("/v1/rag/test/fix")
-async def fix_test(
+def fix_test(
     request: TestFixRequest,
     test_fixer_service: TestFixerService = Depends(get_test_fixer_service),
 ):
@@ -37,7 +37,7 @@ async def fix_test(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/v1/rag/test/convert/html")
-async def convert_html_to_pdf(
+def convert_html_to_pdf(
     request: HtmlRequest,
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
 ):
@@ -55,7 +55,7 @@ async def convert_html_to_pdf(
     )
 
 @router.post("/v1/rag/test/generate/by_prompt")
-async def generate_with_prompt(
+def generate_with_prompt(
     request: PromptRequest,
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
 ):
@@ -69,7 +69,7 @@ async def generate_with_prompt(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/v1/rag/test/generate/by_survey")
-async def generate_with_survey(
+def generate_with_survey(
     request: TestSurveyRequest,
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
 ):
@@ -82,7 +82,7 @@ async def generate_with_survey(
         raise HTTPException(status_code=500, detail=str(e))
         
 @router.post("/v1/rag/test/generate_html/by_prompt")
-async def generate_html_test_with_prompt(
+def generate_html_test_with_prompt(
     request: PromptRequest,
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
@@ -107,7 +107,7 @@ async def generate_html_test_with_prompt(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/v1/rag/test/generate_html/by_survey")
-async def generate_html_test_with_survey(
+def generate_html_test_with_survey(
     request: TestSurveyRequest,
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),

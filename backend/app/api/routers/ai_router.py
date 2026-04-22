@@ -12,7 +12,7 @@ router = APIRouter()
 last_requests_cloud = defaultdict(lambda: datetime.min)
 
 @router.post("/v1/rag/ask")
-async def ask_ollama_cloud(
+def ask_ollama_cloud(
     request: Request,
     text: str = Body(..., description="Query for the cloud AI"),
     ai_service: AiService = Depends(get_ai_service),
