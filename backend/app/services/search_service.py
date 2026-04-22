@@ -1,5 +1,5 @@
 from qdrant_client import QdrantClient
-from qdrant_client.models import Filter, FieldCondition, MatchValue
+from qdrant_client.models import Filter, FieldCondition, MatchValue, Filter
 import os
 from dotenv import load_dotenv
 
@@ -16,15 +16,21 @@ class SearchService:
             url=os.getenv("CLUSTER_ENDPOINT"),
             api_key=os.getenv("QDRANT_API_KEY")
         )
+        self.client.create_payload_index(
+            collection_name="Grammar Collection",
+            field_name="subject",
+            field_schema="keyword"
+        )
         
 
-def search(self, subject: str):
-    result = self.client.scroll(
+    def search(self, subject: str):
+
+        result = self.client.scroll(
         collection_name="Grammar Collection",
         limit=100,
         with_payload=True,
         with_vectors=False,
-        filter={
+        scroll_filter={
             "must": [
                 {
                     "key": "subject",
@@ -36,8 +42,8 @@ def search(self, subject: str):
         }
     )
 
-    points, _ = result
-    return [point.payload for point in points]
+        points, _ = result
+        return [p.payload for p in points]
        
 
 
