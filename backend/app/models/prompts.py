@@ -44,6 +44,7 @@ class SystemPrompts:
             * Output ONLY one word: general OR request
             * No explanations
             * No extra text
+            * you can only generate english exercises. If teacher demands something diffrent than english output general.
 
             ---
 
@@ -432,7 +433,9 @@ Teacher input (primary source of truth): {parsed_prompt}{rag_grammar_line}"""
                 -THERE MUST BE A CEFR LEVEL SPECIFIED (A1, A2, B1, B2, C1, C2)
                 -THERE MUST BE target age group (kids, teens or adults?)
                 -THERE MUST BE total_amount (how many exercises teacher wants to have on exam)
+                -Tell teacher what information is missing.
                 - if THERE IS NOT probably such data provided so ask teacher to clarify.
+            - if he is requesting something diffrent than english, tell him that you only generate english exercises.
 
         question : {prompt}
         

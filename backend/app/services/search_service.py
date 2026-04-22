@@ -31,16 +31,16 @@ class SearchService:
         with_payload=True,
         with_vectors=False,
         scroll_filter={
-            "must": [
-                {
-                    "key": "subject",
-                    "match": {
-                        "value": subject
+                "must": [
+                    {
+                        "key": "subject",
+                        "match": {
+                            "value": subject
+                        }
                     }
-                }
-            ]
-        }
-    )
+                ]
+            }
+        )
 
         points, _ = result
         return [p.payload for p in points]
