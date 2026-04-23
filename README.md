@@ -39,17 +39,8 @@ My sister and my mom are teachers, and I've seen how they prepare tests for thei
 ---
 
 ## 🚀 Quick Start — Just want to use the app?
+https://auto-tests-ai-frontend-bunj.vercel.app/
 
-**No Python or programming environment required.**
-
-### [⬇️ Download AutoTests AI](https://drive.google.com/file/d/1gZA_RZXuiJFlZiKH7dMfKwoCYEyGQfSz/view?usp=sharing)
-
-1. Download and unzip **AutoTestsAI.zip**
-2. Open the extracted folder
-3. Double-click **main_app.exe**
-4. That's it — the app starts automatically! 🎉
-
-> ✅ Works on Windows without any installation.
 
 ---
 
