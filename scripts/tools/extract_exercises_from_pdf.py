@@ -47,7 +47,7 @@ def main():
                 #Format
                 [
                 {{
-                "level": "B1",pozostawiasz bez zmian
+                "level": "A2",pozostawiasz bez zmian
                 "age_group": "teens", pozostawiasz bez zmian
                 "task_type": "" , tu okreslasz - reading, writing, vocabulary, grammar lub listening
                 "topic": "", topic w przypadku grammar jest jakims czasem gramatyki, vocabulary to temat slowek a czytanie i pisanie to tematy tego co uczen czyta badz pisze
@@ -55,7 +55,7 @@ def main():
                 "content": {{
                 "instruction": "...", polecenie do zadania
                 "body": "...", tresc zadania wewnatrz
-                "source": "matura"  pozostawiasz bez zmian
+                "source": "egzamin osmoklasisty"  pozostawiasz bez zmian
                 }}
                 }},
                 .....

@@ -11,6 +11,9 @@ class AiService:
             host="https://ollama.com",
             headers={'Authorization': 'Bearer ' + str(os.getenv('OLLAMA_API_KEY'))}
         )
+        self.local_ollama_client = Client(
+            host="http://localhost:11434"
+        )
         self.model = "gemini-3-flash-preview"
 
     def ask(self, text: str):
@@ -47,3 +50,15 @@ class AiService:
                 response.raise_for_status()
                 data = response.json()
                 return data["choices"][0]["message"]["content"]
+
+    def ask_local(self, text: str):
+        response = self.local_ollama_client.chat(
+            model="qwen2.5:14b-instruct",
+            messages=[
+                {
+                    "role": "user",
+                    "content": text
+                }
+            ]
+        )
+        return response["message"]["content"]
