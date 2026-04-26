@@ -1,5 +1,5 @@
 from backend.app.services.ai_service import AiService
-from backend.app.models.prompts import SystemPrompts
+from backend.app.models.languages.prompts import SystemPrompts
 
 # <summary>
 # Service responsible for classifying user prompts into specific handling strategies.

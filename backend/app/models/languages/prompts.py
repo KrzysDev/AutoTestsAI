@@ -1,4 +1,4 @@
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form
+from backend.app.models.languages.schemas import ParsedPrompt, PromptTestSection, Form
 from typing import Union
 import json
 

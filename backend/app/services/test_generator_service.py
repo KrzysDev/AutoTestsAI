@@ -1,10 +1,10 @@
 from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
-from backend.app.models.prompts import SystemPrompts
+from backend.app.models.languages.prompts import SystemPrompts
 import json
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
-from backend.app.models.schemas import ParsedPrompt, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival, Form, TestGeneratorHTMLResponse
+from backend.app.models.languages.schemas import ParsedPrompt, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival, Form, TestGeneratorHTMLResponse
 import re
 import os
 

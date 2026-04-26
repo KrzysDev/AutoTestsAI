@@ -1,8 +1,8 @@
 from backend.app.services.ai_service import AiService
 
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection
+from backend.app.models.languages.schemas import ParsedPrompt, PromptTestSection
 
-from backend.app.models.prompts import SystemPrompts
+from backend.app.models.languages.prompts import SystemPrompts
 
 # <summary>
 # Service used to parse natural language prompts into structural models for further processing.

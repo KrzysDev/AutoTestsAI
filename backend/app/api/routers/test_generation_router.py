@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 
 from backend.app.services.test_generator_service import TestGeneratorService
-from backend.app.models.schemas import (
+from backend.app.models.languages.schemas import (
     TestSurveyRequest,
     PromptRequest,
     HtmlRequest,
