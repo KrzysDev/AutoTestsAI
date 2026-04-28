@@ -96,10 +96,6 @@ class SystemPrompts:
 
         """
 
-"""
-
-        return combined_prompt
-
     def get_combined_html_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: Union[ParsedPrompt, Form], reading_enabled: bool, writing_enabled: bool):
         grammar_vocab_sections = [s for s in parsed_prompt.sections if s.task_type not in ("reading", "writing")]
         grammar_vocab_amount = sum(s.amount for s in grammar_vocab_sections)
@@ -214,8 +210,6 @@ Mandatory structural rules (layout — do NOT deviate):
 Teacher input (primary source of truth): {parsed_prompt}{rag_grammar_line}"""
 
         return combined_prompt
-
-"""
 
     def clean_json_response(self, response: str) -> str:
         import re
