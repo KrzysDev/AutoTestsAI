@@ -9,6 +9,7 @@ from backend.app.services.test_generator_service import TestGeneratorService
 from backend.app.models.schemas import (
     PromptRequest,
     HtmlRequest,
+    TestSurveyRequest,
 )
 from backend.app.services.html_test_converter_service import HtmlConvertingService
 from backend.app.dependencies import (
