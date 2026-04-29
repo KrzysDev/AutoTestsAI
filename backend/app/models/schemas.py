@@ -4,34 +4,46 @@ from typing import Literal, Union, Optional
 
 CEFR_LEVEL_DESCRIPTIONS = {
     "A1": (
-        "Description: Beginner level. Can understand and use familiar everyday expressions and very basic phrases aimed at the satisfaction of needs of a concrete type. Can introduce him/herself and others and can ask and answer questions about personal details such as where he/she lives, people he/she knows and things he/she has. Can interact in a simple way provided the other person talks slowly and clearly and is prepared to help. "
-        "Vocabulary Focus: Colors, numbers, family members, basic household objects, common verbs (to be, to have, to go), basic greetings, and personal pronouns. "
-        "Sentence Examples: 'Hello, my name is John.', 'I have a big red car.', 'Where is the library?', 'Nice to meet you.'"
+        "Description: Beginner level. Can understand and use familiar everyday expressions and very basic phrases aimed at the satisfaction of needs of a concrete type. Can introduce him/herself and others and can ask and answer questions about personal details. Can interact in a simple way. "
+        "Vocabulary Focus: Colors, numbers, family members, basic household objects, common verbs, basic greetings. "
+        "Sentence Examples: 'Hello, my name is John.', 'I have a big red car.', 'Where is the library?' "
+        "Task Difficulty: Very Low. Tasks should be extremely simple, focusing on identification and direct matching. "
+        "Example Task (Matching): Match the following words with their Polish translations: 1. Apple, 2. Book, 3. Chair, 4. Dog, 5. Elephant, 6. Father, 7. Girl, 8. House."
     ),
     "A2": (
-        "Description: Elementary level. Can understand sentences and frequently used expressions related to areas of most immediate relevance (e.g. very basic personal and family information, shopping, local geography, employment). Can communicate in simple and routine tasks requiring a simple and direct exchange of information on familiar and routine matters. Can describe in simple terms aspects of his/her background, immediate environment and matters in areas of immediate need. "
-        "Vocabulary Focus: Daily routines, shopping terms, basic hobbies and leisure activities, simple travel and transport, basic emotions and physical descriptions. "
-        "Sentence Examples: 'I went to the park yesterday.', 'She is much taller than her brother.', 'Can you tell me the way to the station?', 'I like cooking in my free time.'"
+        "Description: Elementary level. Can understand sentences and frequently used expressions related to areas of most immediate relevance. Can communicate in simple and routine tasks requiring a simple and direct exchange of information. "
+        "Vocabulary Focus: Daily routines, shopping terms, basic hobbies, simple travel, basic emotions. "
+        "Sentence Examples: 'I went to the park yesterday.', 'She is much taller than her brother.', 'I like cooking.' "
+        "Task Difficulty: Low. Tasks involve basic context understanding, simple multiple-choice questions, or short gap-fills in isolated sentences. "
+        "Example Task (MCQ): Choose the correct answer: 1. I (go/goes/going) to school. 2. She (is/are/am) happy. 3. They (have/has) a dog. 4. We (was/were) at home. 5. He (do/does) his homework. 6. Look! It (rains/is raining)."
     ),
     "B1": (
-        "Description: Intermediate level. Can understand the main points of clear standard input on familiar matters regularly encountered in work, school, leisure, etc. Can deal with most situations likely to arise whilst travelling in an area where the language is spoken. Can produce simple connected text on topics which are familiar or of personal interest. Can describe experiences and events, dreams, hopes & ambitions and briefly give reasons and explanations for opinions and plans. "
-        "Vocabulary Focus: Work and employment, education and school life, leisure and travel experiences, expressing personal opinions, talking about plans, dreams, and ambitions. "
-        "Sentence Examples: 'I have lived in this city for over five years.', 'If it rains tomorrow, we will stay at home.', 'I believe that this book is worth reading because...', 'I am planning to study abroad next year.'"
+        "Description: Intermediate level. Can understand the main points of clear standard input on familiar matters. Can deal with most situations while travelling. Can produce simple connected text on topics which are familiar or of personal interest. "
+        "Vocabulary Focus: Work and employment, education, leisure and travel experiences, expressing personal opinions. "
+        "Sentence Examples: 'I have lived in this city for over five years.', 'If it rains tomorrow, we will stay at home.' "
+        "Task Difficulty: Moderate. Tasks require connecting ideas, understanding simple paragraphs, and using common grammatical structures in context. "
+        "Example Task (Gap Fill): Fill in the gaps with ONE word: 1. I have ___ waiting for you. 2. If I ___ you, I would go. 3. The book ___ written by him. 4. She is interested ___ music. 5. He is the man ___ lives next door. 6. They ___ not seen the movie yet."
     ),
     "B2": (
-        "Description: Upper Intermediate level. Can understand the main ideas of complex text on both concrete and abstract topics, including technical discussions in his/her field of specialisation. Can interact with a degree of fluency and spontaneity that makes regular interaction with native speakers quite possible without strain for either party. Can produce clear, detailed text on a wide range of subjects and explain a viewpoint on a topical issue giving the advantages and disadvantages of various options. "
-        "Vocabulary Focus: Concrete and abstract concepts, technical and professional terminology, expressing advantages and disadvantages, complex social issues, and detailed descriptions of experiences. "
-        "Sentence Examples: 'If I had more free time, I would certainly take up a new hobby.', 'The problem currently being discussed is far more complex than it appears.', 'Despite the challenging circumstances, they managed to succeed.', 'It is generally argued that technology has changed our lives.'"
+        "Description: Upper Intermediate level. Can understand the main ideas of complex text on both concrete and abstract topics. Can interact with a degree of fluency and spontaneity. Can produce clear, detailed text. "
+        "Vocabulary Focus: Abstract concepts, technical terminology, expressing advantages/disadvantages, social issues. "
+        "Sentence Examples: 'If I had more free time, I would certainly take up a new hobby.', 'Despite the circumstances, they succeeded.' "
+        "Task Difficulty: High. Tasks involve identifying tone, paraphrasing complex ideas, and using advanced vocabulary. Word formation and sentence transformations are common. "
+        "Example Task (Transformations): Rewrite the sentence using the word given: 1. I'm sure he is tired. (MUST) -> He... 2. It was a mistake to buy this. (SHOULDN'T) -> I... 3. They are building a new road. (BEING) -> A new road... 4. 'I am sorry,' he said. (APOLOGIZED) -> He... 5. Although it was cold, we went out. (DESPITE) -> ... 6. He started here in 2010. (WORKING) -> He has..."
     ),
     "C1": (
-        "Description: Advanced level. Can understand a wide range of demanding, longer texts, and recognise implicit meaning. Can express him/herself fluently and spontaneously without much obvious searching for expressions. Can use language flexibly and effectively for social, academic and professional purposes. Can produce clear, well-structured, detailed text on complex subjects, showing controlled use of organisational patterns, connectors and cohesive devices. "
-        "Vocabulary Focus: Idiomatic expressions, nuanced and sophisticated vocabulary, academic and professional jargon, understanding implicit meaning and subtle irony. "
-        "Sentence Examples: 'Hardly had the meeting started when the fire alarm rang.', 'Had it not been for your invaluable assistance, we would never have finished.', 'It is absolutely essential that everyone be aware of the new regulations.', 'The implications of this decision are far-reaching and multifaceted.'"
+        "Description: Advanced level. Can understand a wide range of demanding, longer texts, and recognise implicit meaning. Can express him/herself fluently and spontaneously. Can use language flexibly and effectively for social, academic and professional purposes. "
+        "Vocabulary Focus: Idiomatic expressions, nuanced vocabulary, academic jargon, implicit meaning, irony. "
+        "Sentence Examples: 'Hardly had the meeting started when the fire alarm rang.', 'Had it not been for your help, we would have failed.' "
+        "Task Difficulty: Very High. Tasks require detecting subtle nuances, understanding complex arguments, and using rare or highly specific vocabulary and structures. "
+        "Example Task (Vocabulary Nuances): Choose the best word to fit the gap: 1. The manager ___ the importance of safety. (stressed/highlighted/underlined/marked) 2. A ___ of hope remained. (shred/glimmer/piece/bit) 3. He was ___ with pride. (beaming/glowing/shining/radiating) 4. The news was a bitter ___ to swallow. (pill/medicine/task/food) 5. She has a ___ for detail. (knack/eye/gift/talent) 6. The situation was fraught ___ danger. (with/of/by/to)."
     ),
     "C2": (
-        "Description: Proficiency level. Can understand with ease virtually everything heard or read. Can summarise information from different spoken and written sources, reconstructing arguments and accounts in a coherent presentation. Can express him/herself spontaneously, very fluently and precisely, differentiating finer shades of meaning even in more complex situations. "
-        "Vocabulary Focus: Complete mastery of sophisticated vocabulary, subtle nuances of meaning, ability to summarise and synthesize information from diverse and complex sources. "
-        "Sentence Examples: 'The sheer magnitude of the discovery was, to put it mildly, quite staggering.', 'Lest the message be misunderstood, it was repeated with even greater emphasis.', 'So subtle were the changes in the atmosphere that they almost went completely unnoticed.', 'The complexity of the situation defies any simple explanation.'"
+        "Description: Proficiency level. Can understand with ease virtually everything heard or read. Can summarise information from different sources. Can express him/herself spontaneously, very fluently and precisely. "
+        "Vocabulary Focus: Complete mastery of sophisticated vocabulary, subtle nuances, synthesis of complex information. "
+        "Sentence Examples: 'The sheer magnitude of the discovery was staggering.', 'Lest the message be misunderstood, it was repeated.' "
+        "Task Difficulty: Professional/Native. Tasks involve synthesizing diverse information, extremely complex sentence structures, and absolute precision in meaning. "
+        "Example Task (Advanced Synthesis): Rewrite the following complex sentences into a single coherent paragraph using sophisticated connectors: 1. The company's profits have declined. 2. This is due to market saturation. 3. New competitors have entered the field. 4. The board of directors is considering a merger. 5. This merger might save the firm. 6. Employees are worried about their jobs."
     )
 }
 
