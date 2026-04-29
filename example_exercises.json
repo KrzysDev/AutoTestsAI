@@ -1,0 +1,1295 @@
+[
+  {
+    "id": "present-simple_grammar_mcq",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Simple",
+      "cefr": "A1",
+      "topic": "Present Simple",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Choose the correct form of the verb in the present simple.",
+      "body": "1. She ___ (like) coffee.\nA) likes\nB) liked\nC) like\nD) liking\n\n2. They ___ (go) to work every day.\nA) goes\nB) go\nC) gone\nD) going\n\n3. He ___ (watch) TV in the evening.\nA) watches\nB) watch\nC) watching\nD) watched\n\n4. I ___ (have) a red car.\nA) has\nB) have\nC) having\nD) had\n\n5. The cat ___ (sleep) on the sofa.\nA) sleeps\nB) sleep\nC) sleeping\nD) slept\n\n6. We ___ (eat) breakfast at 8 am.\nA) eaten\nB) ate\nC) eat\nD) eats\n\n7. My mother ___ (cook) dinner.\nA) cooks\nB) cook\nC) cooking\nD) cooked\n\n8. You ___ (study) English.\nA) studies\nB) study\nC) studying\nD) studied\n\n9. The shop ___ (open) at 9:00.\nA) opens\nB) open\nC) opened\nD) opening\n\n10. Dogs ___ (bark) loudly.\nA) barks\nB) bark\nC) barking\nD) barked",
+      "answer_key": {
+        "1": "A",
+        "2": "B",
+        "3": "A",
+        "4": "B",
+        "5": "A",
+        "6": "C",
+        "7": "A",
+        "8": "B",
+        "9": "A",
+        "10": "B"
+      }
+    }
+  },
+  {
+    "id": "present-simple_grammar_gap_fill",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Simple",
+      "cefr": "A1",
+      "topic": "Present Simple",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Fill in the blanks with the correct form of the verb in brackets. (1 pt each)",
+      "body": "I ______ (live) in a blue house.\nShe ______ (like) tea every morning.\nWe ______ (have) two children.\nTom ______ (work) in a bank.\nThe cat ______ (sleep) on the sofa.\nYou ______ (speak) English very well.\nMy mother ______ (cook) dinner at 7 p.m.\nDogs ______ (like) to run in the park.\nHe ______ (watch) TV after work.\nThe store ______ (open) at 9 a.m.",
+      "answer_key": {
+        "1": "live",
+        "2": "likes",
+        "3": "have",
+        "4": "works",
+        "5": "sleeps",
+        "6": "speak",
+        "7": "cooks",
+        "8": "like",
+        "9": "watches",
+        "10": "opens"
+      }
+    }
+  },
+  {
+    "id": "present-simple_grammar_transformation",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Simple",
+      "cefr": "A1",
+      "topic": "Present Simple",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Rewrite the second sentence using the word in brackets so that it has the same meaning as the first sentence.",
+      "body": [
+        {
+          "first_sentence": "She lives in London.",
+          "keyword": "in",
+          "transformed_sentence": "She lives _____ London."
+        },
+        {
+          "first_sentence": "Tom works at a bank.",
+          "keyword": "at",
+          "transformed_sentence": "Tom works _____ a bank."
+        },
+        {
+          "first_sentence": "They have two children.",
+          "keyword": "two",
+          "transformed_sentence": "They have _____ children."
+        },
+        {
+          "first_sentence": "We eat breakfast at 8 o’clock.",
+          "keyword": "at",
+          "transformed_sentence": "We eat breakfast _____ 8 o’clock."
+        },
+        {
+          "first_sentence": "Maria likes coffee.",
+          "keyword": "likes",
+          "transformed_sentence": "Coffee is _____ by Maria."
+        },
+        {
+          "first_sentence": "The shop opens at nine.",
+          "keyword": "opens",
+          "transformed_sentence": "The shop _____ at nine."
+        }
+      ],
+      "answer_key": {
+        "1": "in",
+        "2": "at",
+        "3": "two",
+        "4": "at",
+        "5": "liked",
+        "6": "opens"
+      }
+    }
+  },
+  {
+    "id": "present-continuous_grammar_mcq",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Continuous",
+      "cefr": "A1",
+      "topic": "Present Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Choose the correct answer (A‑D) for each sentence.",
+      "body": [
+        {
+          "number": 1,
+          "sentence": "I ____ (watch) TV now.",
+          "options": {
+            "A": "watches",
+            "B": "am watching",
+            "C": "is watching",
+            "D": "watch"
+          }
+        },
+        {
+          "number": 2,
+          "sentence": "She ____ (read) a book at the moment.",
+          "options": {
+            "A": "reading",
+            "B": "is read",
+            "C": "is reading",
+            "D": "reads"
+          }
+        },
+        {
+          "number": 3,
+          "sentence": "They ____ (play) football in the park.",
+          "options": {
+            "A": "are playing",
+            "B": "playing",
+            "C": "is playing",
+            "D": "play"
+          }
+        },
+        {
+          "number": 4,
+          "sentence": "My mother ____ (cook) dinner now.",
+          "options": {
+            "A": "cooks",
+            "B": "am cooking",
+            "C": "is cooking",
+            "D": "cooking"
+          }
+        },
+        {
+          "number": 5,
+          "sentence": "We ____ (listen) to music.",
+          "options": {
+            "A": "listening",
+            "B": "are listening",
+            "C": "is listening",
+            "D": "listen"
+          }
+        },
+        {
+          "number": 6,
+          "sentence": "He ____ (study) English today.",
+          "options": {
+            "A": "study",
+            "B": "is studying",
+            "C": "are studying",
+            "D": "studies"
+          }
+        },
+        {
+          "number": 7,
+          "sentence": "The cat ____ (sleep) on the sofa.",
+          "options": {
+            "A": "is sleeping",
+            "B": "sleeping",
+            "C": "are sleeping",
+            "D": "sleeps"
+          }
+        },
+        {
+          "number": 8,
+          "sentence": "I ____ (write) an email now.",
+          "options": {
+            "A": "am writing",
+            "B": "is writing",
+            "C": "writing",
+            "D": "writes"
+          }
+        },
+        {
+          "number": 9,
+          "sentence": "You ____ (talk) too fast.",
+          "options": {
+            "A": "are talking",
+            "B": "is talking",
+            "C": "talking",
+            "D": "talk"
+          }
+        },
+        {
+          "number": 10,
+          "sentence": "The children ____ (draw) pictures.",
+          "options": {
+            "A": "are drawing",
+            "B": "is drawing",
+            "C": "draw",
+            "D": "drawing"
+          }
+        }
+      ],
+      "answer_key": {
+        "1": "B",
+        "2": "C",
+        "3": "A",
+        "4": "C",
+        "5": "B",
+        "6": "B",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "present-continuous_grammar_gap_fill",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Continuous",
+      "cefr": "A1",
+      "topic": "Present Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Fill the gaps with the correct Present Continuous form",
+      "body": "<ol class=\"sentences\">\n<li>I am <span class=\"blank\"></span> (watch) TV. <span class=\"points\">(1 pt)</span></li>\n<li>She is <span class=\"blank\"></span> (read) a book. <span class=\"points\">(1 pt)</span></li>\n<li>They are <span class=\"blank\"></span> (play) football. <span class=\"points\">(1 pt)</span></li>\n<li>He is <span class=\"blank\"></span> (cook) dinner. <span class=\"points\">(1 pt)</span></li>\n<li>We are <span class=\"blank\"></span> (listen) to music. <span class=\"points\">(1 pt)</span></li>\n<li>The cat is <span class=\"blank\"></span> (sleep) on the sofa. <span class=\"points\">(1 pt)</span></li>\n<li>My friends are <span class=\"blank\"></span> (talk) on the phone. <span class=\"points\">(1 pt)</span></li>\n<li>The children are <span class=\"blank\"></span> (draw) pictures. <span class=\"points\">(1 pt)</span></li>\n<li>You are <span class=\"blank\"></span> (write) a letter. <span class=\"points\">(1 pt)</span></li>\n<li>It is <span class=\"blank\"></span> (rain) now. <span class=\"points\">(1 pt)</span></li>\n</ol>",
+      "answer_key": {
+        "1": "watching",
+        "2": "reading",
+        "3": "playing",
+        "4": "cooking",
+        "5": "listening",
+        "6": "sleeping",
+        "7": "talking",
+        "8": "drawing",
+        "9": "writing",
+        "10": "raining"
+      }
+    }
+  },
+  {
+    "id": "present-continuous_grammar_transformation",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Continuous",
+      "cefr": "A1",
+      "topic": "Present Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Rewrite the second sentence so that it has the same meaning as the first one. Use the given key word. Each correct answer is worth 2 pts.",
+      "body": "1. She is reading a book now. Key word: reading. She _________ a book at the moment.\n2. They are watching TV in the kitchen. Key word: watching. They _________ TV in the kitchen.\n3. I am eating breakfast right now. Key word: eating. I _________ breakfast at the moment.\n4. The dog is sleeping on the sofa. Key word: sleeping. The dog _________ on the sofa.\n5. We are cleaning the house today. Key word: cleaning. We _________ the house today.\n6. He is writing a letter now. Key word: writing. He _________ a letter at the moment.",
+      "answer_key": {
+        "1": "is reading",
+        "2": "are watching",
+        "3": "am eating",
+        "4": "is sleeping",
+        "5": "are cleaning",
+        "6": "is writing"
+      }
+    }
+  },
+  {
+    "id": "present-perfect_grammar_mcq",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Perfect",
+      "cefr": "A1",
+      "topic": "Present Perfect",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Choose the correct answer (1 point each).",
+      "body": [
+        {
+          "number": 1,
+          "sentence": "I ____ (live) in this city for five years.",
+          "options": {
+            "A": "lived",
+            "B": "have lived",
+            "C": "has lived",
+            "D": "am living"
+          }
+        },
+        {
+          "number": 2,
+          "sentence": "She ____ (finish) her homework already.",
+          "options": {
+            "A": "finished",
+            "B": "has finished",
+            "C": "have finished",
+            "D": "is finishing"
+          }
+        },
+        {
+          "number": 3,
+          "sentence": "They ____ (be) to Paris three times.",
+          "options": {
+            "A": "have been",
+            "B": "has been",
+            "C": "were",
+            "D": "are"
+          }
+        },
+        {
+          "number": 4,
+          "sentence": "He ____ (eat) breakfast this morning.",
+          "options": {
+            "A": "has eaten",
+            "B": "have eaten",
+            "C": "ate",
+            "D": "is eating"
+          }
+        },
+        {
+          "number": 5,
+          "sentence": "We ____ (see) that movie already.",
+          "options": {
+            "A": "saw",
+            "B": "have seen",
+            "C": "has seen",
+            "D": "are seeing"
+          }
+        },
+        {
+          "number": 6,
+          "sentence": "My brother ____ (write) three letters this week.",
+          "options": {
+            "A": "wrote",
+            "B": "has written",
+            "C": "have written",
+            "D": "is writing"
+          }
+        },
+        {
+          "number": 7,
+          "sentence": "The shop ____ (close) early today.",
+          "options": {
+            "A": "closed",
+            "B": "has closed",
+            "C": "have closed",
+            "D": "is closing"
+          }
+        },
+        {
+          "number": 8,
+          "sentence": "I ____ (break) my arm once.",
+          "options": {
+            "A": "broke",
+            "B": "have broken",
+            "C": "has broken",
+            "D": "am breaking"
+          }
+        },
+        {
+          "number": 9,
+          "sentence": "You ____ (travel) to Spain before?",
+          "options": {
+            "A": "have traveled",
+            "B": "has traveled",
+            "C": "traveled",
+            "D": "are traveling"
+          }
+        },
+        {
+          "number": 10,
+          "sentence": "She ____ (not/see) that film yet.",
+          "options": {
+            "A": "hasn't seen",
+            "B": "haven't seen",
+            "C": "didn't see",
+            "D": "isn't seeing"
+          }
+        }
+      ],
+      "answer_key": {
+        "1": "B",
+        "2": "B",
+        "3": "A",
+        "4": "A",
+        "5": "B",
+        "6": "B",
+        "7": "B",
+        "8": "B",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "present-perfect_grammar_gap_fill",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Perfect",
+      "cefr": "A1",
+      "topic": "Present Perfect",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Fill in the blanks with the correct present perfect form of the verb shown in parentheses.",
+      "body": "1. I <blank> (visit) my grandparents last weekend. (1 pt)\n2. She <blank> (eat) breakfast already. (1 pt)\n3. We <blank> (see) that movie before. (1 pt)\n4. He <blank> (buy) a new bike. (1 pt)\n5. They <blank> (travel) to Spain three times. (1 pt)\n6. You <blank> (read) this book? (1 pt)\n7. The cat <blank> (sleep) on the sofa all day. (1 pt)\n8. My sister <blank> (write) a letter to her friend. (1 pt)\n9. Our teacher <blank> (give) us the homework. (1 pt)\n10. It <blank> (rain) since this morning. (1 pt)",
+      "answer_key": {
+        "1": "have visited",
+        "2": "has eaten",
+        "3": "have seen",
+        "4": "has bought",
+        "5": "have traveled",
+        "6": "have read",
+        "7": "has slept",
+        "8": "has written",
+        "9": "has given",
+        "10": "has rained"
+      }
+    }
+  },
+  {
+    "id": "present-perfect_grammar_transformation",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Perfect",
+      "cefr": "A1",
+      "topic": "Present Perfect",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Rewrite each sentence using the given key word. The new sentence must have the same meaning. Write your answer in the space provided.",
+      "body": "1. I have lived in Berlin for three years. Key word: since → ____\n2. She has just finished her work. Key word: already → ____\n3. They have never eaten sushi. Key word: not → ____\n4. We have already seen that movie. Key word: yet → ____\n5. He has visited his grandparents many times. Key word: often → ____\n6. I have not spoken to my sister today. Key word: yet → ____",
+      "answer_key": "1. I have lived in Berlin since three years ago.\n2. She has already finished her work.\n3. They have not eaten sushi.\n4. We have not seen that movie yet.\n5. He has often visited his grandparents.\n6. I have not spoken to my sister yet."
+    }
+  },
+  {
+    "id": "present-perfect-continuous_grammar_mcq",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Perfect Continuous",
+      "cefr": "A1",
+      "topic": "Present Perfect Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Choose the correct answer (A‑D) for each sentence.",
+      "body": "1. I _______ (study) English for two months.\nA) have studied\nB) have been studying\nC) studied\nD) am studying\n\n2. She _______ (read) the book since morning.\nA) has read\nB) has been reading\nC) reads\nD) is reading\n\n3. They _______ (work) together for three years.\nA) have worked\nB) have been working\nC) worked\nD) are working\n\n4. He _______ (wait) for the bus for 20 minutes.\nA) has waited\nB) has been waiting\nC) waits\nD) is waiting\n\n5. We _______ (live) in this city since 2010.\nA) have lived\nB) have been living\nC) lived\nD) are living\n\n6. Mary _______ (practice) piano for an hour.\nA) has practiced\nB) has been practicing\nC) practices\nD) is practicing\n\n7. You _______ (cook) since I arrived?\nA) have cooked\nB) have been cooking\nC) are cooking\nD) cooked\n\n8. The children _______ (play) in the garden all afternoon.\nA) have played\nB) have been playing\nC) played\nD) are playing\n\n9. I _______ (learn) Spanish for six months now.\nA) have learned\nB) have been learning\nC) learned\nD) am learning\n\n10. She _______ (drive) for two hours when she stopped for lunch.\nA) has driven\nB) has been driving\nC) drove\nD) was driving",
+      "answer_key": {
+        "1": "B",
+        "2": "B",
+        "3": "B",
+        "4": "B",
+        "5": "B",
+        "6": "B",
+        "7": "B",
+        "8": "B",
+        "9": "B",
+        "10": "D"
+      }
+    }
+  },
+  {
+    "id": "present-perfect-continuous_grammar_gap_fill",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Perfect Continuous",
+      "cefr": "A1",
+      "topic": "Present Perfect Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Fill in each blank with the correct present perfect continuous form of the verb shown in parentheses.",
+      "body": "1. I ____ (study) English for two years.\n2. She ____ (read) the book since morning.\n3. They ____ (wait) for the bus for 20 minutes.\n4. He ____ (play) football all afternoon.\n5. We ____ (cook) dinner together.\n6. My mother ____ (work) in the garden.\n7. The children ____ (watch) TV for an hour.\n8. I ____ (listen) to music lately.\n9. You ____ (travel) by train this week.\n10. The dog ____ (bark) loudly since night.",
+      "answer_key": {
+        "1": "have been studying",
+        "2": "has been reading",
+        "3": "have been waiting",
+        "4": "has been playing",
+        "5": "have been cooking",
+        "6": "has been working",
+        "7": "have been watching",
+        "8": "have been listening",
+        "9": "have been traveling",
+        "10": "has been barking"
+      }
+    }
+  },
+  {
+    "id": "present-perfect-continuous_grammar_transformation",
+    "language": "English",
+    "metadata": {
+      "subject": "Present Perfect Continuous",
+      "cefr": "A1",
+      "topic": "Present Perfect Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Present Perfect Continuous – Transform the sentences (2 pts each) (12 pts total)",
+      "body": "1. I have been <em>reading</em> the book since morning. → I <span class=\"gap\"></span> the book since morning.\n2. She has been <em>working</em> in the garden all day. → She <span class=\"gap\"></span> in the garden all day.\n3. We have been <em>learning</em> English for three months. → We <span class=\"gap\"></span> English for three months.\n4. He has been <em>cooking</em> dinner since 5 p.m. → He <span class=\"gap\"></span> dinner since 5 p.m.\n5. They have been <em>waiting</em> for the bus for ten minutes. → They <span class=\"gap\"></span> for the bus for ten minutes.\n6. I have been <em>listening</em> to music all afternoon. → I <span class=\"gap\"></span> to music all afternoon.",
+      "answer_key": {
+        "1": "have been reading",
+        "2": "has been working",
+        "3": "have been learning",
+        "4": "has been cooking",
+        "5": "have been waiting",
+        "6": "have been listening"
+      }
+    }
+  },
+  {
+    "id": "past-simple_grammar_mcq",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Simple",
+      "cefr": "A1",
+      "topic": "Past Simple",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Choose the correct answer (A‑D) for each sentence. Each question is worth 1 point.",
+      "body": "1. He ____ (go) to the market yesterday.\nA) go\nB) went\nC) gone\nD) goes\n2. They ____ (watch) a movie last night.\nA) watched\nB) watches\nC) watch\nD) watching\n3. I ____ (eat) an apple this morning.\nA) ate\nB) eat\nC) eaten\nD) eats\n4. She ____ (visit) her grandparents two days ago.\nA) visited\nB) visits\nC) visit\nD) visiting\n5. We ____ (play) football on Saturday.\nA) played\nB) play\nC) playing\nD) plays\n6. My brother ____ (buy) a new bike last week.\nA) bought\nB) buys\nC) buy\nD) buying\n7. The teacher ____ (teach) us yesterday.\nA) taught\nB) teaches\nC) teach\nD) teaching\n8. Mary ____ (write) a letter yesterday.\nA) wrote\nB) writes\nC) write\nD) writing\n9. The cat ____ (sleep) on the sofa last night.\nA) slept\nB) sleeps\nC) sleep\nD) sleeping\n10. I ____ (see) a dog in the park yesterday.\nA) saw\nB) see\nC) seen\nD) sees",
+      "answer_key": {
+        "1": "B",
+        "2": "A",
+        "3": "A",
+        "4": "A",
+        "5": "A",
+        "6": "A",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "past-simple_grammar_gap_fill",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Simple",
+      "cefr": "A1",
+      "topic": "Past Simple",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Fill the gaps with the correct Past Simple form of the verb in brackets. (1 pt each)",
+      "body": "1. I ______ (visit) my grandparents last weekend.\n2. She ______ (buy) a new dress yesterday.\n3. They ______ (watch) a movie on Friday.\n4. We ______ (eat) pizza for dinner yesterday.\n5. He ______ (go) to the park in the morning.\n6. The teacher ______ (ask) a question in class.\n7. My friends ______ (listen) to music last night.\n8. I ______ (write) a short email yesterday.\n9. She ______ (call) her mother in the afternoon.\n10. They ______ (play) football after school.",
+      "answer_key": {
+        "1": "visited",
+        "2": "bought",
+        "3": "watched",
+        "4": "ate",
+        "5": "went",
+        "6": "asked",
+        "7": "listened",
+        "8": "wrote",
+        "9": "called",
+        "10": "played"
+      }
+    }
+  },
+  {
+    "id": "past-simple_grammar_transformation",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Simple",
+      "cefr": "A1",
+      "topic": "Past Simple",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Transform the sentences using the given key word. Each question is worth 2 pts. (14 pts total)",
+      "body": [
+        {
+          "number": 1,
+          "original": "I saw a movie last night.",
+          "keyword": "watch",
+          "gap": "___ a movie last night."
+        },
+        {
+          "number": 2,
+          "original": "She bought a new car yesterday.",
+          "keyword": "buy",
+          "gap": "___ a new car yesterday."
+        },
+        {
+          "number": 3,
+          "original": "They played football on Saturday.",
+          "keyword": "play",
+          "gap": "___ football on Saturday."
+        },
+        {
+          "number": 4,
+          "original": "He ate an apple for breakfast.",
+          "keyword": "eat",
+          "gap": "___ an apple for breakfast."
+        },
+        {
+          "number": 5,
+          "original": "We visited the museum last week.",
+          "keyword": "visit",
+          "gap": "___ the museum last week."
+        },
+        {
+          "number": 6,
+          "original": "Mary called her mother this morning.",
+          "keyword": "call",
+          "gap": "___ her mother this morning."
+        },
+        {
+          "number": 7,
+          "original": "The teacher taught us the lesson yesterday.",
+          "keyword": "teach",
+          "gap": "___ us the lesson yesterday."
+        }
+      ],
+      "answer_key": {
+        "1": "I watched a movie last night.",
+        "2": "She bought a new car yesterday.",
+        "3": "They played football on Saturday.",
+        "4": "He ate an apple for breakfast.",
+        "5": "We visited the museum last week.",
+        "6": "Mary called her mother this morning.",
+        "7": "The teacher taught us the lesson yesterday."
+      }
+    }
+  },
+  {
+    "id": "past-continuous_grammar_mcq",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Continuous",
+      "cefr": "A1",
+      "topic": "Past Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Choose the correct answer (A‑D) for each sentence. Each question is worth 1 point. Total score: (10 pts)",
+      "body": [
+        {
+          "question": "She _____ TV when the phone rang.",
+          "options": {
+            "A": "watches",
+            "B": "was watching",
+            "C": "watch",
+            "D": "watched"
+          }
+        },
+        {
+          "question": "We _____ dinner at 8 pm yesterday.",
+          "options": {
+            "A": "are having",
+            "B": "were having",
+            "C": "have",
+            "D": "had"
+          }
+        },
+        {
+          "question": "He _____ his bike when it started to rain.",
+          "options": {
+            "A": "rode",
+            "B": "was riding",
+            "C": "rides",
+            "D": "is riding"
+          }
+        },
+        {
+          "question": "They _____ music while they cleaned the house.",
+          "options": {
+            "A": "listened",
+            "B": "were listening",
+            "C": "listen",
+            "D": "were listened"
+          }
+        },
+        {
+          "question": "I _____ a book when my friend called.",
+          "options": {
+            "A": "read",
+            "B": "was reading",
+            "C": "reading",
+            "D": "reads"
+          }
+        },
+        {
+          "question": "Maria _____ coffee at the café at 10 o’clock.",
+          "options": {
+            "A": "drinks",
+            "B": "was drinking",
+            "C": "drink",
+            "D": "drank"
+          }
+        },
+        {
+          "question": "It _____ heavily when we left the office.",
+          "options": {
+            "A": "rains",
+            "B": "was raining",
+            "C": "rained",
+            "D": "is raining"
+          }
+        },
+        {
+          "question": "Tom and Jerry _____ basketball in the park.",
+          "options": {
+            "A": "were playing",
+            "B": "play",
+            "C": "played",
+            "D": "are playing"
+          }
+        },
+        {
+          "question": "She _____ her homework when the lights went out.",
+          "options": {
+            "A": "did",
+            "B": "was doing",
+            "C": "does",
+            "D": "do"
+          }
+        },
+        {
+          "question": "We _____ a movie at 9 pm yesterday.",
+          "options": {
+            "A": "watch",
+            "B": "were watching",
+            "C": "watched",
+            "D": "watches"
+          }
+        }
+      ],
+      "answer_key": {
+        "1": "B",
+        "2": "B",
+        "3": "B",
+        "4": "B",
+        "5": "B",
+        "6": "B",
+        "7": "B",
+        "8": "A",
+        "9": "B",
+        "10": "B"
+      }
+    }
+  },
+  {
+    "id": "past-continuous_grammar_gap_fill",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Continuous",
+      "cefr": "A1",
+      "topic": "Past Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Complete the sentences with the correct form of the verb in parentheses (Past Continuous).",
+      "body": "1. I ______ (watch) TV when the phone rang.\n2. She ______ (read) a book at 8 pm yesterday.\n3. They ______ (play) football in the park.\n4. He ______ (cook) dinner while his wife set the table.\n5. We ______ (study) English at 7 o’clock.\n6. The cat ______ (sleep) on the sofa.\n7. My friends ______ (talk) about the movie.\n8. It ______ (rain) when we left the house.\n9. You ______ (listen) to music in your room.\n10. Anna ______ (write) a letter to her pen‑pal.",
+      "answer_key": {
+        "1": "was watching",
+        "2": "was reading",
+        "3": "were playing",
+        "4": "was cooking",
+        "5": "were studying",
+        "6": "was sleeping",
+        "7": "were talking",
+        "8": "was raining",
+        "9": "were listening",
+        "10": "was writing"
+      }
+    }
+  },
+  {
+    "id": "past-continuous_grammar_transformation",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Continuous",
+      "cefr": "A1",
+      "topic": "Past Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Key Word Transformation – Past Continuous",
+      "body": [
+        {
+          "number": 1,
+          "sentence": "I was cleaning the house.",
+          "keyword": "while",
+          "transform": "_____ my friend was calling, I was cleaning the house."
+        },
+        {
+          "number": 2,
+          "sentence": "They were playing football.",
+          "keyword": "when",
+          "transform": "_____ it started to rain, they were playing football."
+        },
+        {
+          "number": 3,
+          "sentence": "She was cooking dinner.",
+          "keyword": "as",
+          "transform": "_____ the soup boiled, she was cooking dinner."
+        },
+        {
+          "number": 4,
+          "sentence": "He was studying English.",
+          "keyword": "during",
+          "transform": "_____ the lesson, he was studying English."
+        },
+        {
+          "number": 5,
+          "sentence": "We were watching a movie.",
+          "keyword": "after",
+          "transform": "_____ we finished the popcorn, we were watching a movie."
+        },
+        {
+          "number": 6,
+          "sentence": "The children were sleeping.",
+          "keyword": "before",
+          "transform": "_____ the alarm went off, the children were sleeping."
+        }
+      ],
+      "answer_key": {
+        "1": "While my friend was calling, I was cleaning the house.",
+        "2": "When it started to rain, they were playing football.",
+        "3": "As the soup boiled, she was cooking dinner.",
+        "4": "During the lesson, he was studying English.",
+        "5": "After we finished the popcorn, we were watching a movie.",
+        "6": "Before the alarm went off, the children were sleeping."
+      }
+    }
+  },
+  {
+    "id": "past-perfect_grammar_mcq",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Perfect",
+      "cefr": "A1",
+      "topic": "Past Perfect",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Choose the correct answer",
+      "body": [
+        {
+          "number": 1,
+          "sentence": "She ____ (finish) her work before the meeting started.",
+          "options": [
+            "A) had finished",
+            "B) have finished",
+            "C) finished",
+            "D) will finish"
+          ]
+        },
+        {
+          "number": 2,
+          "sentence": "They ____ (leave) the house when it began to rain.",
+          "options": [
+            "A) had left",
+            "B) have left",
+            "C) left",
+            "D) will leave"
+          ]
+        },
+        {
+          "number": 3,
+          "sentence": "By the time we arrived, the train ____ (already/ depart).",
+          "options": [
+            "A) had already departed",
+            "B) has already departed",
+            "C) already departed",
+            "D) will already depart"
+          ]
+        },
+        {
+          "number": 4,
+          "sentence": "I didn’t see him because he ____ (go) to the shop earlier.",
+          "options": [
+            "A) had gone",
+            "B) have gone",
+            "C) went",
+            "D) will go"
+          ]
+        },
+        {
+          "number": 5,
+          "sentence": "After they ____ (eat) dinner, they watched TV.",
+          "options": [
+            "A) had eaten",
+            "B) have eaten",
+            "C) ate",
+            "D) will eat"
+          ]
+        },
+        {
+          "number": 6,
+          "sentence": "She didn’t call because she ____ (forget) my number.",
+          "options": [
+            "A) had forgotten",
+            "B) have forgotten",
+            "C) forgot",
+            "D) will forget"
+          ]
+        },
+        {
+          "number": 7,
+          "sentence": "When the teacher arrived, the students ____ (already/start) the test.",
+          "options": [
+            "A) had already started",
+            "B) have already started",
+            "C) already started",
+            "D) will already start"
+          ]
+        },
+        {
+          "number": 8,
+          "sentence": "He couldn’t answer because he ____ (not/see) the question.",
+          "options": [
+            "A) had not seen",
+            "B) have not seen",
+            "C) did not see",
+            "D) will not see"
+          ]
+        },
+        {
+          "number": 9,
+          "sentence": "By the end of the year we ____ (save) enough money for a holiday.",
+          "options": [
+            "A) had saved",
+            "B) have saved",
+            "C) saved",
+            "D) will save"
+          ]
+        },
+        {
+          "number": 10,
+          "sentence": "She felt happy because she ____ (receive) good news.",
+          "options": [
+            "A) had received",
+            "B) have received",
+            "C) received",
+            "D) will receive"
+          ]
+        }
+      ],
+      "answer_key": {
+        "1": "A",
+        "2": "A",
+        "3": "A",
+        "4": "A",
+        "5": "A",
+        "6": "A",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "past-perfect_grammar_gap_fill",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Perfect",
+      "cefr": "A1",
+      "topic": "Past Perfect",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Fill in the gaps with the correct form of the verb in brackets (Past Perfect).",
+      "body": "1. I ______ (finish) my work before dinner.\n2. She ______ (already / leave) when I arrived.\n3. They ______ (visit) the museum before it closed.\n4. He ______ (not / see) the movie yet.\n5. We ______ (eat) breakfast before the bus came.\n6. Tom ______ (write) a letter before he called.\n7. The cat ______ (sleep) all day when we returned.\n8. Maria ______ (buy) a new dress before the sale ended.\n9. John ______ (lose) his keys before he went home.\n10. Anna ______ (read) the book before the exam.",
+      "answer_key": {
+        "1": "had finished",
+        "2": "had already left",
+        "3": "had visited",
+        "4": "had not seen",
+        "5": "had eaten",
+        "6": "had written",
+        "7": "had slept",
+        "8": "had bought",
+        "9": "had lost",
+        "10": "had read"
+      }
+    }
+  },
+  {
+    "id": "past-perfect_grammar_transformation",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Perfect",
+      "cefr": "A1",
+      "topic": "Past Perfect",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Rewrite each sentence using the word given in brackets. The new sentence must have the same meaning as the original. Write your answer in the gap.",
+      "body": [
+        {
+          "number": 1,
+          "prompt": "I arrived at the station after the train had left. (leave)",
+          "gap_sentence": "I arrived after the train ______."
+        },
+        {
+          "number": 2,
+          "prompt": "She had finished her work before the boss came. (finish)",
+          "gap_sentence": "She ______ her work before the boss came."
+        },
+        {
+          "number": 3,
+          "prompt": "They had eaten dinner when we called them. (eat)",
+          "gap_sentence": "They ______ dinner when we called them."
+        },
+        {
+          "number": 4,
+          "prompt": "He had bought a new car before his birthday. (buy)",
+          "gap_sentence": "He ______ a new car before his birthday."
+        },
+        {
+          "number": 5,
+          "prompt": "We had visited the museum before it closed. (visit)",
+          "gap_sentence": "We ______ the museum before it closed."
+        },
+        {
+          "number": 6,
+          "prompt": "I had seen that film before you mentioned it. (see)",
+          "gap_sentence": "I ______ that film before you mentioned it."
+        },
+        {
+          "number": 7,
+          "prompt": "The children had gone to bed when the lights were turned on. (go)",
+          "gap_sentence": "The children ______ to bed when the lights were turned on."
+        },
+        {
+          "number": 8,
+          "prompt": "She had written a letter before she left the house. (write)",
+          "gap_sentence": "She ______ a letter before she left the house."
+        }
+      ],
+      "answer_key": {
+        "1": "I arrived after the train had left.",
+        "2": "She had finished her work before the boss came.",
+        "3": "They had eaten dinner when we called them.",
+        "4": "He had bought a new car before his birthday.",
+        "5": "We had visited the museum before it closed.",
+        "6": "I had seen that film before you mentioned it.",
+        "7": "The children had gone to bed when the lights were turned on.",
+        "8": "She had written a letter before she left the house."
+      }
+    }
+  },
+  {
+    "id": "past-perfect-continuous_grammar_mcq",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Perfect Continuous",
+      "cefr": "A1",
+      "topic": "Past Perfect Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Choose the correct form to complete each sentence. (Each question = 1 point)",
+      "body": [
+        {
+          "question": "She _______ (watch) TV when the phone rang.",
+          "options": {
+            "A": "had watched",
+            "B": "had been watching",
+            "C": "was watch",
+            "D": "watched"
+          }
+        },
+        {
+          "question": "They _______ (travel) for two hours before they stopped.",
+          "options": {
+            "A": "had traveled",
+            "B": "had been traveling",
+            "C": "traveled",
+            "D": "were traveling"
+          }
+        },
+        {
+          "question": "I _______ (read) the book when the lights went out.",
+          "options": {
+            "A": "had read",
+            "B": "had been reading",
+            "C": "read",
+            "D": "was reading"
+          }
+        },
+        {
+          "question": "He _______ (cook) dinner when the guests arrived.",
+          "options": {
+            "A": "had cooked",
+            "B": "had been cooking",
+            "C": "cooked",
+            "D": "was cooking"
+          }
+        },
+        {
+          "question": "We _______ (wait) for the bus for 10 minutes.",
+          "options": {
+            "A": "had waited",
+            "B": "had been waiting",
+            "C": "waited",
+            "D": "were waiting"
+          }
+        },
+        {
+          "question": "The children _______ (play) in the garden before it started to rain.",
+          "options": {
+            "A": "had played",
+            "B": "had been playing",
+            "C": "played",
+            "D": "were playing"
+          }
+        },
+        {
+          "question": "Maria _______ (study) English all morning.",
+          "options": {
+            "A": "had studied",
+            "B": "had been studying",
+            "C": "studied",
+            "D": "was studying"
+          }
+        },
+        {
+          "question": "John _______ (run) when he felt a cramp.",
+          "options": {
+            "A": "had run",
+            "B": "had been running",
+            "C": "ran",
+            "D": "was running"
+          }
+        },
+        {
+          "question": "The cat _______ (sleep) on the chair all day.",
+          "options": {
+            "A": "had slept",
+            "B": "had been sleeping",
+            "C": "slept",
+            "D": "was sleeping"
+          }
+        },
+        {
+          "question": "You _______ (work) here since last year before you left.",
+          "options": {
+            "A": "had worked",
+            "B": "had been working",
+            "C": "worked",
+            "D": "were working"
+          }
+        }
+      ],
+      "answer_key": {
+        "1": "B",
+        "2": "B",
+        "3": "B",
+        "4": "B",
+        "5": "B",
+        "6": "B",
+        "7": "B",
+        "8": "B",
+        "9": "B",
+        "10": "B"
+      }
+    }
+  },
+  {
+    "id": "past-perfect-continuous_grammar_gap_fill",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Perfect Continuous",
+      "cefr": "A1",
+      "topic": "Past Perfect Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Complete the sentences with the correct form of the verb in brackets (Past Perfect Continuous).",
+      "body": "1. She ____ (study) English for two hours before the test started.\n2. They ____ (wait) for the bus when it began to rain.\n3. I ____ (read) that book all afternoon yesterday.\n4. He ____ (work) in the garden before the neighbors arrived.\n5. We ____ (talk) about the movie when the lights went out.\n6. Anna ____ (cook) dinner for an hour before the guests came.\n7. The children ____ (play) outside when the storm started.\n8. John ____ (exercise) at the gym before he felt dizzy.\n9. Maria ____ (learn) French for three months before she visited Paris.\n10. We ____ (travel) through the city when we saw the parade.",
+      "answer_key": {
+        "1": "had been studying",
+        "2": "had been waiting",
+        "3": "had been reading",
+        "4": "had been working",
+        "5": "had been talking",
+        "6": "had been cooking",
+        "7": "had been playing",
+        "8": "had been exercising",
+        "9": "had been learning",
+        "10": "had been traveling"
+      }
+    }
+  },
+  {
+    "id": "past-perfect-continuous_grammar_transformation",
+    "language": "English",
+    "metadata": {
+      "subject": "Past Perfect Continuous",
+      "cefr": "A1",
+      "topic": "Past Perfect Continuous",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Transform the sentences using the given key word (2 pts each) (14 pts total)",
+      "body": [
+        {
+          "number": 1,
+          "original": "I was studying English for two hours before the exam started.",
+          "keyword": "study",
+          "rewrite": "I __________ English for two hours before the exam started."
+        },
+        {
+          "number": 2,
+          "original": "She lived in London for three months before moving to Manchester.",
+          "keyword": "live",
+          "rewrite": "She __________ in London for three months before moving to Manchester."
+        },
+        {
+          "number": 3,
+          "original": "They worked on the project all morning before the meeting.",
+          "keyword": "work",
+          "rewrite": "They __________ on the project all morning before the meeting."
+        },
+        {
+          "number": 4,
+          "original": "He waited for the bus for ten minutes before it arrived.",
+          "keyword": "wait",
+          "rewrite": "He __________ for the bus for ten minutes before it arrived."
+        },
+        {
+          "number": 5,
+          "original": "We read the story for half an hour before the teacher asked us questions.",
+          "keyword": "read",
+          "rewrite": "We __________ the story for half an hour before the teacher asked us questions."
+        },
+        {
+          "number": 6,
+          "original": "You practiced piano for an hour before your lesson.",
+          "keyword": "practice",
+          "rewrite": "You __________ piano for an hour before your lesson."
+        },
+        {
+          "number": 7,
+          "original": "The children played in the garden for forty minutes before dinner.",
+          "keyword": "play",
+          "rewrite": "The children __________ in the garden for forty minutes before dinner."
+        }
+      ],
+      "answer_key": {
+        "1": "had been studying",
+        "2": "had been living",
+        "3": "had been working",
+        "4": "had been waiting",
+        "5": "had been reading",
+        "6": "had been practicing",
+        "7": "had been playing"
+      }
+    }
+  }
+]

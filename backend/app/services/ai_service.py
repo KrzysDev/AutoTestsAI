@@ -14,7 +14,7 @@ class AiService:
         self.local_ollama_client = Client(
             host="http://localhost:11434"
         )
-        self.model = "gemini-3-flash-preview"
+        self.model = "gpt-oss:120b"
 
     def ask(self, text: str):
         is_testing = os.getenv("AI_TESTING", "false").lower() == "true"

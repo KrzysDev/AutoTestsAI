@@ -1,4 +1,4 @@
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS
 from typing import Union
 import json
 
@@ -211,6 +211,12 @@ Teacher input (primary source of truth): {parsed_prompt}{rag_grammar_line}"""
 
         return combined_prompt
 
+    def _get_cefr_block(self, level: str):
+        desc = CEFR_LEVEL_DESCRIPTIONS.get(level, "No description available.")
+        return f"""# CEFR PROFICIENCY LEVEL: {level}
+{desc}
+Use these criteria to ensure the complexity of the content (vocabulary, sentence structures, and cognitive load) matches the required level. DO NOT generate A1-level content for C1-level requests."""
+
     def _get_absolute_rules(self):
         return """# ABSOLUTE RULES (violation = rejection)
 1. Output ONLY raw HTML starting with <!DOCTYPE html>. No markdown, no code fences, no explanations.
@@ -240,10 +246,11 @@ You have full creative freedom over colors, fonts, and aesthetic style. Design a
 - MCQ options: A) B) C) format"""
 
     def get_grammar_mcq_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, retrieval: str = None):
-        rag_line = f"\nGrammar RAG context (inspiration only): {retrieval}" if retrieval else ""
+        rag_line = f"\nGrammar RAG context (Tense definitions/Inspiration): {retrieval}" if retrieval else ""
         description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
         return f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML file containing ONE Multiple Choice Grammar exercise.
 
+{self._get_cefr_block(level)}
 {self._get_absolute_rules()}
 {self._get_weasyprint_css()}
 {self._get_visual_design_rules(level)}
@@ -262,10 +269,11 @@ You have full creative freedom over colors, fonts, and aesthetic style. Design a
 Teacher requirements: {section}{rag_line}"""
 
     def get_grammar_gap_fill_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, retrieval: str = None):
-        rag_line = f"\nGrammar RAG context (inspiration only): {retrieval}" if retrieval else ""
+        rag_line = f"\nGrammar RAG context (Tense definitions/Inspiration): {retrieval}" if retrieval else ""
         description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
         return f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML file containing ONE Gap Fill Grammar exercise.
 
+{self._get_cefr_block(level)}
 {self._get_absolute_rules()}
 {self._get_weasyprint_css()}
 {self._get_visual_design_rules(level)}
@@ -283,10 +291,11 @@ Teacher requirements: {section}{rag_line}"""
 Teacher requirements: {section}{rag_line}"""
 
     def get_grammar_transformation_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, retrieval: str = None):
-        rag_line = f"\nGrammar RAG context (inspiration only): {retrieval}" if retrieval else ""
+        rag_line = f"\nGrammar RAG context (Tense definitions/Inspiration): {retrieval}" if retrieval else ""
         description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
         return f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML file containing ONE Key Word Transformation exercise.
 
+{self._get_cefr_block(level)}
 {self._get_absolute_rules()}
 {self._get_weasyprint_css()}
 {self._get_visual_design_rules(level)}
@@ -304,10 +313,11 @@ Teacher requirements: {section}{rag_line}"""
 Teacher requirements: {section}{rag_line}"""
 
     def get_vocabulary_matching_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, retrieval: str = None):
-        rag_line = f"\nVocabulary RAG context (inspiration only): {retrieval}" if retrieval else ""
+        rag_line = f"\nVocabulary RAG context (Inspiration): {retrieval}" if retrieval else ""
         description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
         return f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML file containing ONE Vocabulary Matching exercise.
 
+{self._get_cefr_block(level)}
 {self._get_absolute_rules()}
 {self._get_weasyprint_css()}
 {self._get_visual_design_rules(level)}
@@ -324,11 +334,12 @@ Teacher requirements: {section}{rag_line}"""
 # INPUT DATA
 Teacher requirements: {section}{rag_line}"""
 
-    def get_reading_mcq_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, reading_data: str = None):
-        rag_line = f"\nReading RAG context (inspiration only): {reading_data}" if reading_data else ""
+    def get_reading_mcq_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, retrieval: str = None):
+        rag_line = f"\nReading RAG context (Inspiration): {retrieval}" if retrieval else ""
         description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
         return f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML file containing ONE Reading Comprehension (Multiple Choice) exercise.
 
+{self._get_cefr_block(level)}
 {self._get_absolute_rules()}
 {self._get_weasyprint_css()}
 
@@ -348,11 +359,12 @@ Teacher requirements: {section}{rag_line}"""
 # INPUT DATA
 Teacher requirements: {section}{rag_line}"""
 
-    def get_reading_true_false_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, reading_data: str = None):
-        rag_line = f"\nReading RAG context (inspiration only): {reading_data}" if reading_data else ""
+    def get_reading_true_false_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, retrieval: str = None):
+        rag_line = f"\nReading RAG context (Inspiration): {retrieval}" if retrieval else ""
         description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
         return f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML file containing ONE Reading Comprehension (True/False) exercise.
 
+{self._get_cefr_block(level)}
 {self._get_absolute_rules()}
 {self._get_weasyprint_css()}
 
@@ -366,11 +378,12 @@ Teacher requirements: {section}{rag_line}"""
 # INPUT DATA
 Teacher requirements: {section}{rag_line}"""
 
-    def get_writing_email_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, writing_data: str = None):
-        rag_line = f"\nWriting RAG context (inspiration only): {writing_data}" if writing_data else ""
+    def get_writing_email_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, retrieval: str = None):
+        rag_line = f"\nWriting RAG context (Inspiration): {retrieval}" if retrieval else ""
         description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
         return f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML file containing ONE Informal Email/Letter Writing task.
 
+{self._get_cefr_block(level)}
 {self._get_absolute_rules()}
 {self._get_weasyprint_css()}
 
@@ -388,11 +401,12 @@ Teacher requirements: {section}{rag_line}"""
 # INPUT DATA
 Teacher requirements: {section}{rag_line}"""
 
-    def get_writing_essay_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, writing_data: str = None):
-        rag_line = f"\nWriting RAG context (inspiration only): {writing_data}" if writing_data else ""
+    def get_writing_essay_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, retrieval: str = None):
+        rag_line = f"\nWriting RAG context (Inspiration): {retrieval}" if retrieval else ""
         description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
         return f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML file containing ONE Formal Essay Writing task.
 
+{self._get_cefr_block(level)}
 {self._get_absolute_rules()}
 {self._get_weasyprint_css()}
 
@@ -410,6 +424,79 @@ Teacher requirements: {section}{rag_line}"""
 # INPUT DATA
 Teacher requirements: {section}{rag_line}"""
 
+    def get_json_exercise_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, retrieval: str = None):
+        rag_line = f"\nRAG context (Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        cefr_desc = CEFR_LEVEL_DESCRIPTIONS.get(level, "")
+        
+        return f"""You are an expert English test designer. Generate ONE exercise in a STRICT JSON format.
+
+# CEFR LEVEL: {level}
+{cefr_desc}
+
+# EXERCISE REQUIREMENTS
+- Type: {section.task_type}
+- Subject: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Task description: {description}
+- Generate at least 5-10 items/questions.
+- Language: English
+
+# OUTPUT FORMAT (JSON ONLY)
+{{
+  "id": "{section.subject.lower().replace(' ', '-')}_{section.task_type}",
+  "language": "English",
+  "metadata": {{
+    "subject": "{section.subject}",
+    "cefr": "{level}",
+    "topic": "{section.subject}",
+    "difficulty": "medium"
+  }},
+  "content": {{
+    "type": "{section.task_type}",
+    "instruction": "<student-facing instruction in English>",
+    "body": "<full exercise content: sentences, gaps, options, etc.>",
+    "answer_key": "<correct answers keyed to items in body>"
+  }}
+}}
+
+RULES:
+1. Return ONLY the JSON object. No markdown fences like ```json or ```, no extra text.
+2. Ensure the JSON is valid and escaped correctly.
+3. Content must strictly follow the CEFR level difficulty rules.
+
+{rag_line}"""
+
+
+    def get_exercise_parsing_prompt(self, raw_content: str, subject: str, level: str, task_type: str):
+        return f"""You are a data extractor. Convert the following raw exercise content (HTML/Text) into a structured JSON format.
+
+# RAW CONTENT
+{raw_content}
+
+# TARGET JSON SCHEMA
+{{
+  "id": "{subject.lower().replace(' ', '-')}_{task_type}",
+  "language": "English",
+  "metadata": {{
+    "subject": "{subject}",
+    "cefr": "{level}",
+    "topic": "{subject}",
+    "difficulty": "medium"
+  }},
+  "content": {{
+    "type": "{task_type}",
+    "instruction": "<extract student-facing instruction>",
+    "body": "<extract full exercise content: sentences, gaps, options, etc.>",
+    "answer_key": "<extract correct answers keyed to items in body>"
+  }}
+}}
+
+RULES:
+1. Return ONLY the JSON object. No markdown fences.
+2. Ensure the content is extracted exactly as it appears in the raw text.
+3. If answer key is missing, try to solve the exercise yourself and provide it."""
 
     def clean_json_response(self, response: str) -> str:
         import re
