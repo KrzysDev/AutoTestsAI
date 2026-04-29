@@ -9,9 +9,7 @@ from functools import lru_cache
 from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
 from backend.app.services.test_generator_service import TestGeneratorService
-from backend.app.services.test_fixer_service import TestFixerService
 from backend.app.services.html_test_converter_service import HtmlConvertingService
-from backend.app.services.json_test_converting_service import JsonTestConvertingService
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
 
@@ -31,9 +29,7 @@ def get_html_converting_service() -> HtmlConvertingService:
     return HtmlConvertingService()
 
 
-@lru_cache
-def get_json_test_converting_service() -> JsonTestConvertingService:
-    return JsonTestConvertingService()
+
 
 
 @lru_cache
@@ -56,6 +52,4 @@ def get_test_generator_service() -> TestGeneratorService:
     )
 
 
-@lru_cache
-def get_test_fixer_service() -> TestFixerService:
-    return TestFixerService(ai_service=get_ai_service())
+
