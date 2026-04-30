@@ -12,6 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from backend.app.services.ai_service import AiService
 from backend.app.models.prompts import SystemPrompts
 from backend.app.models.schemas import FormSection
+from backend.app.utils.json_utils import clean_json_response
 
 load_dotenv()
 
@@ -108,28 +109,18 @@ def main():
                 )
                 
                 # Step 1: Generate Raw Content (HTML/Text)
-                generation_prompt = generator_method(section, level, "adults", retrieval=retrieval_context)
-                
-                # Transform English-centric prompt to German
-                generation_prompt = generation_prompt.replace("expert English test designer", "expert German test designer")
-                generation_prompt = generation_prompt.replace("English test", "German test")
-                generation_prompt = generation_prompt.replace("in English", "in German")
-                generation_prompt = generation_prompt.replace("English grammar", "German grammar")
+                generation_prompt = generator_method(section, level, "adults", language="German", retrieval=retrieval_context)
                 
                 try:
                     raw_content = ai_service.ask(generation_prompt)
                     
                     # Step 2: Parse to JSON
                     print(f"    Step 2: Parsing to JSON...")
-                    parsing_prompt = prompts.get_exercise_parsing_prompt(raw_content, topic, level, task_type)
-                    
-                    # Modify parsing prompt to expect German
-                    parsing_prompt = parsing_prompt.replace('"language": "English"', '"language": "German"')
-                    parsing_prompt = parsing_prompt.replace('student-facing instruction in English', 'student-facing instruction in German')
+                    parsing_prompt = prompts.get_exercise_parsing_prompt(raw_content, topic, level, task_type, language="German")
                     
                     json_response = ai_service.ask(parsing_prompt)
                     
-                    clean_json = prompts.clean_json_response(json_response)
+                    clean_json = clean_json_response(json_response)
                     exercise_data = json.loads(clean_json)
                     
                     # Ensure metadata is correct

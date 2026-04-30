@@ -9,6 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from backend.app.services.ai_service import AiService
 from backend.app.models.prompts import SystemPrompts
 from backend.app.models.schemas import FormSection
+from backend.app.utils.json_utils import clean_json_response
 
 def main():
     ai_service = AiService()
@@ -84,7 +85,7 @@ def main():
                     parsing_prompt = prompts.get_exercise_parsing_prompt(raw_content, topic, level, task_type)
                     json_response = ai_service.ask(parsing_prompt)
                     
-                    clean_json = prompts.clean_json_response(json_response)
+                    clean_json = clean_json_response(json_response)
                     exercise_data = json.loads(clean_json)
                     
                     all_exercises.append(exercise_data)
