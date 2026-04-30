@@ -33,7 +33,7 @@ def upload_german_grammar():
 
     # Ensure language index exists for filtering
     client.create_payload_index(
-        collection_name="Grammar Collection",
+        collection_name="Example_Ex_De",
         field_name="language",
         field_schema="keyword"
     )
@@ -41,13 +41,13 @@ def upload_german_grammar():
     # 1. DELETE existing German points to avoid duplicates/legacy data
     print("Deleting existing German grammar points...")
     client.delete(
-        collection_name="Grammar Collection",
+        collection_name="Example_Ex_De",
         points_selector=models.FilterSelector(
             filter=models.Filter(
                 must=[
                     models.FieldCondition(
                         key="language",
-                        match=models.MatchValue(value="de")
+                        match=models.MatchValue(value="German")
                     )
                 ]
             )
@@ -62,11 +62,13 @@ def upload_german_grammar():
     print(f"Uploading {length} updated German grammar points to Qdrant...")
 
     for i, item in enumerate(data):
-        print(f"Processing {i+1}/{length}: {item.get('subject')}")
+        print(f"Processing {i+1}/{length}: {item.get('metadata', {}).get('subject')}")
         
         # Use a stable UUID based on the 'id' field in the JSON
         # This is better than hashing the content which might change
-        item_id = item.get('id', str(uuid.uuid4()))
+        base_id = item.get('id', str(uuid.uuid4()))
+        cefr = item.get('metadata', {}).get('cefr', '')
+        item_id = f"{base_id}_{cefr}" if cefr else base_id
         # If item_id is not a valid UUID string, we can hash it to create one
         try:
             point_id = str(uuid.UUID(item_id))
@@ -82,7 +84,7 @@ def upload_german_grammar():
         
         # Upsert into Grammar Collection
         client.upsert(
-            collection_name="Grammar Collection",
+            collection_name="Example_Ex_De",
             points=[
                 models.PointStruct(
                     id=point_id,
