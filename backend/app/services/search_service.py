@@ -23,28 +23,38 @@ class SearchService:
         )
         
 
-    def search(self, subject: str):
+    def search(self, subject: str, collection: str = "Grammar Collection", language: str = None):
+        # Build filter conditions dynamically
+        must_conditions = [
+            {
+                "key": "subject",
+                "match": {
+                    "value": subject
+                }
+            }
+        ]
+
+        # Optionally filter by language (e.g. "de", "en", "fr")
+        if language:
+            must_conditions.append(
+                {
+                    "key": "language",
+                    "match": {
+                        "value": language
+                    }
+                }
+            )
 
         result = self.client.scroll(
-        collection_name="Grammar Collection",
-        limit=100,
-        with_payload=True,
-        with_vectors=False,
-        scroll_filter={
-                "must": [
-                    {
-                        "key": "subject",
-                        "match": {
-                            "value": subject
-                        }
-                    }
-                ]
-            }
+            collection_name=collection,
+            limit=100,
+            with_payload=True,
+            with_vectors=False,
+            scroll_filter={"must": must_conditions}
         )
 
         points, _ = result
         return [p.payload for p in points]
-       
 
 
         

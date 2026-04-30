@@ -1,6 +1,7 @@
 from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
 from backend.app.models.prompts import SystemPrompts
+from backend.app.utils.json_utils import clean_json_response
 import json
 import ast
 from typing import Literal
@@ -49,7 +50,9 @@ class TestGeneratorService:
             parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, ParsedPrompt)
             total_tokens += tokens_used
 
-            data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(parsed_prompt.sections)
+            data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(
+                parsed_prompt.sections, language=parsed_prompt.language
+            )
 
             combined_prompt = self.prompts.get_combined_html_generation_prompt(
                 retrieval=data,
@@ -99,7 +102,9 @@ class TestGeneratorService:
         start = time.time()
         total_tokens = 0
 
-        data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(form.sections)
+        data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(
+            form.sections, language=form.language
+        )
 
         combined_prompt = self.prompts.get_combined_html_generation_prompt(
             retrieval=data,
@@ -130,7 +135,7 @@ class TestGeneratorService:
             total_tokens += self.__count_tokens(raw_response)
             print(f"__ask_model_for_json (Attempt {i+1}):\n{raw_response}")
             try:
-                cleaned = self.__clean_json_response(raw_response)
+                cleaned = clean_json_response(raw_response)
                 parsed_dict = json.loads(cleaned)
                 return schema(**parsed_dict), total_tokens
             except (ValueError, json.JSONDecodeError, TypeError) as e:
@@ -139,24 +144,26 @@ class TestGeneratorService:
                     raise ValueError(f"Model returned invalid json: {e}")
         return None, total_tokens
 
-    def __perform_retrieval(self, sections) -> tuple[list, list, list, bool, bool, TestGeneratorResponseMetadataRetrival]:
+    def __perform_retrieval(self, sections, language: str = "English") -> tuple[list, list, list, bool, bool, TestGeneratorResponseMetadataRetrival]:
         data, reading_data, writing_data = [], [], []
         reading_enabled, writing_enabled = False, False
         retrival_metadata = TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
 
         for section in sections:
             query = section.subject
-            res = self.search_service.search(query)
             
-            if query.lower() == "reading":
+            if section.task_type == "reading":
+                res = self.search_service.search(query, language=language)
                 reading_data.append(res)
                 retrival_metadata.reading += json.dumps(res) + "\n"
                 reading_enabled = True
-            elif query.lower() == "writing":
+            elif section.task_type == "writing":
+                res = self.search_service.search(query, language=language)
                 writing_data.append(res)
                 retrival_metadata.writing += json.dumps(res) + "\n"
                 writing_enabled = True
             else:
+                res = self.search_service.search(query, language=language)
                 data.append(res)
                 retrival_metadata.regular += json.dumps(res) + "\n"
 
@@ -176,29 +183,6 @@ class TestGeneratorService:
             retrival=retrival_metadata
         )
 
-
-    def __clean_json_response(self, response: str) -> str:
-        """
-        Cleans the AI response by removing markdown code blocks and extra text.
-        """
-        # Remove markdown code blocks like ```json ... ```
-        json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response)
-        if json_match:
-            return json_match.group(1).strip()
-        
-        # If no code block, try to find the first '{' or '[' and last '}' or ']'
-        start_idx = response.find('{')
-        if start_idx == -1:
-            start_idx = response.find('[')
-            
-        end_idx = response.rfind('}')
-        if end_idx == -1:
-            end_idx = response.rfind(']')
-            
-        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
-            return response[start_idx:end_idx + 1].strip()
-            
-        return response.strip()
 
     def __count_tokens(self, text: str) -> int:
         """
