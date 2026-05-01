@@ -36,7 +36,7 @@ class AiService:
                 api_key=os.getenv("OPENROUTER_API_KEY", ""),
                 ) as client:
                 response = client.chat.send(
-                    model=model,
+                    model="openai/gpt-5-mini",
                     messages=[
                     {
                         "role": "user",
