@@ -1,4 +1,5 @@
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS
+from backend.app.config.language_configs import get_supported_languages
 from typing import Union
 import json
 
@@ -44,7 +45,7 @@ class SystemPrompts:
             * Output ONLY one word: general OR request
             * No explanations
             * No extra text
-            * you can only generate english exercises. If teacher demands something diffrent than english output general.
+            * you can only generate {get_supported_languages()} exercises. If teacher demands something diffrent than english output general.
 
             ---
 
@@ -74,22 +75,13 @@ class SystemPrompts:
         2. They represent sections of a test. Possible values:
                 task_type: Literal["vocabulary", "grammar", "reading", "writing"]
                 description: string -> description of how exercise has to be created (implementation plan). Its either teachers idea or yours if teacher did not give enough information.
-                subject: Literal[
-                    "Present Simple",
-                    "Present Continuous",
-                    "Present Perfect",
-                    "Present Perfect Continuous",
-                    "Past Simple",
-                    "Past Continuous",
-                    "Past Perfect",
-                    "Past Perfect Continuous",
-                    "Future Simple",
-                    "Future Continuous",
-                    "Future Perfect",
-                    "Future Perfect Continuous"
-                ]
+                subject: string (FREE TEXT) -> the grammar/vocabulary topic, e.g. "Present Simple", "Der Dativ", "Family vocabulary", "Fractions". NOT a fixed list — use whatever topic the teacher specifies or derive one from the request.
                 visuals: string -> description of how exercise has to look visually.
                 amount : int
+        
+        3. language field: detect the target language of the test from the teacher's request.
+           - Default to "English" if not specified.
+           - Examples: "Make a German B2 test" -> language: "German", "Stwórz test z angielskiego" -> language: "English"
         
         #Teacher's request:
         {text}
@@ -97,6 +89,7 @@ class SystemPrompts:
         """
 
     def get_combined_html_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: Union[ParsedPrompt, Form], reading_enabled: bool, writing_enabled: bool):
+        language = getattr(parsed_prompt, 'language', 'English')
         grammar_vocab_sections = [s for s in parsed_prompt.sections if s.task_type not in ("reading", "writing")]
         grammar_vocab_amount = sum(s.amount for s in grammar_vocab_sections)
 
@@ -150,7 +143,7 @@ class SystemPrompts:
         structure_items.append(f"{step}. Answer Key (always last, page-break-before: always)")
         structure_block = "\n".join(structure_items)
 
-        combined_prompt = f"""You are an expert English test designer and web designer. Generate a complete, print-ready HTML test file.
+        combined_prompt = f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML test file. Generate ALL test content in {language}.
 
 # ABSOLUTE RULES (violation = rejection)
 1. Output ONLY raw HTML starting with <!DOCTYPE html>. No markdown, no code fences, no explanations.
@@ -190,6 +183,8 @@ Mandatory structural rules (layout — do NOT deviate):
 - Reading passage: visually distinct container (e.g. background or border), padding ≥ 12px
 - Writing box: bordered, width:100%, min-height:200px
 - Answer Key: page-break-before:always, answers in multi-column table layout (display:table), clearly labeled per exercise
+- All answers in the solution key MUST strictly follow the transformation type requested in the task. Do not introduce alternative grammatical moods unless explicitly required.
+- never use special sighns like '$\rightarrow$' or any other. Simple keyboard text and sighns.
 
 # CONTENT STRUCTURE (follow this exact order)
 {structure_block}
@@ -211,20 +206,294 @@ Teacher input (primary source of truth): {parsed_prompt}{rag_grammar_line}"""
 
         return combined_prompt
 
-    def clean_json_response(self, response: str) -> str:
-        import re
-        json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response)
-        if json_match:
-            return json_match.group(1).strip()
-        start_idx = response.find('{')
-        if start_idx == -1:
-            start_idx = response.find('[')
-        end_idx = response.rfind('}')
-        if end_idx == -1:
-            end_idx = response.rfind(']')
-        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
-            return response[start_idx:end_idx + 1].strip()
-        return response.strip()
+    def _get_cefr_block(self, level: str):
+        desc = CEFR_LEVEL_DESCRIPTIONS.get(level, "No description available.")
+        return f"""# CEFR PROFICIENCY LEVEL: {level}
+{desc}
+Use these criteria to ensure the complexity of the content (vocabulary, sentence structures, and cognitive load) matches the required level. DO NOT generate A1-level content for C1-level requests."""
+
+    def _get_absolute_rules(self):
+        return """# ABSOLUTE RULES (violation = rejection)
+1. Output ONLY raw HTML starting with <!DOCTYPE html>. No markdown, no code fences, no explanations.
+2. CSS+HTML only — zero JavaScript.
+3. Teacher input overrides everything. RAG data is inspiration only.
+4. Must be convertible to PDF via WeasyPrint."""
+
+    def _get_weasyprint_css(self):
+        return """# WEASYPRINT CSS
+Required @page rule:
+@page { size: A4; margin: 1.5cm 2cm; @bottom-center { content: "— " counter(page) " —"; font-size: 9pt; color: #999; } }
+
+Required reset:
+* { box-sizing: border-box; } body { margin:0; padding:0; background:#fff; } .test-container { width:100%; }
+
+FORBIDDEN CSS (breaks WeasyPrint): display:flex, display:grid, vw/vh units, max-width on .test-container, JS-dependent CSS.
+USE INSTEAD: display:table/table-cell for multi-column layouts. Use %, cm, pt, px for widths."""
+
+    def _get_visual_design_rules(self, level: str):
+        return f"""# VISUAL DESIGN
+You have full creative freedom over colors, fonts, and aesthetic style. Design a professional, visually appealing exercise.
+- Body font-size: 10–12pt, line-height ≥ 1.5
+- Header: small bar with exercise title and level: {level}
+- Student info: Name / Date / Class
+- Exercise block: padding ≥ 12px, margin-bottom ≥ 15px. Must show score "( X pts )"
+- Gap fill blanks: border-bottom underline, min-width ≥ 100px
+- MCQ options: A) B) C) format"""
+
+    def get_grammar_mcq_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
+        rag_line = f"\nGrammar RAG context (Tense definitions/Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        return f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML file containing ONE Multiple Choice Grammar exercise. Generate all exercise content in {language}.
+
+{self._get_cefr_block(level)}
+{self._get_absolute_rules()}
+{self._get_weasyprint_css()}
+{self._get_visual_design_rules(level)}
+
+# CONTENT: MULTIPLE CHOICE GRAMMAR
+- Generate exactly ONE exercise with 10 questions.
+- Format: 4 options (A, B, C, D) for each question.
+- Subject: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Task description: {description}
+- Every question is worth 1pt. Show total score.
+- Sequential numbering: Ex. 1.
+
+# INPUT DATA
+Teacher requirements: {section}{rag_line}"""
+
+    def get_grammar_gap_fill_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
+        rag_line = f"\nGrammar RAG context (Tense definitions/Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        return f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML file containing ONE Gap Fill Grammar exercise. Generate all exercise content in {language}.
+
+{self._get_cefr_block(level)}
+{self._get_absolute_rules()}
+{self._get_weasyprint_css()}
+{self._get_visual_design_rules(level)}
+
+# CONTENT: GAP FILL GRAMMAR
+- Generate exactly ONE exercise with 10 sentences.
+- Format: Open gap fill (no options) or with verbs in brackets to be conjugated.
+- Subject: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Task description: {description}
+- Every question is worth 1pt. Show total score.
+
+# INPUT DATA
+Teacher requirements: {section}{rag_line}"""
+
+    def get_grammar_transformation_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
+        rag_line = f"\nGrammar RAG context (Tense definitions/Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        return f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML file containing ONE Key Word Transformation exercise. Generate all exercise content in {language}.
+
+{self._get_cefr_block(level)}
+{self._get_absolute_rules()}
+{self._get_weasyprint_css()}
+{self._get_visual_design_rules(level)}
+
+# CONTENT: KEY WORD TRANSFORMATION
+- Generate exactly ONE exercise with 6–8 questions.
+- Format: A sentence followed by a key word and a second sentence with a gap. The second sentence must have the same meaning as the first.
+- Subject: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Task description: {description}
+- Every question is worth 2pts. Show total score.
+
+# INPUT DATA
+Teacher requirements: {section}{rag_line}"""
+
+    def get_vocabulary_matching_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
+        rag_line = f"\nVocabulary RAG context (Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        return f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML file containing ONE Vocabulary Matching exercise. Generate all exercise content in {language}.
+
+{self._get_cefr_block(level)}
+{self._get_absolute_rules()}
+{self._get_weasyprint_css()}
+{self._get_visual_design_rules(level)}
+
+# CONTENT: VOCABULARY MATCHING
+- Generate exactly ONE exercise with 10–12 items.
+- Format: Match words to definitions, synonyms, or pictures (descriptions). Use display:table for a clear two-column layout.
+- Subject: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Task description: {description}
+- Every item is worth 1pt.
+
+# INPUT DATA
+Teacher requirements: {section}{rag_line}"""
+
+    def get_reading_mcq_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
+        rag_line = f"\nReading RAG context (Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        return f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML file containing ONE Reading Comprehension (Multiple Choice) exercise. Generate all exercise content in {language}.
+
+{self._get_cefr_block(level)}
+{self._get_absolute_rules()}
+{self._get_weasyprint_css()}
+
+# VISUAL DESIGN
+- Reading passage: visually distinct container, padding ≥ 12px
+- MCQ options: A) B) C) D) format
+
+# CONTENT: READING MCQ
+- Generate 1 original multi-paragraph passage + 5–8 Multiple Choice questions.
+- Subject/Topic: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Task description: {description}
+- Question types: main idea, detail, inference, vocabulary-in-context.
+- Passage length: A2: 300w | B1/B2: 500w | C1: 700w
+
+# INPUT DATA
+Teacher requirements: {section}{rag_line}"""
+
+    def get_reading_true_false_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
+        rag_line = f"\nReading RAG context (Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        return f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML file containing ONE Reading Comprehension (True/False) exercise. Generate all exercise content in {language}.
+
+{self._get_cefr_block(level)}
+{self._get_absolute_rules()}
+{self._get_weasyprint_css()}
+
+# CONTENT: READING TRUE/FALSE
+- Generate 1 original multi-paragraph passage + 8–10 True/False/Not Given questions.
+- Subject/Topic: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Task description: {description}
+
+# INPUT DATA
+Teacher requirements: {section}{rag_line}"""
+
+    def get_writing_email_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
+        rag_line = f"\nWriting RAG context (Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        return f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML file containing ONE Informal Email/Letter Writing task. Generate all exercise content in {language}.
+
+{self._get_cefr_block(level)}
+{self._get_absolute_rules()}
+{self._get_weasyprint_css()}
+
+# VISUAL DESIGN
+- Writing box: bordered, width:100%, min-height:250px
+
+# CONTENT: INFORMAL WRITING
+- Generate 1 informal email/letter task.
+- Include: Clear context, 3 bullet points to cover.
+- Subject/Topic: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Word count: {level} level appropriate (A2: 80, B1: 120, B2: 180).
+
+# INPUT DATA
+Teacher requirements: {section}{rag_line}"""
+
+    def get_writing_essay_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
+        rag_line = f"\nWriting RAG context (Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        return f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML file containing ONE Formal Essay Writing task. Generate all exercise content in {language}.
+
+{self._get_cefr_block(level)}
+{self._get_absolute_rules()}
+{self._get_weasyprint_css()}
+
+# VISUAL DESIGN
+- Writing box: bordered, width:100%, min-height:400px
+
+# CONTENT: FORMAL ESSAY
+- Generate 1 formal essay task (opinion or for/against).
+- Include: Essay prompt, 2 given points + 1 own idea requirement.
+- Subject/Topic: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Word count: B2: 140-190, C1: 220-260.
+
+# INPUT DATA
+Teacher requirements: {section}{rag_line}"""
+
+    def get_json_exercise_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
+        rag_line = f"\nRAG context (Inspiration): {retrieval}" if retrieval else ""
+        description = getattr(section, 'description', getattr(section, 'additional_comment', ''))
+        cefr_desc = CEFR_LEVEL_DESCRIPTIONS.get(level, "")
+        
+        return f"""You are an expert {language} test designer. Generate ONE exercise in a STRICT JSON format.
+
+# CEFR LEVEL: {level}
+{cefr_desc}
+
+# EXERCISE REQUIREMENTS
+- Type: {section.task_type}
+- Subject: {section.subject}
+- Level: {level}
+- Age group: {age_group}
+- Task description: {description}
+- Generate at least 5-10 items/questions.
+- Language: {language}
+
+# OUTPUT FORMAT (JSON ONLY)
+{{
+  "id": "{section.subject.lower().replace(' ', '-')}_{section.task_type}",
+  "language": "{language}",
+  "metadata": {{
+    "subject": "{section.subject}",
+    "cefr": "{level}",
+    "topic": "{section.subject}",
+    "difficulty": "medium"
+  }},
+  "content": {{
+    "type": "{section.task_type}",
+    "instruction": "<student-facing instruction in {language}>",
+    "body": "<full exercise content: sentences, gaps, options, etc.>",
+    "answer_key": "<correct answers keyed to items in body>"
+  }}
+}}
+
+RULES:
+1. Return ONLY the JSON object. No markdown fences like ```json or ```, no extra text.
+2. Ensure the JSON is valid and escaped correctly.
+3. Content must strictly follow the CEFR level difficulty rules.
+
+{rag_line}"""
+
+
+    def get_exercise_parsing_prompt(self, raw_content: str, subject: str, level: str, task_type: str, language: str = "English"):
+        return f"""You are a data extractor. Convert the following raw exercise content (HTML/Text) into a structured JSON format.
+
+# RAW CONTENT
+{raw_content}
+
+# TARGET JSON SCHEMA
+{{
+  "id": "{subject.lower().replace(' ', '-')}_{task_type}",
+  "language": "{language}",
+  "metadata": {{
+    "subject": "{subject}",
+    "cefr": "{level}",
+    "topic": "{subject}",
+    "difficulty": "medium"
+  }},
+  "content": {{
+    "type": "{task_type}",
+    "instruction": "<extract student-facing instruction>",
+    "body": "<extract full exercise content: sentences, gaps, options, etc.>",
+    "answer_key": "<extract correct answers keyed to items in body>"
+  }}
+}}
+
+RULES:
+1. Return ONLY the JSON object. No markdown fences.
+2. Ensure the content is extracted exactly as it appears in the raw text.
+3. If answer key is missing, try to solve the exercise yourself and provide it."""
+
+
 
     def get_general_question_prompt(self, prompt: str):
         return f""" 

@@ -1,0 +1,2102 @@
+[
+  {
+    "id": "präteritum_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Präteritum",
+      "cefr": "A1",
+      "topic": "Präteritum",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Übung 1 – Wähle die richtige Präteritum‑Form (1 pt pro Aufgabe)",
+      "body": "1. Gestern ___ (gehen) ich zum Markt.\nA) ging\nB) gehe\nC) gegangen\nD) geht\n\n2. Vor zwei Wochen ___ (kaufen) wir ein neues Auto.\nA) kauften\nB) kaufen\nC) gekauft\nD) kaufte\n\n3. Er ___ (sein) sehr müde nach dem langen Spaziergang.\nA) war\nB) ist\nC) waren\nD) gewesen\n\n4. Sie ___ (haben) gestern keine Zeit.\nA) hatte\nB) hatte\nC) hatten\nD) hatte\n\n5. Der Film ___ (beginnen) um 20 Uhr.\nA) begann\nB) beginnt\nC) begonnen\nD) begänne\n\n6. Plötzlich ___ (hören) ich ein lautes Geräusch.\nA) hörte\nB) höre\nC) hörst\nD) hörte\n\n7. Vor Jahren ___ (reisen) meine Großeltern nach Italien.\nA) reiste\nB) reisten\nC) reisen\nD) reiste\n\n8. Ich ___ (sagen) nichts zu dem Problem.\nA) sagte\nB) sage\nC) sagte\nD) sagt\n\n9. Wir ___ (machen) einen Spaziergang im Park.\nA) machten\nB) machen\nC) machte\nD) gemachten\n\n10. Sie ___ (finden) das Buch sehr interessant.\nA) fand\nB) finde\nC) fanden\nD) findet",
+      "answer_key": "1:A, 2:A, 3:A, 4:A, 5:A, 6:A, 7:B, 8:A, 9:A, 10:A"
+    }
+  },
+  {
+    "id": "präteritum_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Präteritum",
+      "cefr": "A1",
+      "topic": "Präteritum",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Präteritum – Lückentext (A1) – Niveau: A1",
+      "body": [
+        "Gestern ____ ich (gehen) zum Markt.",
+        "Letzte Woche ____ er (kaufen) ein Buch.",
+        "Vor zwei Tagen ____ wir (sein) sehr müde.",
+        "Meine Mutter ____ (kochen) eine Suppe.",
+        "Der Hund ____ (laufen) schnell im Park.",
+        "Anna ____ (sagen) „Guten Tag“.",
+        "Der Film ____ (beginnen) um 7 Uhr.",
+        "Ich ____ (haben) keine Zeit.",
+        "Peter ____ (sehen) den Brief.",
+        "Wir ____ (trinken) Kaffee am Morgen."
+      ],
+      "answer_key": {
+        "1": "ging",
+        "2": "kaufte",
+        "3": "waren",
+        "4": "kochte",
+        "5": "lief",
+        "6": "sagte",
+        "7": "begann",
+        "8": "hatte",
+        "9": "sah",
+        "10": "tranken"
+      }
+    }
+  },
+  {
+    "id": "präteritum_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Präteritum",
+      "cefr": "A1",
+      "topic": "Präteritum",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Verwandle die zweite Aussage so, dass sie dieselbe Bedeutung wie die erste hat. Verwende das angegebene Schlüsselwort und das Präteritum.",
+      "body": "1. Ich gehe gestern ins Kino.\nSchlüsselwort: ging\nIch ___ gestern ins Kino.\n\n2. Er kauft ein Buch.\nSchlüsselwort: kaufte\nEr ___ ein Buch.\n\n3. Wir sind sehr müde.\nSchlüsselwort: waren\nWir ___ sehr müde.\n\n4. Sie fährt mit dem Bus zur Arbeit.\nSchlüsselwort: fuhr\nSie ___ mit dem Bus zur Arbeit.\n\n5. Du hast keine Zeit.\nSchlüsselwort: hatte\nDu ___ keine Zeit.\n\n6. Der Film beginnt um 8 Uhr.\nSchlüsselwort: begann\nDer Film ___ um 8 Uhr.",
+      "answer_key": {
+        "1": "ging",
+        "2": "kaufte",
+        "3": "waren",
+        "4": "fuhr",
+        "5": "hattest",
+        "6": "begann"
+      }
+    }
+  },
+  {
+    "id": "plusquamperfekt_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Plusquamperfekt",
+      "cefr": "A1",
+      "topic": "Plusquamperfekt",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Plusquamperfekt‑Form im jeweiligen Satz.",
+      "body": "1. Ich ___ (sein) schon müde, bevor das Meeting begann.\nA) hatte\nB) war\nC) bin\nD) war gewesen\n\n2. Nachdem er das Buch ___ (lesen), gab er es mir.\nA) hatte gelesen\nB) war gelesen\nC) las\nD) hat gelesen\n\n3. Wir ___ (fahren) schon nach Berlin, als der Zug verspätet war.\nA) waren gefahren\nB) hatten gefahren\nC) fuhren\nD) haben gefahren\n\n4. Sie ___ (schreiben) den Brief, bevor sie das Telefon benutzte.\nA) hatte geschrieben\nB) war geschrieben\nC) schrieb\nD) hat geschrieben\n\n5. Bevor ich nach Hause ___ (kommen), hatte ich im Büro gearbeitet.\nA) kam\nB) war gekommen\nC) war gekommen\nD) hatte gekommen\n\n6. Nachdem sie das Essen ___ (essen), ging sie spazieren.\nA) hatte gegessen\nB) war gegessen\nC) aß\nD) hat gegessen\n\n7. Er ___ (sein) bereits gegangen, als wir ankamen.\nA) war\nB) war gewesen\nC) war gegangen\nD) hatte gegangen\n\n8. Wir ___ (kaufen) das Haus, bevor die Preise gestiegen waren.\nA) hatten gekauft\nB) waren gekauft\nC) kauften\nD) haben gekauft\n\n9. Nachdem das Konzert ___ (enden), ging das Publikum nach Hause.\nA) hatte beendet\nB) war beendet\nC) endete\nD) hat beendet\n\n10. Ich ___ (sehen) den Film schon, bevor ich das Buch las.\nA) hatte gesehen\nB) war gesehen\nC) sah\nD) habe gesehen",
+      "answer_key": {
+        "1": "D",
+        "2": "A",
+        "3": "B",
+        "4": "A",
+        "5": "B",
+        "6": "A",
+        "7": "B",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "plusquamperfekt_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Plusquamperfekt",
+      "cefr": "A1",
+      "topic": "Plusquamperfekt",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Ergänzen Sie die fehlenden Verbformen im Plusquamperfekt (je 1 Punkt)",
+      "body": "1. Ich <blank> schon im Kino, bevor der Film begann.\n2. Sie <blank> das Frühstück gegessen, als das Telefon klingelte.\n3. Wir <blank> nach Hause, nachdem wir das Museum besucht hatten.\n4. Er <blank> mit dem Zug, bevor er das Flugzeug genommen hatte.\n5. Du <blank> den Brief, bevor du den Umschlag abgelegt hast.\n6. Die Kinder <blank> im Park, bevor es zu regnen begann.\n7. Maria <blank> ihre Schlüssel, bevor sie das Haus verließ.\n8. Ich <blank> den Film schon, bevor er im Fernsehen gezeigt wurde.\n9. Ihr <blank> die Hausaufgaben, bevor ihr ausgegangen seid.\n10. Peter <blank> zu Hause, weil er vorher krank gewesen war.",
+      "answer_key": {
+        "1": "war",
+        "2": "hatte",
+        "3": "waren",
+        "4": "war",
+        "5": "hattest",
+        "6": "hatten",
+        "7": "hatte",
+        "8": "hatte",
+        "9": "hattet",
+        "10": "war"
+      }
+    }
+  },
+  {
+    "id": "plusquamperfekt_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Plusquamperfekt",
+      "cefr": "A1",
+      "topic": "Plusquamperfekt",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Formulieren Sie die zweite Aussage im Plusquamperfekt, indem Sie das vorgegebene Schlüsselwort verwenden.",
+      "body": "Übung (14 pts)\nFormulieren Sie die zweite Aussage im Plusquamperfekt, indem Sie das vorgegebene Schlüsselwort verwenden.\n1. Ich ging ins Kino. Schlüsselwort: gesehen\nIch ______ den Film, bevor ich ins Kino ging. (2 pts)\n2. Maria kaufte ein Buch. Schlüsselwort: lesen\nMaria ______ das Buch, bevor sie es gekauft hat. (2 pts)\n3. Wir machten die Hausaufgaben. Schlüsselwort: fertig\nWir ______ die Hausaufgaben, bevor wir fernsehen konnten. (2 pts)\n4. Peter fuhr nach Berlin. Schlüsselwort: gefahren\nPeter ______ nach Berlin, bevor das Meeting begann. (2 pts)\n5. Sie aß das Frühstück. Schlüsselwort: bereitet\nDas Frühstück ______ worden, bevor sie es aß. (2 pts)\n6. Ich traf meine Freundin. Schlüsselwort: gekommen\nMeine Freundin ______ schon, bevor ich ankam. (2 pts)\n7. Die Kinder spielten im Garten. Schlüsselwort: gekommen\nDer Regen ______ bereits, bevor die Kinder im Garten spielten. (2 pts)\nGesamtpunktzahl: 14 pts",
+      "answer_key": {
+        "1": "Ich hatte den Film gesehen, bevor ich ins Kino ging.",
+        "2": "Maria hatte das Buch gelesen, bevor sie es gekauft hat.",
+        "3": "Wir hatten die Hausaufgaben fertig gemacht, bevor wir fernsehen konnten.",
+        "4": "Peter war nach Berlin gefahren, bevor das Meeting begann.",
+        "5": "Das Frühstück war bereitet worden, bevor sie es aß.",
+        "6": "Meine Freundin war schon gekommen, bevor ich ankam.",
+        "7": "Der Regen war bereits gekommen, bevor die Kinder im Garten spielten."
+      }
+    }
+  },
+  {
+    "id": "präsens_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Präsens",
+      "cefr": "A1",
+      "topic": "Präsens",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Übung 1 – Präsens (10 pts)",
+      "body": "Ich ___ (sein) Lehrer.\nA) bin\nB) bist\nC) ist\nD) sind\n\nMaria ___ (haben) zwei Katzen.\nA) habe\nB) hast\nC) hat\nD) haben\n\nWir ___ (gehen) jeden Tag zur Arbeit.\nA) geht\nB) gehe\nC) gehen\nD) gehst\n\nDu ___ (kommen) jetzt?\nA) komme\nB) kommst\nC) kommt\nD) kommen\n\nEr ___ (arbeiten) in einer Bank.\nA) arbeite\nB) arbeitest\nC) arbeitet\nD) arbeiten\n\nDie Kinder ___ (spielen) im Garten.\nA) spielt\nB) spielen\nC) spielst\nD) spiele\n\nIch ___ (trinken) jetzt Wasser.\nA) trinkst\nB) trinke\nC) trinken\nD) trinkt\n\nIhr ___ (lernen) Deutsch jeden Abend.\nA) lernt\nB) lerne\nC) lernen\nD) lernst\n\nSie (Plural) ___ (wohnen) in Berlin.\nA) wohnt\nB) wohne\nC) wohnen\nD) wohnst\n\nDas Buch ___ (sein) interessant.\nA) ist\nB) bist\nC) sind\nD) bin",
+      "answer_key": {
+        "1": "A",
+        "2": "C",
+        "3": "C",
+        "4": "B",
+        "5": "C",
+        "6": "B",
+        "7": "B",
+        "8": "A",
+        "9": "C",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "präsens_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Präsens",
+      "cefr": "A1",
+      "topic": "Präsens",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setzen Sie das richtige Verb in der Gegenwart (Präsens) ein.",
+      "body": "1. Ich ___ (sein) heute zu Hause.\n2. Du ___ (haben) ein rotes Buch.\n3. Er ___ (gehen) jeden Tag zur Arbeit.\n4. Wir ___ (lernen) Deutsch im Kurs.\n5. Ihr ___ (machen) die Hausaufgaben jetzt.\n6. Sie ___ (leben) in Berlin.\n7. Ich ___ (trinken) morgens Kaffee.\n8. Du ___ (kommen) aus Italien.\n9. Wir ___ (spielen) Fußball am Wochenende.\n10. Ihr ___ (schreiben) eine E‑Mail.",
+      "answer_key": {
+        "1": "bin",
+        "2": "hast",
+        "3": "geht",
+        "4": "lernen",
+        "5": "macht",
+        "6": "leben",
+        "7": "trinke",
+        "8": "kommst",
+        "9": "spielen",
+        "10": "schreibt"
+      }
+    }
+  },
+  {
+    "id": "präsens_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Präsens",
+      "cefr": "A1",
+      "topic": "Präsens",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Schlüsselwort-Transformation – Präsens (A1)",
+      "body": "1. Ich lerne Deutsch. (gerade)\nIch ______ Deutsch.\n\n2. Maria fährt jeden Tag zur Arbeit. (oft)\nMaria ______ zur Arbeit.\n\n3. Wir essen jetzt Mittagessen. (jetzt)\nWir ______ Mittagessen.\n\n4. Er arbeitet in einer Firma. (nicht)\nEr ______ in einer Firma.\n\n5. Sie spielt gern Fußball. (immer)\nSie ______ Fußball.\n\n6. Ich wohne in Berlin. (normalerweise)\nIch ______ in Berlin.",
+      "answer_key": {
+        "1": "lerne gerade",
+        "2": "fährt oft",
+        "3": "essen jetzt",
+        "4": "arbeitet nicht",
+        "5": "spielt immer gern",
+        "6": "wohne normalerweise"
+      }
+    }
+  },
+  {
+    "id": "kasus_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Kasus",
+      "cefr": "A1",
+      "topic": "Kasus",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Bestimmen Sie den Kasus des hervorgehobenen Nomens. (1 Punkt pro Frage)",
+      "body": [
+        {
+          "id": 1,
+          "sentence": "Der <strong>Hund</strong> läuft im Park.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        },
+        {
+          "id": 2,
+          "sentence": "Ich sehe <strong>den Mann</strong> jeden Tag.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        },
+        {
+          "id": 3,
+          "sentence": "Wir geben <strong>dem Kind</strong> ein Buch.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        },
+        {
+          "id": 4,
+          "sentence": "Das Auto <strong>der Frau</strong> ist rot.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        },
+        {
+          "id": 5,
+          "sentence": "Ich stelle das Buch <strong>auf den Tisch</strong>.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        },
+        {
+          "id": 6,
+          "sentence": "Sie kommt <strong>aus dem Haus</strong> jeden Morgen.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        },
+        {
+          "id": 7,
+          "sentence": "Wir sprechen über <strong>den Film</strong>.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        },
+        {
+          "id": 8,
+          "sentence": "Die Farbe <strong>des Autos</strong> ist blau.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        },
+        {
+          "id": 9,
+          "sentence": "Er hilft <strong>den Eltern</strong> beim Kochen.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        },
+        {
+          "id": 10,
+          "sentence": "Ich danke <strong>der Lehrerin</strong> für die Hilfe.",
+          "options": [
+            "A) Nominativ",
+            "B) Akkusativ",
+            "C) Dativ",
+            "D) Genitiv"
+          ]
+        }
+      ],
+      "answer_key": {
+        "1": "A",
+        "2": "B",
+        "3": "C",
+        "4": "D",
+        "5": "B",
+        "6": "C",
+        "7": "B",
+        "8": "D",
+        "9": "C",
+        "10": "C"
+      }
+    }
+  },
+  {
+    "id": "kasus_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Kasus",
+      "cefr": "A1",
+      "topic": "Kasus",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Füllen Sie die Lücken mit dem richtigen Artikel bzw. der richtigen Fallform (je 1 Punkt).",
+      "body": "1. ___ Hund bellt laut.\n2. Ich sehe ___ Mann.\n3. Sie gibt ___ Kind ein Geschenk.\n4. Das Haus ___ Lehrers ist groß.\n5. ___ Katze liegt auf dem Sofa.\n6. Wir besuchen ___ Freundin.\n7. Er hilft ___ Frau.\n8. Das Buch ___ Studenten liegt auf dem Tisch.\n9. ___ Auto ist neu.\n10. Ich kaufe ___ Apfel.",
+      "answer_key": {
+        "1": "der",
+        "2": "den",
+        "3": "dem",
+        "4": "des",
+        "5": "die",
+        "6": "die",
+        "7": "der",
+        "8": "der",
+        "9": "das",
+        "10": "den"
+      }
+    }
+  },
+  {
+    "id": "kasus_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Kasus",
+      "cefr": "A1",
+      "topic": "Kasus",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Übung – Schlüsselwortumwandlung (6 Fragen, je 2 pts)",
+      "body": [
+        {
+          "number": 1,
+          "original_sentence": "Der Hund beißt den Mann.",
+          "keyword": "den Mann",
+          "new_sentence": "_____ beißt der Hund."
+        },
+        {
+          "number": 2,
+          "original_sentence": "Ich helfe dem Kind.",
+          "keyword": "dem Kind",
+          "new_sentence": "Ich gebe _____ das Buch."
+        },
+        {
+          "number": 3,
+          "original_sentence": "Das Buch des Lehrers ist neu.",
+          "keyword": "des Lehrers",
+          "new_sentence": "_____ Buch ist neu."
+        },
+        {
+          "number": 4,
+          "original_sentence": "Ich sehe den Film.",
+          "keyword": "den Film",
+          "new_sentence": "_____ schaue ich im Kino."
+        },
+        {
+          "number": 5,
+          "original_sentence": "Der Tisch ist groß.",
+          "keyword": "der Tisch",
+          "new_sentence": "Auf _____ liegt das Buch."
+        },
+        {
+          "number": 6,
+          "original_sentence": "Ich gebe dem Mann das Geschenk.",
+          "keyword": "dem Mann",
+          "new_sentence": "Das Geschenk ist für _____."
+        }
+      ],
+      "answer_key": {
+        "1": "Den Mann",
+        "2": "dem Kind",
+        "3": "Des Lehrers",
+        "4": "Den Film",
+        "5": "dem Tisch",
+        "6": "den Mann"
+      }
+    }
+  },
+  {
+    "id": "futur-i_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Futur I",
+      "cefr": "A1",
+      "topic": "Futur I",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Form des Futur I aus.",
+      "body": "1. Ich ____ morgen nach Berlin fahren.\nA) werde\nB) wird\nC) werden\nD) würdest\n\n2. Du ____ später anrufen.\nA) werden\nB) wirst\nC) wird\nD) werde\n\n3. Er ____ nächste Woche kommen.\nA) werden\nB) wird\nC) werde\nD) werdet\n\n4. Wir ____ bald das neue Restaurant besuchen.\nA) wird\nB) werden\nC) wirst\nD) werde\n\n5. Ihr ____ im Sommer nach Italien reisen.\nA) werdet\nB) wird\nC) werden\nD) werde\n\n6. Sie (Singular) ____ morgen das Buch lesen.\nA) wird\nB) werden\nC) werde\nD) wirst\n\n7. Sie (Plural) ____ im nächsten Jahr ein Haus kaufen.\nA) werde\nB) wird\nC) werden\nD) wirst\n\n8. Ich ____ später Deutsch sprechen.\nA) werde\nB) wird\nC) werdet\nD) werden\n\n9. Du ____ das Spiel gewinnen.\nA) wird\nB) werde\nC) wirst\nD) werden\n\n10. Wir ____ in Zukunft mehr lernen.\nA) wird\nB) werde\nC) werden\nD) wirst",
+      "answer_key": {
+        "1": "A",
+        "2": "B",
+        "3": "B",
+        "4": "B",
+        "5": "A",
+        "6": "A",
+        "7": "C",
+        "8": "A",
+        "9": "C",
+        "10": "C"
+      }
+    }
+  },
+  {
+    "id": "futur-i_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Futur I",
+      "cefr": "A1",
+      "topic": "Futur I",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setzen Sie die richtige Form von werden ein (je 1 Punkt)",
+      "body": "1. Morgen ___ ich nach Berlin fahren. (1 Pkt)\n2. Nächste Woche ___ sie das neue Buch lesen. (1 Pkt)\n3. Bald ___ wir ein Haus kaufen. (1 Pkt)\n4. Später ___ er das Abendessen kochen. (1 Pkt)\n5. In Zukunft ___ du Deutsch sprechen. (1 Pkt)\n6. Heute Abend ___ sie den Film sehen. (1 Pkt)\n7. Übermorgen ___ ich meine Freunde besuchen. (1 Pkt)\n8. Nächstes Jahr ___ wir nach Spanien reisen. (1 Pkt)\n9. In ein paar Tagen ___ er ein Fahrrad reparieren. (1 Pkt)\n10. Demnächst ___ sie bei uns wohnen. (1 Pkt)",
+      "answer_key": {
+        "1": "werde",
+        "2": "wird",
+        "3": "werden",
+        "4": "wird",
+        "5": "wirst",
+        "6": "werden",
+        "7": "werde",
+        "8": "werden",
+        "9": "wird",
+        "10": "werden"
+      }
+    }
+  },
+  {
+    "id": "futur-i_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Futur I",
+      "cefr": "A1",
+      "topic": "Futur I",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Schreiben Sie den zweiten Satz um, indem Sie das vorgegebene Stichwort verwenden und das Futur I bilden.",
+      "body": [
+        {
+          "number": 1,
+          "original": "Ich gehe morgen ins Kino.",
+          "keyword": "werden",
+          "sentence_with_blank": "Ich ___ morgen ins Kino gehen."
+        },
+        {
+          "number": 2,
+          "original": "Wir treffen uns später im Park.",
+          "keyword": "werden",
+          "sentence_with_blank": "Wir ___ später im Park treffen."
+        },
+        {
+          "number": 3,
+          "original": "Du kaufst das Buch nächste Woche.",
+          "keyword": "werden",
+          "sentence_with_blank": "Du ___ das Buch nächste Woche kaufen."
+        },
+        {
+          "number": 4,
+          "original": "Sie fährt bald nach Berlin.",
+          "keyword": "werden",
+          "sentence_with_blank": "Sie ___ bald nach Berlin fahren."
+        },
+        {
+          "number": 5,
+          "original": "Ich lerne in Zukunft Deutsch.",
+          "keyword": "werden",
+          "sentence_with_blank": "Ich ___ in Zukunft Deutsch lernen."
+        },
+        {
+          "number": 6,
+          "original": "Er arbeitet ab morgen im Büro.",
+          "keyword": "werden",
+          "sentence_with_blank": "Er ___ ab morgen im Büro arbeiten."
+        }
+      ],
+      "answer_key": {
+        "1": "werde",
+        "2": "werden",
+        "3": "wirst",
+        "4": "wird",
+        "5": "werde",
+        "6": "wird"
+      }
+    }
+  },
+  {
+    "id": "konjunktiv-ii_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Konjunktiv II",
+      "cefr": "A1",
+      "topic": "Konjunktiv II",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Verbform im Konjunktiv II aus.",
+      "body": "1. Wenn ich mehr Zeit _____, würde ich ein Buch lesen.\n   A) habe\n   B) hätte\n   C) haben\n   D) haben würde\n2. Ich _____ dir gern helfen.\n   A) würde helfen\n   B) könnte helfen\n   C) helfe\n   D) habe geholfen\n3. Wenn er mehr Geld _____, würde er ein Haus kaufen.\n   A) hat\n   B) hätte\n   C) hat gehabt\n   D) haben würde\n4. Wir _____ mit dem Zug, wenn das Wetter schlecht wäre.\n   A) fahren\n   B) würden fahren\n   C) fuhren\n   D) fuhren würden\n5. Du _____ jetzt zu Hause?\n   A) bist\n   B) wärest\n   C) wärst\n   D) wärst du\n6. Wenn ich ein Vogel _____, könnte ich fliegen.\n   A) bin\n   B) wäre\n   C) war\n   D) wäre gewesen\n7. Sie _____ später, wenn sie den Zug nicht verpasst.\n   A) würde kommen\n   B) kommt\n   C) käme\n   D) kämen\n8. Er _____ mehr Zeit, um zu lernen.\n   A) hätte\n   B) hat\n   C) hätte gehabt\n   D) würde haben\n9. Wir _____ glücklich, wenn du hier wärst.\n   A) wären\n   B) sind\n   C) wäre\n   D) wäre wären\n10. Wenn ihr einen Kaffee _____, sagt Bescheid.\n   A) würdet möchten\n   B) möchten\n   C) möchtet\n   D) möchtet ihr",
+      "answer_key": "1:B, 2:A, 3:B, 4:B, 5:C, 6:B, 7:C, 8:A, 9:A, 10:C"
+    }
+  },
+  {
+    "id": "konjunktiv-ii_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Konjunktiv II",
+      "cefr": "A1",
+      "topic": "Konjunktiv II",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setzen Sie die fehlende Form des Konjunktiv II ein.",
+      "body": "1. Wenn ich mehr Geld <blank>, würde ich ein neues Fahrrad kaufen.\n2. Er <blank> gern mit dir kommen, aber er ist krank.\n3. Wir <blank> morgen ins Kino gehen, wenn es nicht regnet.\n4. Sie <blank> besser sprechen, wenn sie mehr üben würde.\n5. Ich <blank> dir helfen, wenn ich Zeit hätte.\n6. Du <blank> mich anrufen, wenn du etwas brauchst.\n7. Wenn du mir das Buch gibst, <blank> ich es lesen.\n8. Er sagt, er <blank> lieber zu Hause bleiben.\n9. Wir <blank> das Angebot annehmen, wenn es günstiger wäre.\n10. Sie <blank> heute früher kommen, aber ihr Zug ist verspätet.",
+      "answer_key": {
+        "1": "hätte",
+        "2": "würde",
+        "3": "würden",
+        "4": "könnte",
+        "5": "würde",
+        "6": "würdest",
+        "7": "würde",
+        "8": "würde",
+        "9": "würden",
+        "10": "könnte"
+      }
+    }
+  },
+  {
+    "id": "konjunktiv-ii_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Konjunktiv II",
+      "cefr": "A1",
+      "topic": "Konjunktiv II",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Formulieren Sie den Satz mit dem angegebenen Schlüsselwort im Konjunktiv II. Schreiben Sie das fehlende Wort in die Lücke.",
+      "body": "1. Ich habe viel Geld.\nKey word: hätte\nIch ___ viel Geld.\n\n2. Er ist zu müde, um zu laufen.\nKey word: wäre\nEr ___ zu müde, um zu laufen.\n\n3. Wir können heute nicht kommen.\nKey word: könnten\nWir ___ heute nicht kommen.\n\n4. Du hast Zeit, das Buch zu lesen.\nKey word: hättest\nDu ___ Zeit, das Buch zu lesen.\n\n5. Ich mag den Kuchen nicht.\nKey word: würde\nIch ___ den Kuchen nicht mögen.\n\n6. Sie besitzen ein großes Haus.\nKey word: hätten\nSie ___ ein großes Haus.\n\n7. Wir gehen gern ins Kino.\nKey word: würden\nWir ___ gern ins Kino gehen.",
+      "answer_key": {
+        "1": "hätte",
+        "2": "wäre",
+        "3": "könnten",
+        "4": "hättest",
+        "5": "würde",
+        "6": "hätten",
+        "7": "würden"
+      }
+    }
+  },
+  {
+    "id": "konjunktiv-i_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Konjunktiv I",
+      "cefr": "A1",
+      "topic": "Konjunktiv I",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Form des Konjunktiv I für die indirekte Rede.",
+      "body": "1. Er sagt: „Ich bin müde.“ – Was ist die korrekte indirekte Rede?\nA) Er sagt, er bin müde.\nB) Er sagt, er sei müde.\nC) Er sagt, er wäre müde.\nD) Er sagt, er wird müde.\n\n2. Sie berichtet: „Wir haben keine Zeit.“ – Indirekte Rede?\nA) Sie berichtet, sie haben keine Zeit.\nB) Sie berichtet, wir haben keine Zeit.\nC) Sie berichtet, sie habe keine Zeit.\nD) Sie berichtet, wir habe keine Zeit.\n\n3. Der Lehrer sagt: „Die Aufgabe ist schwer.“ – Indirekte Rede?\nA) Der Lehrer sagt, die Aufgabe sei schwer.\nB) Der Lehrer sagt, die Aufgabe ist schwer.\nC) Der Lehrer sagt, die Aufgabe wäre schwer.\nD) Der Lehrer sagt, die Aufgabe wird schwer.\n\n4. Er meinte: „Ich komme später.“ – Indirekte Rede?\nA) Er meinte, er komme später.\nB) Er meinte, er käme später.\nC) Er meinte, ich komme später.\nD) Er meinte, er kommt später.\n\n5. Sie behauptet: „Sie hat das gesehen.“ – Indirekte Rede?\nA) Sie behauptet, sie habe das gesehen.\nB) Sie behauptet, sie hat das gesehen.\nC) Sie behauptet, sie hätte das gesehen.\nD) Sie behauptet, sie sehe das gesehen.\n\n6. Der Reporter sagt: „Die Demonstration findet morgen statt.“ – Indirekte Rede?\nA) Der Reporter sagt, die Demonstration finde morgen statt.\nB) Der Reporter sagt, die Demonstration fand morgen statt.\nC) Der Reporter sagt, die Demonstration würde morgen stattfinden.\nD) Der Reporter sagt, die Demonstration findet morgen statt.\n\n7. Maria sagt: „Ich lerne Deutsch.“ – Indirekte Rede?\nA) Maria sagt, sie lerne Deutsch.\nB) Maria sagt, sie lernte Deutsch.\nC) Maria sagt, ich lerne Deutsch.\nD) Maria sagt, sie wird Deutsch lernen.\n\n8. Der Chef behauptet: „Wir müssen das Projekt bis Freitag abschließen.“ – Indirekte Rede?\nA) Der Chef behauptet, wir müssten das Projekt bis Freitag abschließen.\nB) Der Chef behauptet, wir müssen das Projekt bis Freitag abschließen.\nC) Der Chef behauptet, wir müssten das Projekt bis Freitag abschließen.\nD) Der Chef behauptet, wir müssen das Projekt bis Freitag abgeschlossen haben.\n\n9. Peter sagt: „Ich gehe heute nicht zur Schule.“ – Indirekte Rede?\nA) Peter sagt, er gehe heute nicht zur Schule.\nB) Peter sagt, er gehe heute nicht zu Schule.\nC) Peter sagt, er geht heute nicht zur Schule.\nD) Peter sagt, er ginge heute nicht zur Schule.\n\n10. Die Ärztin erklärt: „Der Patient hat Fieber.“ – Indirekte Rede?\nA) Die Ärztin erklärt, der Patient habe Fieber.\nB) Die Ärztin erklärt, der Patient hat Fieber.\nC) Die Ärztin erklärt, der Patient hätte Fieber.\nD) Die Ärztin erklärt, der Patient werde Fieber haben.",
+      "answer_key": {
+        "1": "B",
+        "2": "C",
+        "3": "A",
+        "4": "A",
+        "5": "A",
+        "6": "A",
+        "7": "A",
+        "8": "B",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "konjunktiv-i_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Konjunktiv I",
+      "cefr": "A1",
+      "topic": "Konjunktiv I",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setzen Sie die passende Form des Konjunktivs I ein.",
+      "body": [
+        "Er sagt, er ____ (sein) müde.",
+        "Sie berichtet, sie ____ (haben) keine Zeit.",
+        "Der Lehrer meint, die Aufgabe ____ (sein) schwer.",
+        "Der Chef sagt, wir ____ (arbeiten) morgen früher.",
+        "Maria behauptet, sie ____ (kommen) später.",
+        "Peter erzählt, er ____ (fahren) mit dem Zug.",
+        "Die Zeitung berichtet, das Wetter ____ (sein) schön.",
+        "Der Arzt sagt, die Medizin ____ (wirken) schnell.",
+        "Anna meint, ihr Freund ____ (kommen) am Freitag.",
+        "Der Student erklärt, er ____ (lesen) das Buch bereits."
+      ],
+      "answer_key": {
+        "1": "sei",
+        "2": "habe",
+        "3": "sei",
+        "4": "arbeiten",
+        "5": "komme",
+        "6": "fahre",
+        "7": "sei",
+        "8": "wirke",
+        "9": "komme",
+        "10": "lese"
+      }
+    }
+  },
+  {
+    "id": "konjunktiv-i_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Konjunktiv I",
+      "cefr": "A1",
+      "topic": "Konjunktiv I",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Bilden Sie zu jedem Beispielsatz die indirekte Rede, indem Sie das vorgegebene Schlüsselwort in die Lücke einsetzen. Jede Lücke ist 2 Punkte wert.",
+      "body": [
+        {
+          "number": 1,
+          "original": "Der Lehrer sagt, die Aufgabe ist schwer.",
+          "keyword": "sei",
+          "sentence_with_blank": "Der Lehrer sagt, die Aufgabe ___ schwer."
+        },
+        {
+          "number": 2,
+          "original": "Sie berichtet, sie hat keinen Urlaub.",
+          "keyword": "habe",
+          "sentence_with_blank": "Sie berichtet, sie ___ keinen Urlaub."
+        },
+        {
+          "number": 3,
+          "original": "Er meint, er kommt morgen.",
+          "keyword": "komme",
+          "sentence_with_blank": "Er meint, er ___ morgen."
+        },
+        {
+          "number": 4,
+          "original": "Der Chef sagt, er wird das Projekt leiten.",
+          "keyword": "leite",
+          "sentence_with_blank": "Der Chef sagt, er ___ das Projekt leiten."
+        },
+        {
+          "number": 5,
+          "original": "Sie behauptet, sie hat das Buch gelesen.",
+          "keyword": "habe",
+          "sentence_with_blank": "Sie behauptet, sie ___ das Buch gelesen."
+        },
+        {
+          "number": 6,
+          "original": "Der Reporter sagte, die Polizei findet den Dieb.",
+          "keyword": "finde",
+          "sentence_with_blank": "Der Reporter sagte, die Polizei ___ den Dieb."
+        }
+      ],
+      "answer_key": {
+        "1": "sei",
+        "2": "habe",
+        "3": "komme",
+        "4": "leite",
+        "5": "habe",
+        "6": "finde"
+      }
+    }
+  },
+  {
+    "id": "perfekt_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Perfekt",
+      "cefr": "A1",
+      "topic": "Perfekt",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Perfekt‑Form.",
+      "body": [
+        {
+          "number": 1,
+          "sentence": "Ich ____ (gehen) gestern ins Kino.",
+          "options": {
+            "A": "bin gegangen",
+            "B": "habe gegangen",
+            "C": "bin gegangen",
+            "D": "habe gegessen"
+          }
+        },
+        {
+          "number": 2,
+          "sentence": "Sie ____ (kaufen) ein neues Buch.",
+          "options": {
+            "A": "hat gekauft",
+            "B": "hat gekauft",
+            "C": "ist gekauft",
+            "D": "hat gekauft"
+          }
+        },
+        {
+          "number": 3,
+          "sentence": "Wir ____ (machen) die Hausaufgaben.",
+          "options": {
+            "A": "haben gemachen",
+            "B": "haben gemacht",
+            "C": "sind gemacht",
+            "D": "haben machen"
+          }
+        },
+        {
+          "number": 4,
+          "sentence": "Er ____ (sein) schon müde.",
+          "options": {
+            "A": "hat gewesen",
+            "B": "ist gewesen",
+            "C": "hat war",
+            "D": "ist war"
+          }
+        },
+        {
+          "number": 5,
+          "sentence": "Du ____ (schreiben) einen Brief.",
+          "options": {
+            "A": "hast geschrieben",
+            "B": "bist geschrieben",
+            "C": "hast schrieben",
+            "D": "bist schrieben"
+          }
+        },
+        {
+          "number": 6,
+          "sentence": "Ich ____ (aufstehen) um 7 Uhr.",
+          "options": {
+            "A": "habe aufgestanden",
+            "B": "bin aufgestanden",
+            "C": "habe aufgestanden",
+            "D": "bin aufgestanden"
+          }
+        },
+        {
+          "number": 7,
+          "sentence": "Ihr ____ (sehen) den Film gestern.",
+          "options": {
+            "A": "habt gesehen",
+            "B": "seid gesehen",
+            "C": "habt sehne",
+            "D": "seid sehne"
+          }
+        },
+        {
+          "number": 8,
+          "sentence": "Maria ____ (fahren) mit dem Bus.",
+          "options": {
+            "A": "hat gefahren",
+            "B": "ist gefahren",
+            "C": "hat fahrte",
+            "D": "ist fahrte"
+          }
+        },
+        {
+          "number": 9,
+          "sentence": "Wir ____ (trinken) Kaffee.",
+          "options": {
+            "A": "haben getrunken",
+            "B": "sind getrunken",
+            "C": "haben getrekk",
+            "D": "sind getrekk"
+          }
+        },
+        {
+          "number": 10,
+          "sentence": "Ihr ____ (lernen) viel.",
+          "options": {
+            "A": "habt gelernt",
+            "B": "seid gelernt",
+            "C": "habt lernte",
+            "D": "seid lernte"
+          }
+        }
+      ],
+      "answer_key": {
+        "1": "A",
+        "2": "A",
+        "3": "B",
+        "4": "B",
+        "5": "A",
+        "6": "B",
+        "7": "A",
+        "8": "B",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "perfekt_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Perfekt",
+      "cefr": "A1",
+      "topic": "Perfekt",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setzen Sie das Verb im Perfekt ein",
+      "body": "1. Ich ____ (machen) meine Hausaufgaben gestern.\n2. Wir ____ (gehen) am Wochenende ins Kino.\n3. Sie ____ (kaufen) ein rotes Kleid.\n4. Du ____ (trinken) schon Kaffee?\n5. Er ____ (schreiben) einen Brief.\n6. Ihr ____ (sein) sehr pünktlich.\n7. Ich ____ (sehen) den Film letzte Woche.\n8. Sie ____ (lernen) viel für die Prüfung.\n9. Wir ____ (fahren) mit dem Bus nach Berlin.\n10. Du ____ (bleiben) zu Hause.",
+      "answer_key": {
+        "1": "habe gemacht",
+        "2": "sind gegangen",
+        "3": "haben gekauft",
+        "4": "hast getrunken",
+        "5": "hat geschrieben",
+        "6": "seid gewesen",
+        "7": "habe gesehen",
+        "8": "haben gelernt",
+        "9": "sind gefahren",
+        "10": "bist geblieben"
+      }
+    }
+  },
+  {
+    "id": "perfekt_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Perfekt",
+      "cefr": "A1",
+      "topic": "Perfekt",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Aufgabe: Bilden Sie aus dem vorgegebenen Satz einen neuen Satz mit dem Schlüsselwort. Verwenden Sie das Perfekt.",
+      "body": [
+        {
+          "number": 1,
+          "original": "Ich habe gestern einen Apfel gegessen.",
+          "keyword": "essen",
+          "gap_sentence": "Ich ___ einen Apfel ___."
+        },
+        {
+          "number": 2,
+          "original": "Wir haben letzte Woche einen Film gesehen.",
+          "keyword": "sehen",
+          "gap_sentence": "Wir ___ einen Film ___."
+        },
+        {
+          "number": 3,
+          "original": "Sie ist vor einer Stunde nach Hause gegangen.",
+          "keyword": "gehen",
+          "gap_sentence": "Sie ___ nach Hause ___."
+        },
+        {
+          "number": 4,
+          "original": "Du hast schon deine Hausaufgaben gemacht.",
+          "keyword": "machen",
+          "gap_sentence": "Du ___ deine Hausaufgaben ___."
+        },
+        {
+          "number": 5,
+          "original": "Er hat heute um 7 Uhr aufgestanden.",
+          "keyword": "aufstehen",
+          "gap_sentence": "Er ___ um 7 Uhr ___."
+        },
+        {
+          "number": 6,
+          "original": "Ich habe meine Mutter gestern besucht.",
+          "keyword": "besuchen",
+          "gap_sentence": "Ich ___ meine Mutter ___."
+        },
+        {
+          "number": 7,
+          "original": "Wir sind am Wochenende schwimmen gegangen.",
+          "keyword": "schwimmen",
+          "gap_sentence": "Wir ___ am Wochenende ___."
+        }
+      ],
+      "answer_key": {
+        "1": [
+          "habe",
+          "gegessen"
+        ],
+        "2": [
+          "haben",
+          "gesehen"
+        ],
+        "3": [
+          "ist",
+          "gegangen"
+        ],
+        "4": [
+          "hast",
+          "gemacht"
+        ],
+        "5": [
+          "hat",
+          "aufgestanden"
+        ],
+        "6": [
+          "habe",
+          "besucht"
+        ],
+        "7": [
+          "sind",
+          "geschwommen"
+        ]
+      }
+    }
+  },
+  {
+    "id": "präpositionen-mit-kasus_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Präpositionen mit Kasus",
+      "cefr": "A1",
+      "topic": "Präpositionen mit Kasus",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Präposition‑Kombination aus den vier Optionen aus. Jede Frage gibt 1 Punkt.",
+      "body": "1. Ich gehe ___ die Schule.\n   A) in der Schule\n   B) in die Schule\n   C) in dem Schule\n   D) in das Schule\n2. Wir wohnen ___ das Haus.\n   A) in das Haus\n   B) in dem Haus\n   C) in die Haus\n   D) in den Haus\n3. Das Geschenk ist ___ dich.\n   A) für du\n   B) für dich\n   C) für dein\n   D) für dir\n4. Er sitzt ___ den Stuhl.\n   A) auf dem Stuhl\n   B) auf den Stuhl\n   C) auf das Stuhl\n   D) auf der Stuhl\n5. Wir fahren ___ die Stadt.\n   A) in die Stadt\n   B) in dem Stadt\n   C) in das Stadt\n   D) in der Stadt\n6. Sie kommt ___ dem Bahnhof.\n   A) zu dem Bahnhof\n   B) zu den Bahnhof\n   C) zu das Bahnhof\n   D) zu dasn Bahnhof\n7. Ich bin ___ der Bibliothek.\n   A) in der Bibliothek\n   B) in den Bibliothek\n   C) in das Bibliothek\n   D) in dem Bibliothek\n8. Das Bild hängt ___ die Wand.\n   A) an die Wand\n   B) an dem Wand\n   C) an das Wand\n   D) an den Wand\n9. Er wartet ___ den Bus.\n   A) auf den Bus\n   B) auf dem Bus\n   C) auf das Bus\n   D) auf der Bus\n10. Ich spreche ___ meiner Mutter.\n   A) mit meiner Mutter\n   B) mit meine Mutter\n   C) mit meinen Mutter\n   D) mit mein Mutter",
+      "answer_key": {
+        "1": "B",
+        "2": "B",
+        "3": "B",
+        "4": "A",
+        "5": "A",
+        "6": "A",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "präpositionen-mit-kasus_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Präpositionen mit Kasus",
+      "cefr": "A1",
+      "topic": "Präpositionen mit Kasus",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Vervollständige die Sätze mit der richtigen Präposition und dem passenden Kasus.",
+      "body": [
+        "1. Ich gehe <blank> dem Park.",
+        "2. Das Geschenk ist <blank> dich.",
+        "3. Wir fahren <blank> die Stadt.",
+        "4. Er kommt <blank> dem Haus.",
+        "5. Ich spiele <blank> meiner Schwester.",
+        "6. Sie wartet <blank> den Bus.",
+        "7. Du sitzt <blank> dem Stuhl.",
+        "8. Ich lege das Buch <blank> den Tisch.",
+        "9. Wir gehen <blank> dem Kino.",
+        "10. Er schreibt einen Brief <blank> seine Freundin."
+      ],
+      "answer_key": {
+        "1": "zu",
+        "2": "für",
+        "3": "in",
+        "4": "aus",
+        "5": "mit",
+        "6": "auf",
+        "7": "auf",
+        "8": "auf",
+        "9": "zu",
+        "10": "an"
+      }
+    }
+  },
+  {
+    "id": "präpositionen-mit-kasus_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Präpositionen mit Kasus",
+      "cefr": "A1",
+      "topic": "Präpositionen mit Kasus",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Formulieren Sie den zweiten Satz um, sodass er dieselbe Bedeutung wie der erste hat, und benutzen Sie das vorgegebene Stichwort. Schreiben Sie die Antwort in die Lücke.",
+      "body": "1. Ich gehe mit meinem Freund. – Stichwort: zu\nIch gehe ___ dem Freund.\n(2 pts)\n\n2. Das Buch liegt auf dem Tisch. – Stichwort: in\nDas Buch liegt ___ dem Tisch.\n(2 pts)\n\n3. Wir fahren nach Berlin. – Stichwort: in\nWir fahren ___ die Stadt.\n(2 pts)\n\n4. Der Hund wartet neben dem Kind. – Stichwort: bei\nDer Hund wartet ___ dem Kind.\n(2 pts)\n\n5. Ich schenke das Geschenk für dich. – Stichwort: zu\nIch schenke das Geschenk ___ dir.\n(2 pts)\n\n6. Sie kommt aus dem Haus. – Stichwort: von\nSie kommt ___ dem Haus.\n(2 pts)\n\n7. Ich stelle das Glas auf den Tisch. – Stichwort: in\nIch stelle das Glas ___ den Tisch.\n(2 pts)",
+      "answer_key": {
+        "1": "zu",
+        "2": "in",
+        "3": "in",
+        "4": "bei",
+        "5": "zu",
+        "6": "von",
+        "7": "in"
+      }
+    }
+  },
+  {
+    "id": "rektion-der-verben_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Rektion der Verben",
+      "cefr": "A1",
+      "topic": "Rektion der Verben",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Präposition zum Verb aus und kreuzen Sie die passende Antwort an.",
+      "body": "1. Ich warte ___ den Bus.\n   A) auf\n   B) über\n   C) mit\n   D) bei\n2. Er denkt ___ seine Familie.\n   A) auf\n   B) an\n   C) von\n   D) um\n3. Wir interessieren uns ___ Musik.\n   A) für\n   B) über\n   C) mit\n   D) bei\n4. Sie träumt ___ Urlaub.\n   A) von\n   B) an\n   C) auf\n   D) um\n5. Ihr sprecht ___ das Problem.\n   A) über\n   B) für\n   C) mit\n   D) bei\n6. Ich freue mich ___ das Geschenk.\n   A) über\n   B) auf\n   C) von\n   D) an\n7. Du kümmerst dich ___ deine Katze.\n   A) um\n   B) für\n   C) über\n   D) an\n8. Wir achten ___ die Regel.\n   A) auf\n   B) mit\n   C) bei\n   D) von\n9. Ich bedanke mich ___ meine Eltern.\n   A) bei\n   B) für\n   C) über\n   D) um\n10. Er entscheidet sich ___ das blaue T‑Shirt.\n   A) für\n   B) von\n   C) auf\n   D) an",
+      "answer_key": {
+        "1": "A",
+        "2": "B",
+        "3": "A",
+        "4": "A",
+        "5": "A",
+        "6": "A",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "rektion-der-verben_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Rektion der Verben",
+      "cefr": "A1",
+      "topic": "Rektion der Verben",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Ergänzen Sie die fehlenden Präpositionen.",
+      "body": "<ol>\n      <li>Ich warte <span class=\"blank\"></span> den Bus.</li>\n      <li>Wir denken <span class=\"blank\"></span> das Spiel.</li>\n      <li>Sie spricht <span class=\"blank\"></span> das Problem.</li>\n      <li>Er spricht <span class=\"blank\"></span> das Wetter.</li>\n      <li>Ich interessiere mich <span class=\"blank\"></span> Musik.</li>\n      <li>Du träumst <span class=\"blank\"></span> Urlaub.</li>\n      <li>Wir freuen uns <span class=\"blank\"></span> das Geschenk.</li>\n      <li>Sie erinnert sich <span class=\"blank\"></span> die Reise.</li>\n      <li>Ich warte <span class=\"blank\"></span> meine Freundin.</li>\n      <li>Er denkt <span class=\"blank\"></span> seine Eltern.</li>\n    </ol>",
+      "answer_key": {
+        "1": "auf",
+        "2": "an",
+        "3": "über",
+        "4": "über",
+        "5": "für",
+        "6": "von",
+        "7": "über",
+        "8": "an",
+        "9": "auf",
+        "10": "an"
+      }
+    }
+  },
+  {
+    "id": "rektion-der-verben_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Rektion der Verben",
+      "cefr": "A1",
+      "topic": "Rektion der Verben",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Key‑Word‑Transformation (je 2 pts)",
+      "body": "1. Ich warte auf den Bus.\nKey‑Word: warten\nIch ____ den Bus.\n\n2. Er denkt an seine Eltern.\nKey‑Word: denken\nEr ____ seine Eltern.\n\n3. Wir helfen dem Mann.\nKey‑Word: helfen\nWir ____ dem Mann.\n\n4. Sie interessiert sich für Musik.\nKey‑Word: interessieren\nSie ____ für Musik.\n\n5. Ich spreche über das Problem.\nKey‑Word: sprechen\nIch ____ das Problem.\n\n6. Du träumst von Urlaub.\nKey‑Word: träumen\nDu ____ von Urlaub.",
+      "answer_key": {
+        "1": "warte auf",
+        "2": "denkt an",
+        "3": "helfen",
+        "4": "interessiert sich",
+        "5": "spreche über",
+        "6": "träumst von"
+      }
+    }
+  },
+  {
+    "id": "futur-ii_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Futur II",
+      "cefr": "A1",
+      "topic": "Futur II",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Futur‑II‑Form für den Satz.",
+      "body": "1. Morgen _____ ich das Buch gelesen haben.\nA) werde das Buch gelesen haben\nB) würde das Buch lesen werden\nC) werde das Buch lesen\nD) werde das Buch gelesen sein\n\n2. In zwei Jahren _____ wir das Haus gebaut haben.\nA) werden das Haus gebaut haben\nB) werden das Haus bauen wird\nC) werden das Haus gebaut sein\nD) würden das Haus bauen\n\n3. Er _____ bis dahin angekommen sein.\nA) wird\nB) wird angekommen sein\nC) wird angekommen sein\nD) wird angekommen haben\n\n4. Du _____ das Ergebnis gesehen haben.\nA) wirst\nB) wirst das Ergebnis gesehen haben\nC) wirst das Ergebnis sehen werden\nD) wirst das Ergebnis gesehen sein\n\n5. Sie _____ das Zimmer aufgeräumt haben.\nA) wird\nB) wird das Zimmer aufgeräumt haben\nC) wird das Zimmer aufgeräumt sein\nD) würde das Zimmer aufräumen\n\n6. Wir _____ das Gespräch beendet haben.\nA) werden\nB) werden das Gespräch beendet haben\nC) werden das Gespräch beenden werden\nD) würden das Gespräch beendet haben\n\n7. Ich _____ bis dahin meine Aufgaben erledigt haben.\nA) werde\nB) werde meine Aufgaben erledigt haben\nC) werde meine Aufgaben erledigt sein\nD) würde meine Aufgaben erledigen\n\n8. Bis nächste Woche _____ er das Projekt abgeschlossen haben.\nA) wird\nB) wird das Projekt abgeschlossen haben\nC) wird das Projekt abschließen werden\nD) würde das Projekt abschließen\n\n9. Ihr _____ die Einladung erhalten haben.\nA) werdet\nB) werdet die Einladung erhalten haben\nC) werdet die Einladung erhalten sein\nD) würdet die Einladung erhalten\n\n10. Sie _____ bis dahin nach Berlin gefahren sein.\nA) werden\nB) werden nach Berlin gefahren sein\nC) werden nach Berlin gefahren haben\nD) würden nach Berlin fahren",
+      "answer_key": {
+        "1": "A",
+        "2": "A",
+        "3": "A",
+        "4": "A",
+        "5": "A",
+        "6": "A",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "futur-ii_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Futur II",
+      "cefr": "A1",
+      "topic": "Futur II",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Ergänzen Sie die Lücken mit der richtigen Futur‑II‑Form von werden (z. B. werde, wirst, wird, werden, werdet). Jeder Lückentext ist 1 Punkt wert.",
+      "body": "1. Morgen <blank> ich nach Berlin angekommen sein. (1 pt)\n2. Nächste Woche <blank> du das Buch gelesen haben. (1 pt)\n3. In einem Monat <blank> er das Projekt abgeschlossen haben. (1 pt)\n4. Bis dahin <blank> sie das Geschenk erhalten haben. (1 pt)\n5. Übermorgen <blank> wir das Konzert besucht haben. (1 pt)\n6. In zwei Jahren <blank> ihr das Auto repariert haben. (1 pt)\n7. Bald <blank> sie (Plural) die Prüfung bestanden haben. (1 pt)\n8. Nach dem Training <blank> ich müde gewesen sein. (1 pt)\n9. Heute Abend <blank> du die E‑Mails geschrieben haben. (1 pt)\n10. Morgen früh <blank> er den Zug verpasst haben. (1 pt)",
+      "answer_key": {
+        "1": "werde",
+        "2": "wirst",
+        "3": "wird",
+        "4": "wird",
+        "5": "werden",
+        "6": "werdet",
+        "7": "werden",
+        "8": "werde",
+        "9": "wirst",
+        "10": "wird"
+      }
+    }
+  },
+  {
+    "id": "futur-ii_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Futur II",
+      "cefr": "A1",
+      "topic": "Futur II",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Key Word Transformation – Futur II",
+      "body": "1. Ausgangssatz: Ich werde das Buch bis morgen gelesen haben.\nSchlüsselwort: lesen\nUmformulierung: Bis morgen ___ ich das Buch ___.\n\n2. Ausgangssatz: Er wird das Haus bis Ende des Jahres gebaut haben.\nSchlüsselwort: bauen\nUmformulierung: Bis Ende des Jahres ___ er das Haus ___.\n\n3. Ausgangssatz: Wir werden das Projekt bis nächste Woche beendet haben.\nSchlüsselwort: beenden\nUmformulierung: Bis nächste Woche ___ wir das Projekt ___.\n\n4. Ausgangssatz: Sie wird in zwei Tagen den Bericht geschrieben haben.\nSchlüsselwort: schreiben\nUmformulierung: In zwei Tagen ___ sie den Bericht ___.\n\n5. Ausgangssatz: Du wirst das Spiel bis morgen gewonnen haben.\nSchlüsselwort: gewinnen\nUmformulierung: Bis morgen ___ du das Spiel ___.\n\n6. Ausgangssatz: Ich werde bis morgen die Prüfung bestanden haben.\nSchlüsselwort: bestehen\nUmformulierung: Bis morgen ___ ich die Prüfung ___.",
+      "answer_key": {
+        "1": [
+          "werde",
+          "gelesen haben"
+        ],
+        "2": [
+          "wird",
+          "gebaut haben"
+        ],
+        "3": [
+          "werden",
+          "beendet haben"
+        ],
+        "4": [
+          "wird",
+          "geschrieben haben"
+        ],
+        "5": [
+          "wirst",
+          "gewonnen haben"
+        ],
+        "6": [
+          "werde",
+          "bestanden haben"
+        ]
+      }
+    }
+  },
+  {
+    "id": "nebensätze_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Nebensätze",
+      "cefr": "A1",
+      "topic": "Nebensätze",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Antwort (A‑D) aus. Jede richtige Antwort gibt 1 Punkt.",
+      "body": "1. Welches Wort ist ein typisches Signalwort für einen Nebensatz?\nA) und\nB) weil\nC) aber\nD) oder\n\n2. Was fehlt in diesem Satz? „Ich lerne, ___ ich die Prüfung bestehe.“\nA) damit\nB) weil\nC) wenn\nD) weil\n\n3. In welchem Satz steht das Verb korrekt am Ende des Nebensatzes?\nA) Ich komme, weil ich bin müde.\nB) Ich bleibe zu Hause, weil ich krank bin.\nC) Ich gehe, obwohl es regnet.\nD) Ich lese, damit ich lerne.\n\n4. Welcher Satz enthält das Komma an der richtigen Stelle?\nA) Ich glaube dass er kommt.\nB) Ich glaube, dass er kommt.\nC) Ich glaube dass, er kommt.\nD) Ich glaube dass, er kommt.\n\n5. Wählen Sie die richtige Wortstellung im Nebensatz: „..., dass ___ ich gestern gesehen habe.“\nA) du\nB) dich\nC) du hast\nD) dich habe\n\n6. Welches Wort passt nicht als Signalwort für einen Nebensatz?\nA) weil\nB) wenn\nC) obwohl\nD) aber\n\n7. Welche Form ist richtig im Nebensatz? „..., weil ich ___ müde.“\nA) bin\nB) sein\nC) war\nD) gewesen\n\n8. Setzen Sie die richtige Reihenfolge ein: „Ich rufe dich an, ___ du zu Hause bist.“\nA) weil\nB) wenn\nC) obwohl\nD) damit\n\n9. Welcher Satz ist grammatisch falsch?\nA) Er geht nach Hause, obwohl es regnet.\nB) Er geht nach Hause weil es regnet.\nC) Er geht nach Hause, weil es regnet.\nD) Er geht nach Hause, wenn ich ihn rufe.\n\n10. Was ist im folgenden Satz richtig? „Ich warte, ___ der Zug kommt.“\nA) bis\nB) weil\nC) wenn\nD) obwohl",
+      "answer_key": {
+        "q1": "B",
+        "q2": "A",
+        "q3": "B",
+        "q4": "B",
+        "q5": "B",
+        "q6": "D",
+        "q7": "A",
+        "q8": "B",
+        "q9": "B",
+        "q10": "A"
+      }
+    }
+  },
+  {
+    "id": "nebensätze_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Nebensätze",
+      "cefr": "A1",
+      "topic": "Nebensätze",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setzen Sie die fehlenden Wort(e) in die Lücken ein.",
+      "body": "<ol>\n    <li>Ich bleibe zu Hause, weil ich <span class=\"blank\"></span>.</li>\n    <li>Er sagt, dass er <span class=\"blank\"></span>.</li>\n    <li>Wenn ich mehr Geld habe, <span class=\"blank\"></span> ich ein neues Buch.</li>\n    <li>Obwohl es heute kalt ist, <span class=\"blank\"></span> wir spazieren.</li>\n    <li>Sie lernt, damit sie die Prüfung <span class=\"blank\"></span>.</li>\n    <li>Wir essen, weil wir <span class=\"blank\"></span>.</li>\n    <li>Du kannst kommen, wenn du <span class=\"blank\"></span>.</li>\n    <li>Ich glaube, dass er <span class=\"blank\"></span>.</li>\n    <li>Er bleibt zu Hause, obwohl er <span class=\"blank\"></span> gehen muss.</li>\n    <li>Sie arbeitet, damit sie ihr Ziel <span class=\"blank\"></span>.</li>\n</ol>",
+      "answer_key": {
+        "1": "krank bin",
+        "2": "kommt",
+        "3": "kaufe",
+        "4": "gehen",
+        "5": "bestehen",
+        "6": "Hunger haben",
+        "7": "willst",
+        "8": "kommt",
+        "9": "nicht",
+        "10": "erreichen"
+      }
+    }
+  },
+  {
+    "id": "nebensätze_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Nebensätze",
+      "cefr": "A1",
+      "topic": "Nebensätze",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Schreibe den Satz mit dem Schlüsselwort um (gleiche Bedeutung):",
+      "body": "Aufgabe 1: Ursprünglicher Satz: Ich gehe heute nicht zur Arbeit. Schlüsselwort: weil. Satz mit Lücke: ____ ich heute nicht zur Arbeit gehe.\nAufgabe 2: Ursprünglicher Satz: Er hat das Buch gekauft. Schlüsselwort: dass. Satz mit Lücke: Er sagt ____ er das Buch gekauft hat.\nAufgabe 3: Ursprünglicher Satz: Wir kommen später. Schlüsselwort: wenn. Satz mit Lücke: ____ wir später kommen, warten Sie bitte.\nAufgabe 4: Ursprünglicher Satz: Sie ist müde. Schlüsselwort: obwohl. Satz mit Lücke: ____ sie müde ist, arbeitet sie weiter.\nAufgabe 5: Ursprünglicher Satz: Ich lerne Deutsch. Schlüsselwort: damit. Satz mit Lücke: Ich lerne, ____ ich Deutsch spreche.\nAufgabe 6: Ursprünglicher Satz: Es regnet. Schlüsselwort: weil. Satz mit Lücke: ____ es regnet, bleiben wir zu Hause.\nAufgabe 7: Ursprünglicher Satz: Du kannst kommen. Schlüsselwort: wenn. Satz mit Lücke: ____ du kommst, freuen wir uns.",
+      "answer_key": {
+        "1": "Weil ich heute nicht zur Arbeit gehe.",
+        "2": "Er sagt, dass er das Buch gekauft hat.",
+        "3": "Wenn wir später kommen, warten Sie bitte.",
+        "4": "Obwohl sie müde ist, arbeitet sie weiter.",
+        "5": "Ich lerne, damit ich Deutsch spreche.",
+        "6": "Weil es regnet, bleiben wir zu Hause.",
+        "7": "Wenn du kommst, freuen wir uns."
+      }
+    }
+  },
+  {
+    "id": "modalverben_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Modalverben",
+      "cefr": "A1",
+      "topic": "Modalverben",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie das richtige Modalverb, das die Lücke im Satz korrekt vervollständigt.",
+      "body": "1. Ich ____ heute Abend ins Kino gehen.\n   A) muss\n   B) kann\n   C) will\n   D) möchte\n2. Du ____ das Buch lesen.\n   A) darf\n   B) musst\n   C) sollst\n   D) möchtest\n3. Wir ____ morgen früh arbeiten.\n   A) können\n   B) sollen\n   C) dürfen\n   D) wollen\n4. Er ____ gut Deutsch sprechen.\n   A) kann\n   B) muss\n   C) darf\n   D) soll\n5. Sie ____ heute länger bleiben.\n   A) darf\n   B) muss\n   C) soll\n   D) möchte\n6. Ich ____ morgen meine Hausaufgaben machen.\n   A) möchte\n   B) darf\n   C) soll\n   D) kann\n7. Ihr ____ leise sein.\n   A) sollt\n   B) könnt\n   C) müsst\n   D) dürft\n8. Wir ____ heute nicht essen.\n   A) dürfen\n   B) können\n   C) müssen\n   D) wollen\n9. Er ____ das Auto waschen.\n   A) muss\n   B) kann\n   C) darf\n   D) soll\n10. Du ____ dir das Bild anschauen.\n   A) willst\n   B) darfst\n   C) sollst\n   D) kannst",
+      "answer_key": {
+        "1": "D",
+        "2": "B",
+        "3": "B",
+        "4": "A",
+        "5": "A",
+        "6": "C",
+        "7": "C",
+        "8": "A",
+        "9": "A",
+        "10": "B"
+      }
+    }
+  },
+  {
+    "id": "modalverben_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Modalverben",
+      "cefr": "A1",
+      "topic": "Modalverben",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Ersetze die Lücken mit dem korrekten konjugierten Modalverb (kann, muss, darf, soll, will, möchte).",
+      "body": "1. Ich ______ (können) heute Abend ins Kino gehen.\n2. Du ______ (müssen) deine Hausaufgaben machen.\n3. Er ______ (dürfen) das Fenster öffnen.\n4. Wir ______ (sollen) jetzt pünktlich sein.\n5. Sie ______ (wollen) ein neues Buch kaufen.\n6. Ich ______ (möchten) einen Kaffee trinken.\n7. Ihr ______ (können) leiser sprechen.\n8. Du ______ (dürfen) nicht rauchen.\n9. Er ______ (müssen) das Auto waschen.\n10. Wir ______ (sollen) morgen üben.",
+      "answer_key": {
+        "1": "kann",
+        "2": "musst",
+        "3": "darf",
+        "4": "sollen",
+        "5": "will",
+        "6": "möchte",
+        "7": "könnt",
+        "8": "darf",
+        "9": "muss",
+        "10": "sollen"
+      }
+    }
+  },
+  {
+    "id": "modalverben_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Modalverben",
+      "cefr": "A1",
+      "topic": "Modalverben",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Schreiben Sie den zweiten Satz so um, dass er dieselbe Bedeutung hat wie der erste. Verwenden Sie das angegebene Schlüsselwort (Modalverb) und setzen Sie das fehlende Wort in das Feld.",
+      "body": "1. Ich habe keine Zeit. (müssen)\nIch ______ Zeit haben.\n\n2. Wir dürfen nicht laut sprechen. (können)\nWir ______ laut sprechen.\n\n3. Du sollst das Fenster öffnen. (möchten)\nDu ______ das Fenster öffnen.\n\n4. Er kann sehr gut tanzen. (müssen)\nEr ______ gut tanzen.\n\n5. Ich möchte einen Kaffee trinken. (dürfen)\nIch ______ einen Kaffee trinken.\n\n6. Ihr sollt pünktlich kommen. (können)\nIhr ______ pünktlich kommen.",
+      "answer_key": {
+        "1": "muss",
+        "2": "können nicht",
+        "3": "möchtest",
+        "4": "muss",
+        "5": "darf",
+        "6": "könnt"
+      }
+    }
+  },
+  {
+    "id": "wortstellung_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Wortstellung",
+      "cefr": "A1",
+      "topic": "Wortstellung",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Aufgabe: Wählen Sie die korrekte Wortstellung im Haupt‑ bzw. Nebensatz. Kreuzen Sie die richtige Antwort (A‑D) an.",
+      "body": "1. Ich ____ heute ins Kino.\nA) gehe\nB) ins Kino gehe\nC) gehe ich\nD) gehe heute ich\n\n2. ______ ich Zeit habe, lese ich ein Buch.\nA) Wenn\nB) Ich\nC) Habe\nD) Zeit\n\n3. Wir ____ morgen nach Berlin fahren.\nA) fahren\nB) nach Berlin fahren wir\nC) wir fahren\nD) morgen fahren wir\n\n4. Er weiß, ______ er kommt.\nA) dass\nB) weil\nC) wenn\nD) obwohl\n\n5. ______ ich krank bin, bleibe ich zu Hause.\nA) Weil\nB) Wenn\nC) Obwohl\nD) Dass\n\n6. Sie ____ jeden Tag pünktlich.\nA) ist\nB) sind\nC) war\nD) ist\n\n7. Heute ____ ich viel Arbeit.\nA) habe\nB) habe ich\nC) ich habe\nD) Arbeit habe ich\n\n8. ____ du gern Musik hörst, kannst du das Radio einschalten.\nA) Wenn\nB) Weil\nC) Dass\nD) Obwohl\n\n9. Meine Mutter ____ jeden Tag kocht.\nA) kocht\nB) kocht meine Mutter\nC) meine Mutter kocht\nD) kocht meine Mutter jeden Tag\n\n10. Wir gehen ins Restaurant, ______ wir Hunger haben.\nA) weil\nB) wenn\nC) obwohl\nD) dass",
+      "answer_key": {
+        "1": "A",
+        "2": "A",
+        "3": "A",
+        "4": "A",
+        "5": "B",
+        "6": "A",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "wortstellung_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Wortstellung",
+      "cefr": "A1",
+      "topic": "Wortstellung",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setzen Sie das fehlende Wort an die richtige Stelle, um die Satzstellung korrekt zu machen. Jeder Satz ist 1 Punkt wert.",
+      "body": "1. Heute ___ ich ___ ins Kino.\n2. Wir ___ morgen ___ einen Ausflug.\n3. Ich ___ meine Mutter ___ im Supermarkt.\n4. Wenn es regnet, ___ ich ___ zu Hause.\n5. Du ___ den Brief ___ gestern gelesen.\n6. Sie ___ sehr ___ freundlich.\n7. Mein Freund und ich ___ am Wochenende ___ Fußball.\n8. Weil ich krank bin, ___ ich ___ zu Hause bleibe.\n9. Er ___ das Buch ___ gerade.\n10. Gestern ___ wir ___ im Park spazieren.",
+      "answer_key": {
+        "1": [
+          "werde",
+          "gehen"
+        ],
+        "2": [
+          "werden",
+          "machen"
+        ],
+        "3": [
+          "werde",
+          "treffen"
+        ],
+        "4": [
+          "werde",
+          "bleiben"
+        ],
+        "5": [
+          "hast",
+          "schon"
+        ],
+        "6": [
+          "ist",
+          ""
+        ],
+        "7": [
+          "werden",
+          "spielen"
+        ],
+        "8": [
+          "bleibe",
+          ""
+        ],
+        "9": [
+          "wird",
+          "lesen"
+        ],
+        "10": [
+          "sind",
+          "gegangen"
+        ]
+      }
+    }
+  },
+  {
+    "id": "wortstellung_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Wortstellung",
+      "cefr": "A1",
+      "topic": "Wortstellung",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Verändern Sie den zweiten Satz, sodass er die gleiche Bedeutung wie der erste hat. Nutzen Sie das angegebene Schlüsselwort.",
+      "body": [
+        {
+          "item": 1,
+          "original": "Ich habe gestern einen roten Ball.",
+          "keyword": "gestern",
+          "transformed_template": "_____ ______ einen roten Ball habe ich."
+        },
+        {
+          "item": 2,
+          "original": "Peter kommt morgen zur Schule.",
+          "keyword": "morgen",
+          "transformed_template": "_____ ______ kommt Peter zur Schule."
+        },
+        {
+          "item": 3,
+          "original": "Wir treffen uns am Abend im Park.",
+          "keyword": "am Abend",
+          "transformed_template": "_____ ______ treffen wir uns im Park."
+        },
+        {
+          "item": 4,
+          "original": "Sie liest gern Bücher.",
+          "keyword": "gern",
+          "transformed_template": "_____ ______ liest sie Bücher."
+        },
+        {
+          "item": 5,
+          "original": "Der Lehrer erklärt die Aufgabe laut.",
+          "keyword": "laut",
+          "transformed_template": "_____ ______ erklärt der Lehrer die Aufgabe."
+        },
+        {
+          "item": 6,
+          "original": "Du kannst heute das Haus putzen.",
+          "keyword": "heute",
+          "transformed_template": "_____ ______ kannst du das Haus putzen."
+        }
+      ],
+      "answer_key": {
+        "1": "Gestern",
+        "2": "Morgen",
+        "3": "Am Abend",
+        "4": "Gern",
+        "5": "Laut",
+        "6": "Heute"
+      }
+    }
+  },
+  {
+    "id": "passiv_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Passiv",
+      "cefr": "A1",
+      "topic": "Passiv",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Übung: Passiv – Multiple‑Choice (10 Fragen) (10 pts)",
+      "body": "1. Welches Wort fehlt im Passiv‑Satz?\nDas Buch _____ von Anna geschrieben.\nA) wird\nB) ist\nC) sein\nD) haben\n\n2. Wählen Sie die richtige Passiv‑Form.\nDie Tür (öffnen) _________.\nA) wird geöffnet\nB) ist geöffnet\nC) öffnet\nD) geöffnet wird\n\n3. Setzen Sie das passende Hilfsverb ein.\nDas Essen _______ gekocht.\nA) werden\nB) wird\nC) ist\nD) sein\n\n4. Welcher Satz ist im Passiv?\nA) Der Lehrer erklärt die Aufgabe.\nB) Die Aufgabe wird erklärt.\nC) Wir erklären die Aufgabe.\nD) Er erklärt die Aufgabe.\n\n5. Ergänzen Sie den Satz korrekt.\nDer Brief _______ von Peter geschrieben.\nA) wird\nB) ist\nC) sein\nD) hat\n\n6. Welches Partizip II passt?\nDie Fenster __________ (schließen).\nA) geschlossen\nB) schließt\nC) anschließend\nD) schloss\n\n7. Wählen Sie die richtige Präposition im Passiv‑Satz.\nDas Bild wird __________ dem Lehrer gezeigt.\nA) von\nB) durch\nC) mit\nD) zu\n\n8. Welcher Satz ist grammatisch richtig im Passiv?\nA) Der Kuchen ist gebacken.\nB) Der Kuchen wird gebacken.\nC) Der Kuchen gebacken wird.\nD) Der Kuchen zu backen ist.\n\n9. Ergänzen Sie das fehlende Wort.\nDie Aufgabe __________ von den Schülern gemacht.\nA) wurde\nB) wird\nC) ist\nD) haben\n\n10. Wählen Sie das korrekte Passiv mit „sein“.\nDer Brief (schreiben) _________.\nA) ist geschrieben\nB) wird geschrieben\nC) schreibt\nD) war geschrieben",
+      "answer_key": [
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "A",
+        "B",
+        "A",
+        "A"
+      ]
+    }
+  },
+  {
+    "id": "passiv_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Passiv",
+      "cefr": "A1",
+      "topic": "Passiv",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Lückentext – Ergänzen Sie die korrekte Passivform (je 1 Punkt)",
+      "body": "1. Das Brot [...] (backen) von meiner Mutter.\n2. Die Fenster [...] (reinigen) von den Kindern.\n3. Der Brief [...] (schreiben) von Anna.\n4. Der Film [...] (sehen) von vielen Zuschauern.\n5. Das Essen [...] (kochen) von dem Koch.\n6. Die Tür [...] (schließen) von dem Hausmeister.\n7. Der Briefkasten [...] (aufräumen) von der Reinigungskraft.\n8. Die Blumen [...] (gießen) von Peter.\n9. Das Bild [...] (malen) von einer Künstlerin.\n10. Der Aufsatz [...] (schreiben) von dem Schüler.",
+      "answer_key": {
+        "1": "wird gebacken",
+        "2": "werden gereinigt",
+        "3": "wird geschrieben",
+        "4": "wird gesehen",
+        "5": "wird gekocht",
+        "6": "wird geschlossen",
+        "7": "wird aufgeräumt",
+        "8": "werden gegossen",
+        "9": "wird gemalt",
+        "10": "wird geschrieben"
+      }
+    }
+  },
+  {
+    "id": "passiv_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Passiv",
+      "cefr": "A1",
+      "topic": "Passiv",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Formulieren Sie den Passivsatz mit dem angegebenen Schlüsselwort.",
+      "body": "1. Aktiv: Der Mann repariert das Fahrrad. Schlüsselwort: werden. Passiv: Das Fahrrad ___ (reparieren) ___ vom Mann. (2 pts)\n2. Aktiv: Die Köchin kocht die Suppe. Schlüsselwort: werden. Passiv: Die Suppe ___ (kochen) ___ von der Köchin. (2 pts)\n3. Aktiv: Die Kinder malen ein Bild. Schlüsselwort: werden. Passiv: Ein Bild ___ (malen) ___ von den Kindern. (2 pts)\n4. Aktiv: Der Briefträger liefert die Post. Schlüsselwort: werden. Passiv: Die Post ___ (liefern) ___ vom Briefträger. (2 pts)\n5. Aktiv: Der Arzt untersucht den Patienten. Schlüsselwort: sein. Passiv: Der Patient ___ (untersuchen) ___ vom Arzt. (2 pts)\n6. Aktiv: Die Schüler schließen die Tür. Schlüsselwort: sein. Passiv: Die Tür ___ (schließen) ___ von den Schülern. (2 pts)\nGesamtpunktzahl: 12 pts",
+      "answer_key": {
+        "1": [
+          "wird",
+          "repariert"
+        ],
+        "2": [
+          "wird",
+          "gekocht"
+        ],
+        "3": [
+          "wird",
+          "gemalt"
+        ],
+        "4": [
+          "wird",
+          "geliefert"
+        ],
+        "5": [
+          "ist",
+          "untersucht"
+        ],
+        "6": [
+          "ist",
+          "geschlossen"
+        ]
+      }
+    }
+  },
+  {
+    "id": "steigerung-der-adjektive_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Steigerung der Adjektive",
+      "cefr": "A1",
+      "topic": "Steigerung der Adjektive",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Form des Adjektivs (Positiv, Komparativ oder Superlativ) für jede Lücke aus.",
+      "body": "1. Der Elefant ist ___ als die Maus.\nA) groß\nB) größer\nC) am größten\nD) am größeren\n\n2. Mein Haus ist ___ als dein Haus.\nA) klein\nB) kleiner\nC) am kleinsten\nD) am kleineren\n\n3. Der Zug fährt ___ als das Auto.\nA) schnell\nB) schneller\nC) am schnellsten\nD) am schneller\n\n4. Dieses Buch ist ___ von allen.\nA) interessant\nB) interessanter\nC) am interessantesten\nD) am interessanteren\n\n5. Heute ist es ___ als gestern.\nA) warm\nB) wärmer\nC) am wärmsten\nD) am wärmeren\n\n6. Anna ist ___ als Maria.\nA) alt\nB) älter\nC) am ältesten\nD) am älteren\n\n7. Der Berg ist ___ als der Hügel.\nA) hoch\nB) höher\nC) am höchsten\nD) am höheren\n\n8. Dieses Bild ist ___ von allen im Raum.\nA) schön\nB) schöner\nC) am schönsten\nD) am schöneren\n\n9. Der Film war ___ als das Buch.\nA) gut\nB) besser\nC) am besten\nD) am besser\n\n10. Mein Sohn ist ___ als ich.\nA) jung\nB) jünger\nC) am jüngsten\nD) am jüngeren",
+      "answer_key": {
+        "1": "B",
+        "2": "B",
+        "3": "B",
+        "4": "C",
+        "5": "B",
+        "6": "B",
+        "7": "B",
+        "8": "C",
+        "9": "B",
+        "10": "B"
+      }
+    }
+  },
+  {
+    "id": "steigerung-der-adjektive_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Steigerung der Adjektive",
+      "cefr": "A1",
+      "topic": "Steigerung der Adjektive",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setzen Sie die richtige Form des Adjektivs in die Lücken ein (Positiv → Komparativ → Superlativ). Hinweis: Vergleiche mit „als“ oder „am …“.",
+      "body": "1. Mein Haus ist ___ (groß) als das deiner.\n2. Der Zug fährt ___ (schnell) als das Flugzeug.\n3. Dieses Buch ist ___ (interessant) von allen, die ich gelesen habe.\n4. Meine Schwester ist ___ (jung) als ich.\n5. Der Berg ist ___ (hoch) als der Hügel.\n6. Das Wetter heute ist ___ (kalt) als gestern.\n7. Von allen Früchten ist die Erdbeere ___ (süß).\n8. Dein Laptop ist ___ (teuer) als meiner.\n9. Das Kino ist ___ (laut) als die Bibliothek.\n10. Er läuft ___ (schnell) von allen im Team.",
+      "answer_key": {
+        "1": "größer",
+        "2": "schneller",
+        "3": "am interessantesten",
+        "4": "jünger",
+        "5": "höher",
+        "6": "kälter",
+        "7": "am süßesten",
+        "8": "teurer",
+        "9": "lauter",
+        "10": "am schnellsten"
+      }
+    }
+  },
+  {
+    "id": "steigerung-der-adjektive_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Steigerung der Adjektive",
+      "cefr": "A1",
+      "topic": "Steigerung der Adjektive",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "",
+      "body": "",
+      "answer_key": ""
+    }
+  },
+  {
+    "id": "präteritum_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Präteritum",
+      "cefr": "A2",
+      "topic": "Präteritum",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Präteritum‑Form des Verbs in jedem Satz aus.",
+      "body": "1. Ich ___ gestern ins Kino.\nA) gehe\nB) ging\nC) gingst\nD) gingete\n\n2. Maria ___ das Buch schnell gelesen.\nA) hat\nB) hatte\nC) las\nD) liest\n\n3. Wir ___ am Wochenende wanderten.\nA) gehen\nB) gingen\nC) ging\nD) gerannt\n\n4. Der Lehrer ___ den Test korrigiert.\nA) korrigierte\nB) korrigiert\nC) korrigierte er\nD) korrigierten\n\n5. Letztes Jahr ___ wir nach Berlin gefahren.\nA) fahren\nB) fuhren\nC) fuhr\nD) gefahren\n\n6. Sie ___ den Ball gefangen.\nA) fängt\nB) fing\nC) gefing\nD) gefangen\n\n7. Ich ___ viel Glück gehabt.\nA) hatte\nB) habe\nC) hatte gehabt\nD) hatte nicht\n\n8. Dein Freund ___ das Fenster geöffnet.\nA) öffnete\nB) öffnet\nC) öffnete er\nD) geöffnet\n\n9. Die Kinder ___ laut gesungen.\nA) sangen\nB) sang\nC) singen\nD) gesungen\n\n10. Plötzlich ___ es stark geregnet.\nA) regnet\nB) regnete\nC) regnete es\nD) regnet es",
+      "answer_key": {
+        "1": "B",
+        "2": "C",
+        "3": "B",
+        "4": "A",
+        "5": "B",
+        "6": "B",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "B"
+      }
+    }
+  },
+  {
+    "id": "präteritum_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Präteritum",
+      "cefr": "A2",
+      "topic": "Präteritum",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setzen Sie die Verben in Klammern im Präteritum ein. (Jede Lücke 1 Punkt)",
+      "body": "1. Gestern ____ (gehen) ich zum Supermarkt.\n2. Wir ____ (sehen) einen interessanten Film.\n3. Sie ____ (kaufen) ein neues Handy.\n4. Er ____ (fahren) mit dem Zug nach Berlin.\n5. Ich ____ (haben) keine Zeit.\n6. Der Lehrer ____ (erklären) die Aufgabe.\n7. Anna ____ (trinken) eine Tasse Tee.\n8. Wir ____ (sein) müde nach dem Sport.\n9. Meine Eltern ____ (besuchen) uns letzte Woche.\n10. Der Hund ____ (bellen) laut im Garten.",
+      "answer_key": {
+        "1": "ging",
+        "2": "sahen",
+        "3": "kauften",
+        "4": "fuhr",
+        "5": "hatte",
+        "6": "erklärte",
+        "7": "trank",
+        "8": "waren",
+        "9": "besuchten",
+        "10": "bellte"
+      }
+    }
+  },
+  {
+    "id": "präteritum_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Präteritum",
+      "cefr": "A2",
+      "topic": "Präteritum",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Formulieren Sie die zweite Aussage im Präteritum, indem Sie das vorgegebene Schlüsselwort benutzen. Schreiben Sie die fehlende Wortform in die Lücke.",
+      "body": "1. Ich ___ gestern ins Kino. (gehen)\n2. Sie ___ einen Kuchen. (backen)\n3. Wir ___ letztes Jahr nach Berlin. (fahren)\n4. Er ___ sehr müde nach der Arbeit. (sein)\n5. Der Lehrer ___ die Aufgabe. (erklären)\n6. Ich ___ ein neues Buch. (kaufen)",
+      "answer_key": {
+        "1": "ging",
+        "2": "backte",
+        "3": "fuhren",
+        "4": "war",
+        "5": "erklärte",
+        "6": "kaufte"
+      }
+    }
+  },
+  {
+    "id": "plusquamperfekt_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Plusquamperfekt",
+      "cefr": "A2",
+      "topic": "Plusquamperfekt",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Plusquamperfekt‑Form aus den vier Optionen (A‑D). Jede richtige Antwort gibt 1 Punkt.",
+      "body": "<ol>\n<li class=\"question\">\n                Ich <span class=\"blank\">_____</span> (gehen) schon nach Hause, bevor es zu regnen begann.\n                <div class=\"options\">\n                    <div class=\"option\">A) war gegangen</div>\n                    <div class=\"option\">B) hatte gegangen</div>\n                    <div class=\"option\">C) bin gegangen</div>\n                    <div class=\"option\">D) war gehen</div>\n                </div>\n            </li>\n<li class=\"question\">\n                Nachdem sie <span class=\"blank\">_____</span> (lesen) hatte, schrieb sie die Zusammenfassung.\n                <div class=\"options\">\n                    <div class=\"option\">A) hatte gelesen</div>\n                    <div class=\"option\">B) war gelesen</div>\n                    <div class=\"option\">C) hat gelesen</div>\n                    <div class=\"option\">D) gelesen hatte</div>\n                </div>\n            </li>\n<li class=\"question\">\n                Wir <span class=\"blank\">_____</span> (schreiben) den Brief, bevor die Post geöffnet wurde.\n                <div class=\"options\">\n                    <div class=\"option\">A) hatten geschrieben</div>\n                    <div class=\"option\">B) waren geschrieben</div>\n                    <div class=\"option\">C) haben geschrieben</div>\n                    <div class=\"option\">D) schrieben</div>\n                </div>\n            </li>\n<li class=\"question\">\n                Als ich ankam, <span class=\"blank\">_____</span> (fahren) der Bus bereits ab.\n                <div class=\"options\">\n                    <div class=\"option\">A) war gefahren</div>\n                    <div class=\"option\">B) hatte gefahren</div>\n                    <div class=\"option\">C) fuhr</div>\n                    <div class=\"option\">D) hat gefahren</div>\n                </div>\n            </li>\n<li class=\"question\">\n                Sie <span class=\"blank\">_____</span> (machen) die Aufgabe, bevor wir mit dem Test begannen.\n                <div class=\"options\">\n                    <div class=\"option\">A) hatten gemacht</div>\n                    <div class=\"option\">B) waren gemacht</div>\n                    <div class=\"option\">C) hat gemacht</div>\n                    <div class=\"option\">D) machte</div>\n                </div>\n            </li>\n<li class=\"question\">\n                Du <span class=\"blank\">_____</span> (sehen) den Film schon, bevor er im Kino kam.\n                <div class=\"options\">\n                    <div class=\"option\">A) hattest gesehen</div>\n                    <div class=\"option\">B) warst gesehen</div>\n                    <div class=\"option\">C) hast gesehen</div>\n                    <div class=\"option\">D) gesehen hattest</div>\n                </div>\n            </li>\n<li class=\"question\">\n                Bevor das Konzert begann, <span class=\"blank\">_____</span> (ankommen) die Musiker.\n                <div class=\"options\">\n                    <div class=\"option\">A) waren angekommen</div>\n                    <div class=\"option\">B) hatten angekommen</div>\n                    <div class=\"option\">C) waren ankommen</div>\n                    <div class=\"option\">D) hatten ankommen</div>\n                </div>\n            </li>\n<li class=\"question\">\n                Er <span class=\"blank\">_____</span> (verlieren) seine Schlüssel, nachdem er das Haus verlassen hatte.\n                <div class=\"options\">\n                    <div class=\"option\">A) hatte verloren</div>\n                    <div class=\"option\">B) war verloren</div>\n                    <div class=\"option\">C) hat verloren</div>\n                    <div class=\"option\">D) verlor</div>\n                </div>\n            </li>\n<li class=\"question\">\n                Nachdem wir <span class=\"blank\">_____</span> (trinken) hatten, gingen wir spazieren.\n                <div class=\"options\">\n                    <div class=\"option\">A) hatten getrunken</div>\n                    <div class=\"option\">B) waren getrunken</div>\n                    <div class=\"option\">C) haben getrunken</div>\n                    <div class=\"option\">D) tranken</div>\n                </div>\n            </li>\n<li class=\"question\">\n                Sie <span class=\"blank\">_____</span> bereits, als der Wecker klingelte.\n                <div class=\"options\">\n                    <div class=\"option\">A) hatte geschlafen</div>\n                    <div class=\"option\">B) war geschlafen</div>\n                    <div class=\"option\">C) hat geschlafen</div>\n                    <div class=\"option\">D) schlief</div>\n                </div>\n            </li>\n</ol>",
+      "answer_key": {
+        "1": "A",
+        "2": "D",
+        "3": "A",
+        "4": "A",
+        "5": "A",
+        "6": "A",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "plusquamperfekt_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Plusquamperfekt",
+      "cefr": "A2",
+      "topic": "Plusquamperfekt",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Lückentext (10 Punkte)",
+      "body": [
+        "1. Nachdem ich gestern lange ___ (arbeiten), ging ich früh ins Bett.",
+        "2. Sie hatte das Buch schon ___ (lesen), bevor der Film begann.",
+        "3. Wir hatten bereits ___ (essen), als die Gäste ankamen.",
+        "4. Nachdem er den Schlüssel ___ (verlieren) hatte, musste er einen neuen kaufen.",
+        "5. Sie waren bereits ___ (schlafen), als das Telefon klingelte.",
+        "6. Ich hatte das Geschenk ___ (kaufen), bevor ich zur Party ging.",
+        "7. Nachdem du das Formular ___ (ausfüllen) hattest, konntest du dich anmelden.",
+        "8. Wir hatten nach dem Spaziergang ___ (sitzen), weil es kalt war.",
+        "9. Er hatte die Aufgabe ___ (machen), bevor der Chef kam.",
+        "10. Nachdem ihr das Bild ___ (malen) hattet, putzte ihr den Raum."
+      ],
+      "answer_key": {
+        "1": "gearbeitet",
+        "2": "gelesen",
+        "3": "gegessen",
+        "4": "verloren",
+        "5": "geschlafen",
+        "6": "gekauft",
+        "7": "ausgefüllt",
+        "8": "gesessen",
+        "9": "gemacht",
+        "10": "gemalt"
+      }
+    }
+  },
+  {
+    "id": "plusquamperfekt_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Plusquamperfekt",
+      "cefr": "A2",
+      "topic": "Plusquamperfekt",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Bilden Sie zu jedem Satz die Plusquamperfekt‑Form, indem Sie das angegebene Schlüsselwort verwenden. Schreiben Sie die fehlenden Wort(e) in das Feld.",
+      "body": "1. Ich habe das Buch gelesen, bevor ich ins Kino ging.\nSchlüsselwort: gehen\nUmformung: Ich ___ (gehen) ___ ins Kino, bevor ich das Buch ___ (lesen).\n\n2. Er kam zu spät, weil er den Bus verpasst hatte.\nSchlüsselwort: verpassen\nUmformung: Er kam zu spät, weil er den Bus ___ (verpassen) hatte.\n\n3. Wir haben die Tickets gekauft, bevor das Konzert begann.\nSchlüsselwort: beginnen\nUmformung: Wir hatten die Tickets gekauft, bevor das Konzert ___ (beginnen) .\n\n4. Sie war bereits weggegangen, als ich ankam.\nSchlüsselwort: gehen\nUmformung: Sie ___ (gehen) bereits, bevor ich ___ (ankommen) .\n\n5. Nachdem ich den Brief gelesen hatte, rief ich meine Mutter an.\nSchlüsselwort: anrufen\nUmformung: Ich ___ (anrufen) meine Mutter, nachdem ich den Brief ___ (lesen) .\n\n6. Du hattest das Fenster geöffnet, bevor es stark zu regnen begann.\nSchlüsselwort: regnen\nUmformung: Du hattest das Fenster geöffnet, bevor es stark zu regnen ___ (beginnen) .",
+      "answer_key": {
+        "1": [
+          "war",
+          "gegangen",
+          "gelesen hatte"
+        ],
+        "2": [
+          "verpasst"
+        ],
+        "3": [
+          "begonnen hatte"
+        ],
+        "4": [
+          "war",
+          "angekommen war"
+        ],
+        "5": [
+          "angerufen hatte",
+          "gelesen hatte"
+        ],
+        "6": [
+          "begonnen hatte"
+        ]
+      }
+    }
+  },
+  {
+    "id": "präsens_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Präsens",
+      "cefr": "A2",
+      "topic": "Präsens",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Wählen Sie die richtige Verbform im Präsens aus.",
+      "body": "1. Ich ______ jeden Morgen Kaffee.\nA) trinke\nB) trinkst\nC) trinken\nD) trink\n\n2. Du ______ oft im Park joggen.\nA) läuft\nB) läufst\nC) laufen\nD) läuftet\n\n3. Er ______ gerade ein Buch.\nA) lese\nB) liest\nC) lesen\nD) lesst\n\n4. Wir ______ jeden Sonntag schwimmen.\nA) schwimme\nB) schwimmst\nC) schwimmen\nD) schwimmt\n\n5. Ihr ______ heute Abend ins Kino.\nA) gehe\nB) gehst\nC) gehen\nD) geht\n\n6. Sie (Plural) ______ gern Musik.\nA) höre\nB) hörst\nC) hört\nD) hören\n\n7. Mein Freund ______ immer zu spät.\nA) kommt\nB) komme\nC) kommen\nD) kommst\n\n8. Die Lehrerin ______ die Aufgabe erklärt.\nA) erklärt\nB) erkläre\nC) erklärst\nD) erklären\n\n9. Ich ______ jetzt nicht, ich bin beschäftigt.\nA) spreche\nB) sprichst\nC) spricht\nD) sprechen\n\n10. Wir ______ morgen nach Berlin fahren.\nA) wollen\nB) willst\nC) will\nD) wolle",
+      "answer_key": {
+        "1": "A",
+        "2": "B",
+        "3": "B",
+        "4": "C",
+        "5": "D",
+        "6": "D",
+        "7": "A",
+        "8": "A",
+        "9": "A",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "präsens_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Präsens",
+      "cefr": "A2",
+      "topic": "Präsens",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Lückentext – Präsens (je 1 Punkt)",
+      "body": "1. Ich ____ (gehen) jeden Tag zu Fuß zur Arbeit.\n2. Du ____ (haben) oft viel zu tun.\n3. Er ____ (wohnen) in einer kleinen Stadt.\n4. Wir ____ (lernen) Deutsch seit drei Monaten.\n5. Ihr ____ (kommen) morgen um zehn Uhr.\n6. Sie (Plural) ____ (spielen) gern Fußball am Wochenende.\n7. Das Wetter ____ (sein) heute sehr schön.\n8. Anna ____ (kaufen) im Supermarkt frisches Brot.\n9. Meine Mutter ____ (kochen) gern italienische Gerichte.\n10. Wir ____ (fahren) gerade mit dem Zug nach Berlin.",
+      "answer_key": {
+        "1": "gehe",
+        "2": "hast",
+        "3": "wohnt",
+        "4": "lernen",
+        "5": "kommt",
+        "6": "spielen",
+        "7": "ist",
+        "8": "kauft",
+        "9": "kocht",
+        "10": "fahren"
+      }
+    }
+  },
+  {
+    "id": "präsens_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Präsens",
+      "cefr": "A2",
+      "topic": "Präsens",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Aufgabe (14 pts): Transformieren Sie die Sätze, indem Sie das Schlüsselwort einbauen.",
+      "body": [
+        {
+          "number": 1,
+          "original": "Ich lerne Deutsch.",
+          "keyword": "nicht",
+          "template": "Ich <blank> Deutsch."
+        },
+        {
+          "number": 2,
+          "original": "Sie arbeitet in einer Firma.",
+          "keyword": "heute",
+          "template": "Sie <blank> in einer Firma."
+        },
+        {
+          "number": 3,
+          "original": "Wir spielen Fußball am Wochenende.",
+          "keyword": "meistens",
+          "template": "Wir <blank> Fußball am Wochenende."
+        },
+        {
+          "number": 4,
+          "original": "Er isst gerade Mittagessen.",
+          "keyword": "nicht",
+          "template": "Er <blank> Mittagessen."
+        },
+        {
+          "number": 5,
+          "original": "Du gehst jeden Tag zur Schule.",
+          "keyword": "manchmal",
+          "template": "Du <blank> zur Schule."
+        },
+        {
+          "number": 6,
+          "original": "Ich trinke Kaffee.",
+          "keyword": "immer",
+          "template": "Ich <blank> Kaffee."
+        },
+        {
+          "number": 7,
+          "original": "Sie fährt mit dem Bus.",
+          "keyword": "jetzt",
+          "template": "Sie <blank> mit dem Bus."
+        }
+      ],
+      "answer_key": {
+        "1": "lerne nicht",
+        "2": "arbeitet heute",
+        "3": "spielen meistens",
+        "4": "isst gerade nicht",
+        "5": "gehst manchmal",
+        "6": "trinke immer",
+        "7": "fährt jetzt"
+      }
+    }
+  },
+  {
+    "id": "kasus_grammar_mcq",
+    "language": "German",
+    "metadata": {
+      "subject": "Kasus",
+      "cefr": "A2",
+      "topic": "Kasus",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_mcq",
+      "instruction": "Aufgabe 1 – Kasus (je 1 Punkt)",
+      "body": "1. Ich sehe ____ Mann im Park.\nA) der\nB) den\nC) dem\nD) des\n\n2. Der Junge gibt ____ Mutter ein Geschenk.\nA) die\nB) der\nC) den\nD) des\n\n3. Wir fahren mit ____ Bus zur Arbeit.\nA) dem\nB) den\nC) der\nD) des\n\n4. Das ist das Haus ____ Lehrers.\nA) des\nB) dem\nC) den\nD) der\n\n5. Ich kaufe ____ Apfel.\nA) ein\nB) einen\nC) einem\nD) eines\n\n6. Sie hilft ____ Freund bei den Hausaufgaben.\nA) den\nB) dem\nC) der\nD) des\n\n7. Wir besuchen _____ Museum am Sonntag.\nA) das\nB) den\nC) dem\nD) des\n\n8. Er hat ____ Katze gestreichelt.\nA) die\nB) der\nC) den\nD) des\n\n9. Die Kinder spielen mit ____ Ball.\nA) der\nB) dem\nC) den\nD) des\n\n10. Ich habe ____ Buch gelesen.\nA) das\nB) den\nC) dem\nD) des",
+      "answer_key": {
+        "1": "B",
+        "2": "B",
+        "3": "A",
+        "4": "A",
+        "5": "B",
+        "6": "B",
+        "7": "A",
+        "8": "A",
+        "9": "B",
+        "10": "A"
+      }
+    }
+  },
+  {
+    "id": "kasus_grammar_gap_fill",
+    "language": "German",
+    "metadata": {
+      "subject": "Kasus",
+      "cefr": "A2",
+      "topic": "Kasus",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_gap_fill",
+      "instruction": "Setze die richtige Kasus‑Form des bestimmten Artikels ein.",
+      "body": "1. ___ Hund liegt im Garten.\n2. Ich sehe ___ Film.\n3. Sie hilft ___ Freund.\n4. Das Auto ___ Lehrers ist rot.\n5. Wir besuchen ___ Museum.\n6. Der Junge gibt ___ Mädchen das Buch.\n7. ___ Bücher auf dem Tisch sind neu.\n8. Ich kaufe ___ Apfel.\n9. Sie spricht mit ___ Nachbarn.\n10. Das Haus ___ Stadt ist groß.",
+      "answer_key": {
+        "1": "Der",
+        "2": "den",
+        "3": "dem",
+        "4": "des",
+        "5": "das",
+        "6": "dem",
+        "7": "die",
+        "8": "den",
+        "9": "den",
+        "10": "der"
+      }
+    }
+  },
+  {
+    "id": "kasus_grammar_transformation",
+    "language": "German",
+    "metadata": {
+      "subject": "Kasus",
+      "cefr": "A2",
+      "topic": "Kasus",
+      "difficulty": "medium"
+    },
+    "content": {
+      "type": "grammar_transformation",
+      "instruction": "Verwandeln Sie den ersten Satz, indem Sie das Schlüsselwort benutzen, sodass der zweite Satz die gleiche Bedeutung hat. Schreiben Sie die fehlende Wortgruppe in die Lücke.",
+      "body": "1. Satz: Der Lehrer gibt dem Schüler das Buch.\nSchlüsselwort: geben\nUmformulierung: Das Buch ______ dem Schüler.\n\n2. Satz: Ich sehe den Film im Kino.\nSchlüsselwort: sehen\nUmformulierung: Den Film ______ ich im Kino.\n\n3. Satz: Die Mutter hilft dem Kind.\nSchlüsselwort: helfen\nUmformulierung: Dem Kind ______ die Mutter.\n\n4. Satz: Das Auto des Mannes ist neu.\nSchlüsselwort: sein\nUmformulierung: Der Mann ______ Auto ist neu.\n\n5. Satz: Wir besuchen den Freund am Wochenende.\nSchlüsselwort: besuchen\nUmformulierung: Den Freund ______ wir am Wochenende.\n\n6. Satz: Sie schreibt den Brief an die Lehrerin.\nSchlüsselwort: schreiben\nUmformulierung: Den Brief ______ sie an die Lehrerin.",
+      "answer_key": {
+        "1": "gibt der Lehrer",
+        "2": "sehe",
+        "3": "hilft",
+        "4": "sein",
+        "5": "besuchen",
+        "6": "schreibt"
+      }
+    }
+  }
+]

@@ -1,6 +1,7 @@
 from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
 from backend.app.models.prompts import SystemPrompts
+from backend.app.utils.json_utils import clean_json_response
 import json
 import ast
 from typing import Literal
@@ -41,7 +42,7 @@ class TestGeneratorService:
         # 1. Classification
         classification_prompt = self.prompts.get_classification_prompts(prompt)
         total_tokens += self.__count_tokens(classification_prompt)
-        classification : str = self.ai_service.ask(classification_prompt)
+        classification : str = self.ai_service.ask(classification_prompt, "gpt-oss:120b")
         total_tokens += self.__count_tokens(classification)
 
         if "request" in classification.lower():
@@ -49,7 +50,11 @@ class TestGeneratorService:
             parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, ParsedPrompt)
             total_tokens += tokens_used
 
-            data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(parsed_prompt.sections)
+            data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(
+                parsed_prompt.sections, language=parsed_prompt.language
+            )
+
+            print("retrived_data: ", data)
 
             combined_prompt = self.prompts.get_combined_html_generation_prompt(
                 retrieval=data,
@@ -62,7 +67,7 @@ class TestGeneratorService:
 
             total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask(combined_prompt)
+            generated_test_raw = self.ai_service.ask(combined_prompt, "gpt-5-mini")
             total_tokens += self.__count_tokens(generated_test_raw)
             
             metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
@@ -73,7 +78,7 @@ class TestGeneratorService:
             )
         else:
             gen_prompt = self.prompts.get_general_question_prompt(prompt)
-            res = self.ai_service.ask(self.prompts.get_general_question_prompt(gen_prompt))
+            res = self.ai_service.ask(self.prompts.get_general_question_prompt(gen_prompt), "gpt-5-mini")
             
             timer = time.time() - start
             average_time = self.__get_and_update_average_time(timer)
@@ -99,7 +104,9 @@ class TestGeneratorService:
         start = time.time()
         total_tokens = 0
 
-        data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(form.sections)
+        data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(
+            form.sections, language=form.language
+        )
 
         combined_prompt = self.prompts.get_combined_html_generation_prompt(
             retrieval=data,
@@ -111,7 +118,7 @@ class TestGeneratorService:
         )
         total_tokens += self.__count_tokens(combined_prompt)
         
-        generated_test_raw = self.ai_service.ask(combined_prompt)
+        generated_test_raw = self.ai_service.ask(combined_prompt, "gpt-5-mini")
         total_tokens += self.__count_tokens(generated_test_raw)
         
         metadata = self.__build_metadata(start, "Survey Generated HTML Test", form.model_dump_json(), total_tokens, retrival_metadata)
@@ -123,14 +130,14 @@ class TestGeneratorService:
 
     # --- Sub-methods for Refactoring ---
 
-    def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3) -> tuple:
+    def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3, model: str = "gpt-oss:120b") -> tuple:
         total_tokens = self.__count_tokens(prompt)
         for i in range(max_tries):
-            raw_response = self.ai_service.ask(prompt)
+            raw_response = self.ai_service.ask(prompt, model)
             total_tokens += self.__count_tokens(raw_response)
             print(f"__ask_model_for_json (Attempt {i+1}):\n{raw_response}")
             try:
-                cleaned = self.__clean_json_response(raw_response)
+                cleaned = clean_json_response(raw_response)
                 parsed_dict = json.loads(cleaned)
                 return schema(**parsed_dict), total_tokens
             except (ValueError, json.JSONDecodeError, TypeError) as e:
@@ -139,24 +146,26 @@ class TestGeneratorService:
                     raise ValueError(f"Model returned invalid json: {e}")
         return None, total_tokens
 
-    def __perform_retrieval(self, sections) -> tuple[list, list, list, bool, bool, TestGeneratorResponseMetadataRetrival]:
+    def __perform_retrieval(self, sections, language: str = "English") -> tuple[list, list, list, bool, bool, TestGeneratorResponseMetadataRetrival]:
         data, reading_data, writing_data = [], [], []
         reading_enabled, writing_enabled = False, False
         retrival_metadata = TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
 
         for section in sections:
             query = section.subject
-            res = self.search_service.search(query)
             
-            if query.lower() == "reading":
+            if section.task_type == "reading":
+                res = self.search_service.search(query, language=language)
                 reading_data.append(res)
                 retrival_metadata.reading += json.dumps(res) + "\n"
                 reading_enabled = True
-            elif query.lower() == "writing":
+            elif section.task_type == "writing":
+                res = self.search_service.search(query, language=language)
                 writing_data.append(res)
                 retrival_metadata.writing += json.dumps(res) + "\n"
                 writing_enabled = True
             else:
+                res = self.search_service.search(query, language=language)
                 data.append(res)
                 retrival_metadata.regular += json.dumps(res) + "\n"
 
@@ -176,29 +185,6 @@ class TestGeneratorService:
             retrival=retrival_metadata
         )
 
-
-    def __clean_json_response(self, response: str) -> str:
-        """
-        Cleans the AI response by removing markdown code blocks and extra text.
-        """
-        # Remove markdown code blocks like ```json ... ```
-        json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response)
-        if json_match:
-            return json_match.group(1).strip()
-        
-        # If no code block, try to find the first '{' or '[' and last '}' or ']'
-        start_idx = response.find('{')
-        if start_idx == -1:
-            start_idx = response.find('[')
-            
-        end_idx = response.rfind('}')
-        if end_idx == -1:
-            end_idx = response.rfind(']')
-            
-        if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
-            return response[start_idx:end_idx + 1].strip()
-            
-        return response.strip()
 
     def __count_tokens(self, text: str) -> int:
         """

@@ -10,4 +10,4 @@ class ClassificationService:
         self.ai_service = ai_service
 
     def classify(self, text: str):
-        return self.ai_service.ask(self.prompts.get_classification_prompts(text))
+        return self.ai_service.ask(self.prompts.get_classification_prompts(text), "gpt-oss:120b")
