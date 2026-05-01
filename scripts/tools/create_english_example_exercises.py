@@ -78,12 +78,12 @@ def main():
                 # Step 1: Generate Raw Content (HTML/Text)
                 generation_prompt = generator_method(section, level, "adults")
                 try:
-                    raw_content = ai_service.ask(generation_prompt)
+                    raw_content = ai_service.ask(generation_prompt, "gpt-5-mini")
                     
                     # Step 2: Parse to JSON
                     print(f"    Step 2: Parsing to JSON...")
                     parsing_prompt = prompts.get_exercise_parsing_prompt(raw_content, topic, level, task_type)
-                    json_response = ai_service.ask(parsing_prompt)
+                    json_response = ai_service.ask(parsing_prompt, "gpt-oss:120b")
                     
                     clean_json = clean_json_response(json_response)
                     exercise_data = json.loads(clean_json)

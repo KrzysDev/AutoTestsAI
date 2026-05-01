@@ -42,7 +42,7 @@ class TestGeneratorService:
         # 1. Classification
         classification_prompt = self.prompts.get_classification_prompts(prompt)
         total_tokens += self.__count_tokens(classification_prompt)
-        classification : str = self.ai_service.ask(classification_prompt)
+        classification : str = self.ai_service.ask(classification_prompt, "gpt-oss:120b")
         total_tokens += self.__count_tokens(classification)
 
         if "request" in classification.lower():
@@ -53,6 +53,8 @@ class TestGeneratorService:
             data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(
                 parsed_prompt.sections, language=parsed_prompt.language
             )
+
+            print("retrived_data: ", data)
 
             combined_prompt = self.prompts.get_combined_html_generation_prompt(
                 retrieval=data,
@@ -65,7 +67,7 @@ class TestGeneratorService:
 
             total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask(combined_prompt)
+            generated_test_raw = self.ai_service.ask(combined_prompt, "gpt-5-mini")
             total_tokens += self.__count_tokens(generated_test_raw)
             
             metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
@@ -76,7 +78,7 @@ class TestGeneratorService:
             )
         else:
             gen_prompt = self.prompts.get_general_question_prompt(prompt)
-            res = self.ai_service.ask(self.prompts.get_general_question_prompt(gen_prompt))
+            res = self.ai_service.ask(self.prompts.get_general_question_prompt(gen_prompt), "gpt-5-mini")
             
             timer = time.time() - start
             average_time = self.__get_and_update_average_time(timer)
@@ -116,7 +118,7 @@ class TestGeneratorService:
         )
         total_tokens += self.__count_tokens(combined_prompt)
         
-        generated_test_raw = self.ai_service.ask(combined_prompt)
+        generated_test_raw = self.ai_service.ask(combined_prompt, "gpt-5-mini")
         total_tokens += self.__count_tokens(generated_test_raw)
         
         metadata = self.__build_metadata(start, "Survey Generated HTML Test", form.model_dump_json(), total_tokens, retrival_metadata)
@@ -128,10 +130,10 @@ class TestGeneratorService:
 
     # --- Sub-methods for Refactoring ---
 
-    def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3) -> tuple:
+    def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3, model: str = "gpt-oss:120b") -> tuple:
         total_tokens = self.__count_tokens(prompt)
         for i in range(max_tries):
-            raw_response = self.ai_service.ask(prompt)
+            raw_response = self.ai_service.ask(prompt, model)
             total_tokens += self.__count_tokens(raw_response)
             print(f"__ask_model_for_json (Attempt {i+1}):\n{raw_response}")
             try:

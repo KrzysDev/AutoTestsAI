@@ -2,8 +2,9 @@ import httpx
 import os
 import dotenv
 from ollama import Client
+from openrouter import OpenRouter
 
-dotenv.load_dotenv()
+dotenv.load_dotenv(dotenv.find_dotenv(), override=True)
 
 class AiService:
     def __init__(self):
@@ -14,14 +15,14 @@ class AiService:
         self.local_ollama_client = Client(
             host="http://localhost:11434"
         )
-        self.model = "gpt-oss:120b"
 
-    def ask(self, text: str):
+    def ask(self, text: str, model: str):
         is_testing = os.getenv("AI_TESTING", "false").lower() == "true"
 
         if is_testing:
             response = self.ollama_client.chat(
-                model=self.model,
+                #diffrent model is used for testing
+                model="gemma4:31b-cloud",
                 messages=[
                     {
                         "role": "user",
@@ -31,25 +32,25 @@ class AiService:
             )
             return response["message"]["content"]
         else:
-            with httpx.Client(timeout=60.0) as client:
-                response = client.post(
-                    url="https://openrouter.ai/api/v1/chat/completions",
-                    headers={
-                        "Authorization": f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
-                    },
-                    json={
-                        "model": self.model,
-                        "messages": [
+            with OpenRouter(
+                api_key=os.getenv("OPENROUTER_API_KEY", ""),
+                ) as client:
+                response = client.chat.send(
+                    model="openai/gpt-5-mini",
+                    messages=[
+                    {
+                        "role": "user",
+                        "content": [
                             {
-                                "role": "user",
-                                "content": text
-                            }
+                                "type": "text",
+                                "text": f"{text}"
+                            },
                         ]
                     }
+                    ]
                 )
-                response.raise_for_status()
-                data = response.json()
-                return data["choices"][0]["message"]["content"]
+
+                return response.choices[0].message.content
 
     def ask_local(self, text: str):
         response = self.local_ollama_client.chat(

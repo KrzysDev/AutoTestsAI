@@ -15,7 +15,7 @@ LANGUAGE_CONFIGS: dict[str, dict] = {
         # None means no language filter applied (whole collection is English)
         "qdrant_language_filter": None,
         "supported_task_types": ["vocabulary", "grammar", "reading", "writing"],
-        "description": "English (global default)",
+        "description": "English (English)",
     },
     "German": {
         "code": "de",

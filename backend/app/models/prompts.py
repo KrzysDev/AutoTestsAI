@@ -1,4 +1,5 @@
 from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS
+from backend.app.config.language_configs import get_supported_languages
 from typing import Union
 import json
 
@@ -44,7 +45,7 @@ class SystemPrompts:
             * Output ONLY one word: general OR request
             * No explanations
             * No extra text
-            * you can only generate english exercises. If teacher demands something diffrent than english output general.
+            * you can only generate {get_supported_languages()} exercises. If teacher demands something diffrent than english output general.
 
             ---
 

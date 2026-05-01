@@ -71,7 +71,7 @@ def main():
 
         """
 
-        response = service.ask(prompt)
+        response = service.ask(prompt, "gpt-5-mini")
 
         print(response)
 
