@@ -183,6 +183,8 @@ Mandatory structural rules (layout — do NOT deviate):
 - Reading passage: visually distinct container (e.g. background or border), padding ≥ 12px
 - Writing box: bordered, width:100%, min-height:200px
 - Answer Key: page-break-before:always, answers in multi-column table layout (display:table), clearly labeled per exercise
+- All answers in the solution key MUST strictly follow the transformation type requested in the task. Do not introduce alternative grammatical moods unless explicitly required.
+- never use special sighns like '$\rightarrow$' or any other. Simple keyboard text and sighns.
 
 # CONTENT STRUCTURE (follow this exact order)
 {structure_block}
