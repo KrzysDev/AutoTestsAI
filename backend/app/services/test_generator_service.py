@@ -152,7 +152,7 @@ class TestGeneratorService:
         retrival_metadata = TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
 
         for section in sections:
-            query = section.subject
+            query = section.retrival_subject
             
             if section.task_type == "reading":
                 res = self.search_service.search(query, language=language)

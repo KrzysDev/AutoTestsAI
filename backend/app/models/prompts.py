@@ -76,6 +76,7 @@ class SystemPrompts:
                 task_type: Literal["vocabulary", "grammar", "reading", "writing"]
                 description: string -> description of how exercise has to be created (implementation plan). Its either teachers idea or yours if teacher did not give enough information.
                 subject: string (FREE TEXT) -> the grammar/vocabulary topic, e.g. "Present Simple", "Der Dativ", "Family vocabulary", "Fractions". NOT a fixed list — use whatever topic the teacher specifies or derive one from the request.
+                retrival_subject: subject that will be searched in the database to retrive relevant data. Use ONLY grammar types. For example for english use only Present Simple For german only Perfekt, Prateritum. There must be only ONE retrival_subject per section. NEVER multiple like lists. ALWAYS one
                 visuals: string -> description of how exercise has to look visually.
                 amount : int
         

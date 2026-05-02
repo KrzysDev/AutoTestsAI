@@ -58,6 +58,7 @@ class PromptTestSection(BaseModel):
     task_type: TASK_TYPES
     description: str
     subject: str  # Free-text topic — e.g. "Present Simple", "Der Dativ", "Fractions"
+    retrival_subject: str
     visuals: str
     amount: int
 
