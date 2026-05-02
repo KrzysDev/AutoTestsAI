@@ -54,7 +54,7 @@ class AiService:
 
     def ask_local(self, text: str):
         response = self.local_ollama_client.chat(
-            model="qwen2.5:14b-instruct",
+            model="gemma4:latest",
             messages=[
                 {
                     "role": "user",
