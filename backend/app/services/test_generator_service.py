@@ -146,7 +146,7 @@ class TestGeneratorService:
                     raise ValueError(f"Model returned invalid json: {e}")
         return None, total_tokens
 
-    def __perform_retrieval(self, sections, language: str = "English") -> tuple[list, list, list, bool, bool, TestGeneratorResponseMetadataRetrival]:
+    def __perform_retrieval(self, sections, language: str = "en") -> tuple[list, list, list, bool, bool, TestGeneratorResponseMetadataRetrival]:
         data, reading_data, writing_data = [], [], []
         reading_enabled, writing_enabled = False, False
         retrival_metadata = TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")

@@ -90,8 +90,8 @@ LANGUAGE_CONFIGS: dict[str, dict] = {
 def get_possible_language_codes() -> list[str]:
     result = []
 
-    for config in LANGUAGE_CONFIGS.values():
-        result.append(config["code"])
+    for lang_name, config in LANGUAGE_CONFIGS.items():
+        result.append(f'{config["code"]} for {lang_name} language')
 
     return result
 
@@ -106,6 +106,4 @@ def get_language_config(language: str) -> dict:
 def get_supported_languages() -> list[str]:
     """Returns a list of all registered language names."""
     return list(LANGUAGE_CONFIGS.keys())
-
-
 
