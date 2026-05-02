@@ -1,5 +1,5 @@
 from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS
-from backend.app.config.language_configs import get_supported_languages
+from backend.app.config.language_configs import get_supported_languages, get_possible_language_codes
 from typing import Union
 import json
 
@@ -67,6 +67,7 @@ class SystemPrompts:
          - you must ALWAYS return valid json. No mistakes, no markdown sighns like ``` or ```json
          - YOU MUST return ONLY valid JSON. NO markdown. NO code fences. NO extra text before or after the JSON.
          - YOU MUST follow this EXACT schema — any deviation WILL result in rejection
+         - MUST FOLLOW: only possible language filed values are in this list: {get_possible_language_codes} 
         
         #IMPORTANT INFORMATION
         1.Sections in provided format look like this:
