@@ -86,30 +86,22 @@ python frontend/main_app.py
 
 ## 🗂️ Project Structure
 
-```
-TestGenerator/
-├── backend/                # Backend (FastAPI)
+AITestGenerator/
+├── backend/                        # Backend (FastAPI)
 │   └── app/
-│       ├── api/            # API endpoints and controllers
-│       ├── core/           # Configuration, settings, security
-│       ├── models/         # Data models (SQLAlchemy/Pydantic)
-│       ├── services/       # Business logic of the project
-│       └── main.py         # Entry point of the backend application
-├── frontend/               # Frontend 
-│   ├── main_app.py         # Main file of the frontend application
-│   └── main_app.spec       # PyInstaller configuration (to build exe)
-├── frontend_mock/          # Mock/CLI version of the frontend
-├── scripts/                # Helper scripts
-│   ├── tests/              # Tests for scripts
-│   └── tools/              # Utility tools
-├── AutoTestsAI.zip         # Ready-to-use compiled application
-├── venv/                   # Python virtual environment
-├── .gitignore              
-├── README.md               
-└── requirements.txt        
-```
-
----
+│       ├── api/                    # API endpoints
+│       ├── config/                 # Configuration and language settings
+│       ├── models/                 # Data schemas and prompts
+│       ├── services/               # Business logic
+│       ├── utils/                  # Helper utilities
+│       └── main.py                 # Main application entry point
+├── data/                           # Data files and templates
+├── demos/                          # Media and demonstrations
+├── scripts/                        # Helper scripts and tools
+├── statistics/                     # Statistical data and logs             
+├── README.md                       
+├── render.yaml                     # Render deployment configuration
+└── requirements.txt
 
 ## 📐 How It Works
 
