@@ -1,5 +1,5 @@
 from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS
-from backend.app.config.language_configs import get_supported_languages
+from backend.app.config.language_configs import get_supported_languages, get_possible_language_codes
 from typing import Union
 import json
 
@@ -67,6 +67,7 @@ class SystemPrompts:
          - you must ALWAYS return valid json. No mistakes, no markdown sighns like ``` or ```json
          - YOU MUST return ONLY valid JSON. NO markdown. NO code fences. NO extra text before or after the JSON.
          - YOU MUST follow this EXACT schema — any deviation WILL result in rejection
+         - MUST FOLLOW: only possible language filed values are in this list: {get_possible_language_codes()}. YOU CAN NEVER PRINT IN THE 'language' FIELD ANYTHING ELSE. YOU HAVE TO CHOOSE ONE FROM THE LIST.
         
         #IMPORTANT INFORMATION
         1.Sections in provided format look like this:
@@ -76,12 +77,9 @@ class SystemPrompts:
                 task_type: Literal["vocabulary", "grammar", "reading", "writing"]
                 description: string -> description of how exercise has to be created (implementation plan). Its either teachers idea or yours if teacher did not give enough information.
                 subject: string (FREE TEXT) -> the grammar/vocabulary topic, e.g. "Present Simple", "Der Dativ", "Family vocabulary", "Fractions". NOT a fixed list — use whatever topic the teacher specifies or derive one from the request.
+                retrival_subject: subject that will be searched in the database to retrive relevant data. Use ONLY grammar types. For example for english use only Present Simple For german only Perfekt, Prateritum. There must be only ONE retrival_subject per section. NEVER multiple like lists. ALWAYS one
                 visuals: string -> description of how exercise has to look visually.
                 amount : int
-        
-        3. language field: detect the target language of the test from the teacher's request.
-           - Default to "English" if not specified.
-           - Examples: "Make a German B2 test" -> language: "German", "Stwórz test z angielskiego" -> language: "English"
         
         #Teacher's request:
         {text}
