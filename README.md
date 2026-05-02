@@ -59,88 +59,62 @@ For developers who want to run or modify the project locally.
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/KrzysDev/AITestGenerator.git
+git clone [https://github.com/KrzysDev/AITestGenerator.git](https://github.com/KrzysDev/AITestGenerator.git)
 cd AITestGenerator
-```
-
-2. **Install dependencies**
-
-```bash
 pip install -r requirements.txt
-```
-
-3. **Start the backend**
-
-```bash
 # from root directory
 uvicorn backend.app.main:app --reload
-```
-
-4. **Start the frontend**
-
-```bash
 python frontend/main_app.py
 ```
 
----
+# 🗂️ Project Structure
+```
+  AITestGenerator/
+  ├── backend/                        # Backend (FastAPI)
+  │   └── app/
+  │       ├── api/                    # API endpoints
+  │       ├── config/                 # Configuration and language settings
+  │       ├── models/                 # Data schemas and prompts
+  │       ├── services/               # Business logic
+  │       ├── utils/                  # Helper utilities
+  │       └── main.py                 # Main application entry point
+  ├── data/                           # Data files and templates
+  ├── demos/                          # Media and demonstrations
+  ├── scripts/                        # Helper scripts and tools
+  ├── statistics/                     # Statistical data and logs            
+  ├── venv/                           # Python virtual environment
+  ├── .env                            # Environment variables
+  ├── .gitignore                      
+  ├── README.md                       
+  ├── render.yaml                     # Render deployment configuration
+  └── requirements.txt
+```
 
-## 🗂️ Project Structure
+# 📐 How It Works
 
-AITestGenerator/
-├── backend/                        # Backend (FastAPI)
-│   └── app/
-│       ├── api/                    # API endpoints
-│       ├── config/                 # Configuration and language settings
-│       ├── models/                 # Data schemas and prompts
-│       ├── services/               # Business logic
-│       ├── utils/                  # Helper utilities
-│       └── main.py                 # Main application entry point
-├── data/                           # Data files and templates
-├── demos/                          # Media and demonstrations
-├── scripts/                        # Helper scripts and tools
-├── statistics/                     # Statistical data and logs             
-├── README.md                       
-├── render.yaml                     # Render deployment configuration
-└── requirements.txt
+Classification & Intent Handling: The system classifies whether the prompt is a direct request or a general question.
 
-## 📐 How It Works
+Prompt Parsing & Retrieval (RAG): If it is a request, the system breaks it down into sections and queries the SearchService to gather relevant grammar, writing, or reading knowledge from the database.
 
-1. The **teacher** submits a request via the UI (e.g. *"Generate a grammar test on past tenses for B2 students"*).
-2. The **backend** uses sentence-transformers to embed the query and retrieves relevant grammar rules from the **Qdrant** vector database (RAG).
-3. The retrieved chunks and teacher's request are passed to the **LLM** (Ollama) with a structured prompt.
-4. The LLM generates a test in a defined **JSON schema**:
-   - Groups of questions
-   - Each question has: `text`, `type` (`multiple_choice` / `open_ended`), `correct_answer`
-5. The system converts the JSON into a **.pdf** file.
+LLM Generation: The system builds a prompt incorporating the retrieved material and passes it to the LLM (gpt-5-mini or the classification engine) to generate the target HTML structure.
 
----
+Metadata & Statistics: The backend estimates token usage, measures execution time, and updates the average response time statistics.
 
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
+Layer,Technology
+Backend,"Python, FastAPI, Uvicorn"
+AI / LLM,"Ollama (API), OpenAI/Open-source models"
+Embeddings,sentence-transformers
+Vector DB,Qdrant
+PDF/HTML export,"fpdf2, HTML generation"
 
-| Layer | Technology |
-|---|---|
-| Backend | Python, FastAPI, Uvicorn |
-| AI / LLM | Ollama (API) |
-| Embeddings | sentence-transformers |
-| Vector DB | Qdrant |
-| PDF export | fpdf2 |
-
----
-
-## 🤝 Contributing
-
+# 🤝 Contributing
 Contributions are welcome! Feel free to open an issue or submit a pull request.
 
----
-
----
-
-## 📜 License
-
+# 📜 License
 All rights reserved.
 
 Krzysztof Sokołowski © 2026
 
-## 👤 Author
-
-**KrzysDev** — [github.com/KrzysDev](https://github.com/KrzysDev)
+# 👤 Author
+KrzysDev — github.com/KrzysDev
