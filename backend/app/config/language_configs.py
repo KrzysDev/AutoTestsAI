@@ -1,3 +1,53 @@
+
+from qdrant_client import QdrantClient, models
+
+import os
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+def get_language_subjects(language: str) -> list[str]:
+    subjects = set()
+    client = QdrantClient(
+        url=os.getenv("CLUSTER_ENDPOINT"),
+        api_key=os.getenv("QDRANT_API_KEY")
+    )
+    
+    # Inicjalizacja zmiennych do obsługi paginacji
+    scroll_filter = models.Filter(
+        must=[
+            models.FieldCondition(
+                key="language",
+                match=models.MatchValue(value=language),
+            ),
+        ]
+    )
+    
+    next_offset = None
+    batch_size = 100 
+
+    while True:
+        records, next_offset = client.scroll(
+            collection_name="Grammar Collection",
+            scroll_filter=scroll_filter,
+            limit=batch_size,
+            offset=next_offset,
+            with_payload=True,
+            with_vectors=False 
+        )
+
+        for record in records:
+            if record.payload and "subject" in record.payload:
+                subjects.add(record.payload["subject"])
+
+        if next_offset is None:
+            break
+
+    return sorted(list(subjects))
+    
+
+
+
 """
 Central registry of supported languages for test generation.
 
@@ -16,6 +66,7 @@ LANGUAGE_CONFIGS: dict[str, dict] = {
         "qdrant_language_filter": None,
         "supported_task_types": ["vocabulary", "grammar", "reading", "writing"],
         "description": "English (English)",
+        "allowed_retrival_subjects" : f"{get_language_subjects("en")}"
     },
     "German": {
         "code": "de",
@@ -24,6 +75,7 @@ LANGUAGE_CONFIGS: dict[str, dict] = {
         "qdrant_language_filter": "de",
         "supported_task_types": ["grammar", "reading", "writing"],
         "description": "German (Deutsch)",
+        "allowed_retrival_subjects" : f"{get_language_subjects("de")}"
     },
     # ── Template for a new language ────────────────────────────────────────────
     # "French": {
@@ -47,3 +99,4 @@ def get_language_config(language: str) -> dict:
 def get_supported_languages() -> list[str]:
     """Returns a list of all registered language names."""
     return list(LANGUAGE_CONFIGS.keys())
+
