@@ -44,7 +44,8 @@ def convert_html_to_pdf(
     )
 
 
-
+class TooManyCharactersError(Exception):
+    pass
 
 
 @router.post("/v1/rag/test/generate_html/by_prompt")
@@ -53,6 +54,10 @@ def generate_html_test_with_prompt(
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
 ):
+
+    if len(request.prompt) > 1000:
+        raise TooManyCharactersError()
+        return None
     try:
         result = test_generator_service.generate_html_test_from_prompt(request.prompt)
 
