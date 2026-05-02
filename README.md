@@ -100,13 +100,16 @@ LLM Generation: The system builds a prompt incorporating the retrieved material 
 
 Metadata & Statistics: The backend estimates token usage, measures execution time, and updates the average response time statistics.
 
-# 🛠️ Tech Stack
-Layer,Technology
-Backend,"Python, FastAPI, Uvicorn"
-AI / LLM,"Ollama (API), OpenAI/Open-source models"
-Embeddings,sentence-transformers
-Vector DB,Qdrant
-PDF/HTML export,"fpdf2, HTML generation"
+> [!NOTE]
+> **🛠️ Tech Stack**
+> 
+> | Warstwa (Layer) | Technologia |
+> | :--- | :--- |
+> | **Backend** | Python, FastAPI, Uvicorn |
+> | **AI / LLM** | Ollama (API), OpenAI / Open-source models |
+> | **Embeddings** | sentence-transformers |
+> | **Baza Wektorowa** | Qdrant |
+> | **Eksport PDF/HTML** | fpdf2, HTML generation |
 
 # 🤝 Contributing
 Contributions are welcome! Feel free to open an issue or submit a pull request.
