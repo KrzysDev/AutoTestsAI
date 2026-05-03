@@ -22,9 +22,6 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-
-
-
 @router.post("/v1/rag/test/convert/html")
 def convert_html_to_pdf(
     request: HtmlRequest,
