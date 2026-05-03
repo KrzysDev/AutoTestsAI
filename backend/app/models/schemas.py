@@ -116,3 +116,7 @@ class Form(BaseModel):
 
 class TestSurveyRequest(BaseModel):
     form: Form
+
+class FixingRequest(BaseModel):
+    html: str
+    feedback: str

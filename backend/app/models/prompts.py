@@ -207,6 +207,23 @@ Teacher input (primary source of truth): {parsed_prompt}{rag_grammar_line}"""
 
         return combined_prompt
 
+    def get_fixing_prompt(self, html: str, feedback: str):
+        return f"""You are an expert test designer and web designer. Your task is to modify an existing HTML test file based on a teacher's feedback.
+        
+# ABSOLUTE RULES
+1. Output ONLY the updated raw HTML starting with <!DOCTYPE html>. No markdown, no code fences, no explanations.
+2. Maintain the overall structure and style of the original HTML unless the feedback specifically asks to change it.
+3. Fix ONLY what is requested in the teacher's feedback, but ensure the resulting HTML remains valid and print-ready.
+4. CSS+HTML only — zero JavaScript.
+5. Must be convertible to PDF via WeasyPrint.
+
+# ORIGINAL HTML
+{html}
+
+# TEACHER'S FEEDBACK (Follow this strictly)
+{feedback}
+"""
+
     def _get_cefr_block(self, level: str):
         desc = CEFR_LEVEL_DESCRIPTIONS.get(level, "No description available.")
         return f"""# CEFR PROFICIENCY LEVEL: {level}
