@@ -2,12 +2,13 @@ from fastapi import APIRouter
 from backend.app.config.language_configs import (
     get_supported_languages,
     get_language_config,
-    get_possible_language_codes
+    get_possible_language_codes,
+    get_language_subjects
 )
 
 router = APIRouter(prefix="/v1/stats", tags=["stats"])
 
-@router.get("/languages")
+@router.get("/v1/rag/stats/languages")
 def get_language_statistics():
     """
     Returns statistics and configuration data for all supported languages.
@@ -21,3 +22,9 @@ def get_language_statistics():
         "language_codes": get_possible_language_codes(),
         "detailed_configs": detailed_configs
     }
+
+@router.get("/v1/rag/stats/{language}/grammar_subjects")
+def get_language_grammar_subjects(language: str):
+    config = get_language_config(language)
+    code = config.get("code", language)
+    return get_language_subjects(code)
