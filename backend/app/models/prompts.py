@@ -98,6 +98,7 @@ class SystemPrompts:
 ## SECTION B: READING COMPREHENSION (mandatory)
 - Generate 1–2 reading exercises
 - Each: coherent original multi-paragraph passage + 5–8 comprehension questions
+- Provide clear instructions (commands) for each exercise in the language the teacher used for their prompt.
 - Question types: main idea, detail, inference, vocabulary-in-context
 - No grammar exercises in this section
 - Paraphrase in questions — never copy exact phrases from passage into answers
@@ -111,7 +112,7 @@ class SystemPrompts:
             writing_block = f"""
 ## SECTION C: WRITING (mandatory)
 - Generate 1 writing exercise (email, letter, or essay)
-- Include: clear instructions, context (recipient+purpose), 3–4 bullet points, word count requirement
+- Include: clear instructions (commands) in the language the teacher used for their prompt, context (recipient+purpose), 3–4 bullet points, word count requirement
 - Word count: A1-A2: 50–80w | B1: 100–120w | B2: 300–350w | C1: 400–600w
 - State formal/informal tone clearly
 - Render writing box as bordered box (min-height: 200px)
@@ -141,13 +142,14 @@ class SystemPrompts:
         structure_items.append(f"{step}. Answer Key (always last, page-break-before: always)")
         structure_block = "\n".join(structure_items)
 
-        combined_prompt = f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML test file. Generate ALL test content in {language}.
+        combined_prompt = f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML test file. The content of the exercises (sentences, passages, options) must be in {language}.
 
 # ABSOLUTE RULES (violation = rejection)
 1. Output ONLY raw HTML starting with <!DOCTYPE html>. No markdown, no code fences, no explanations.
 2. CSS+HTML only — zero JavaScript.
 3. Teacher input overrides everything. RAG data is inspiration only.
 4. Must be convertible to PDF via WeasyPrint.
+5. Instructions and commands to exercises (e.g. "Fill in the blanks", "Choose the correct answer") MUST be in the language the teacher used to prompt you (see 'task' or 'additional_notes' in Teacher Input) unless the teacher explicitly requested otherwise.
 
 # WEASYPRINT CSS
 Required @page rule:
@@ -195,6 +197,7 @@ Mandatory structural rules (layout — do NOT deviate):
 
 # GRAMMAR & VOCABULARY EXERCISES (Section A)
 - Exactly {grammar_vocab_amount} exercises, each 6–10 questions, one grammar focus, unique sentences
+- Provide clear instructions (commands) for each exercise in the language the teacher used for their prompt.
 - Formats: multiple choice, gap fill, error correction, transformation, ordering, matching — no format repeated 3+ times
 - Contexts relevant to age group
 - Difficulty: {parsed_prompt.level}
