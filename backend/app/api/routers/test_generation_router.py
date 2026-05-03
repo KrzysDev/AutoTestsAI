@@ -10,6 +10,7 @@ from backend.app.models.schemas import (
     PromptRequest,
     HtmlRequest,
     TestSurveyRequest,
+    TestGeneratorHTMLResponse,
 )
 from backend.app.services.html_test_converter_service import HtmlConvertingService
 from backend.app.dependencies import (
@@ -27,7 +28,7 @@ def convert_html_to_pdf(
     request: HtmlRequest,
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
 ):
-    html_content = "\n".join(request.html)
+    html_content = request.html
     pdf_bytes = html_converting_service.convert_html_to_pdf(html_content)
 
     if not pdf_bytes:
@@ -57,20 +58,7 @@ def generate_html_test_with_prompt(
         return None
     try:
         result = test_generator_service.generate_html_test_from_prompt(request.prompt)
-
-        pdf_bytes = html_converting_service.convert_html_to_pdf(result.response)
-        if not pdf_bytes:
-            logger.error("HTML to PDF conversion returned no bytes (by_prompt)")
-            raise HTTPException(status_code=500, detail="Failed to convert HTML to PDF")
-
-        return StreamingResponse(
-            io.BytesIO(pdf_bytes),
-            media_type="application/pdf",
-            headers={
-                "Content-Disposition": "attachment; filename=generated_test.pdf",
-                "Access-Control-Expose-Headers": "Content-Disposition",
-            },
-        )
+        return result
     except HTTPException:
         raise  # nie łap własnych HTTPException
     except ValueError as e:
@@ -88,20 +76,7 @@ def generate_html_test_with_survey(
 ):
     try:
         result = test_generator_service.generate_html_test_from_survey(request.form)
-
-        pdf_bytes = html_converting_service.convert_html_to_pdf(result.response)
-        if not pdf_bytes:
-            logger.error("HTML to PDF conversion returned no bytes (by_survey)")
-            raise HTTPException(status_code=500, detail="Failed to convert HTML to PDF")
-
-        return StreamingResponse(
-            io.BytesIO(pdf_bytes),
-            media_type="application/pdf",
-            headers={
-                "Content-Disposition": "attachment; filename=generated_test.pdf",
-                "Access-Control-Expose-Headers": "Content-Disposition",
-            },
-        )
+        return result
     except HTTPException:
         raise
     except ValueError as e:
