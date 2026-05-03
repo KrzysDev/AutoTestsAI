@@ -68,7 +68,8 @@ class SystemPrompts:
          - YOU MUST return ONLY valid JSON. NO markdown. NO code fences. NO extra text before or after the JSON.
          - YOU MUST follow this EXACT schema — any deviation WILL result in rejection
          - MUST FOLLOW: only possible language filed values are in this list: {get_possible_language_codes()}. YOU CAN NEVER PRINT IN THE 'language' FIELD ANYTHING ELSE. YOU HAVE TO CHOOSE ONE FROM THE LIST.
-        
+         - the task field has to ALWAYS be written in language user was prompting.
+         
         #IMPORTANT INFORMATION
         1.Sections in provided format look like this:
             {json.dumps(PromptTestSection.model_json_schema(), indent=2)}
