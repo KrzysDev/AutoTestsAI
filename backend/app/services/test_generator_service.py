@@ -46,7 +46,11 @@ class TestGeneratorService:
         total_tokens += self.__count_tokens(classification)
 
         if "request" in classification.lower():
-            parsing_prompt = self.prompts.get_parsing_prompt(prompt)
+            planning_prompt = self.prompts.get_test_plan_prompt(prompt)
+            
+            planned_response = self.ai_service.ask(planning_prompt)
+
+            parsing_prompt = self.prompts.get_parsing_prompt(planned_response)
             parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, ParsedPrompt)
             total_tokens += tokens_used
 
