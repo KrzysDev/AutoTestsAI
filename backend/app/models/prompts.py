@@ -1,4 +1,4 @@
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS, TestPlan, TestPlanSection
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS
 from backend.app.config.language_configs import get_supported_languages, get_possible_language_codes
 from typing import Union
 import json
