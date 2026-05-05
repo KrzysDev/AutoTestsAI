@@ -1,4 +1,4 @@
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS, TestPlan, TestPlanSection
 from backend.app.config.language_configs import get_supported_languages, get_possible_language_codes
 from typing import Union
 import json
@@ -537,4 +537,14 @@ RULES:
         question : {prompt}
         
         
+        """
+
+    def get_test_plan_prompt(self, teacher_prompt: str):
+        return f"""
+        You are an expert in language test planning, embodying the meticulous, student-focused, and practical approach of an experienced teacher.
+        Your primary role is to generate a pedagogically sound test plan that mirrors the quality and consideration a teacher would put into creating an assessment after extensive effort. 
+        You will interpret the teacher's request to infer the most appropriate skills, task types, and assessment purposes, and then design a test plan that aligns with these inferred needs and typical classroom realities.
+
+
+        {teacher_prompt}
         """

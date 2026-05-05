@@ -62,6 +62,25 @@ class PromptTestSection(BaseModel):
     visuals: str
     amount: int
 
+class TestPlanSection(BaseModel):
+    task_type: TASK_TYPES
+    subject: str
+    amount: int
+    pedagogical_goal: str
+    difficulty_level: str
+    estimated_time_minutes: int
+
+class TestPlan(BaseModel):
+    title: str
+    language: str
+    level: str
+    age_group: str
+    learning_objectives: list[str]
+    pedagogical_approach: str
+    sections: list[TestPlanSection]
+    total_estimated_time: int
+    total_points: int
+
 class ParsedPrompt(BaseModel):
     task : str
     language : str = "English"  # Language of the test, e.g. "English", "German", "French"
