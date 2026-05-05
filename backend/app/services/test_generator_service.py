@@ -47,7 +47,7 @@ class TestGeneratorService:
 
         if "request" in classification.lower():
             planning_prompt = self.prompts.get_test_plan_prompt(prompt)
-            
+
             planned_response = self.ai_service.ask(planning_prompt)
 
             parsing_prompt = self.prompts.get_parsing_prompt(planned_response)

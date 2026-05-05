@@ -53,7 +53,7 @@ def generate_html_test_with_prompt(
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
 ):
 
-    if len(request.prompt) > 1000:
+    if len(request.prompt) > 10000:
         raise TooManyCharactersError()
         return None
     try:

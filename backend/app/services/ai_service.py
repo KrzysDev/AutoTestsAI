@@ -16,7 +16,7 @@ class AiService:
             host="http://localhost:11434"
         )
 
-    def ask(self, text: str, model: str):
+    def ask(self, text: str, model: str = None):
         is_testing = os.getenv("AI_TESTING", "false").lower() == "true"
 
         if is_testing:
