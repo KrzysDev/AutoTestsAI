@@ -46,7 +46,8 @@ class TestGeneratorService:
         total_tokens += self.__count_tokens(classification)
 
         if "request" in classification.lower():
-            planned_response = self.ai_service.ask(planning_prompt, "qwen/qwen3.5-plus-20260420")
+            planning_prompt = self.prompts.get_test_plan_prompt(prompt)
+            planned_response = self.ai_service.ask(planning_prompt, "anthropic/claude-sonnet-4")
 
             parsing_prompt = self.prompts.get_parsing_prompt(planned_response)
             parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, ParsedPrompt)
@@ -68,7 +69,7 @@ class TestGeneratorService:
 
             total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask(combined_prompt, "qwen/qwen3.5-plus-20260420")
+            generated_test_raw = self.ai_service.ask(combined_prompt, "anthropic/claude-sonnet-4")
             total_tokens += self.__count_tokens(generated_test_raw)
 
             # 6. Checking Stage
@@ -125,7 +126,7 @@ class TestGeneratorService:
         )
         total_tokens += self.__count_tokens(combined_prompt)
         
-        generated_test_raw = self.ai_service.ask(combined_prompt, "qwen/qwen3.5-plus-20260420")
+        generated_test_raw = self.ai_service.ask(combined_prompt, "anthropic/claude-sonnet-4")
         total_tokens += self.__count_tokens(generated_test_raw)
 
         checking_prompt = self.prompts.get_checking_prompt(generated_test_raw, "Survey Generated HTML Test")

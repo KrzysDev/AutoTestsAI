@@ -36,7 +36,7 @@ class AiService:
                 api_key=os.getenv("OPENROUTER_API_KEY", ""),
                 ) as client:
                 response = client.chat.send(
-                    model=f"{"qwen/qwen3.5-plus-20260420" if model == None else model}",
+                    model=f"{"anthropic/claude-sonnet-4" if model == None else model}",
                     messages=[
                     {
                         "role": "user",
