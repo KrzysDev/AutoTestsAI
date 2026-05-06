@@ -18,4 +18,4 @@ class PromptParserService:
 
     def parse_prompt(self, text: str):
 
-        return self.ai_service.ask(self.prompts.get_parsing_prompt(text), "gpt-oss:120b")
+        return self.ai_service.ask(self.prompts.get_parsing_prompt(text), "google/gemma-4-26b-a4b-it")

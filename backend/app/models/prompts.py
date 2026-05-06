@@ -592,11 +592,25 @@ RULES:
         {teacher_prompt}
         """
 
-    def get_refactored_retrival_prompt(self, retrival):
+    def get_checking_prompt(self, test_html: str, teacher_request: str):
         return f"""
-            You are part of a big agentic system that generates tests for teachers. Organise this retrived data from the database for the other model to read.
-            Return only refactored data, you CANNOT return anything else.
-
-            #Data to refactor:
-            {retrival}
+        You are a quality assurance pedagogical expert. Your task is to review a generated English test based on a teacher's original request.
+        
+        # TEACHER'S ORIGINAL REQUEST
+        {teacher_request}
+        
+        # GENERATED TEST HTML
+        {test_html}
+        
+        # YOUR TASK
+        1. Verify if the test covers all topics requested by the teacher.
+        2. Check if the CEFR level is appropriate for the content.
+        3. Check for any numbering errors or formatting issues.
+        4. Ensure instructions are in the correct language.
+        5. Verify that the answer key matches the questions.
+        
+        If everything is correct, start your response with "OK".
+        If there are issues, list them clearly so they can be fixed.
+        
+        Keep your feedback concise and professional.
         """
