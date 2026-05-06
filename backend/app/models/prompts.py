@@ -69,6 +69,7 @@ class SystemPrompts:
          - YOU MUST follow this EXACT schema — any deviation WILL result in rejection
          - MUST FOLLOW: only possible language filed values are in this list: {get_possible_language_codes()}. YOU CAN NEVER PRINT IN THE 'language' FIELD ANYTHING ELSE. YOU HAVE TO CHOOSE ONE FROM THE LIST.
          - the task field has to ALWAYS be written in language user was prompting.
+         - CRITICAL: DO NOT create sections for 'writing' (emails, essays) or 'reading' unless EXPLICITLY requested by the user. Do not assume they are needed.
          
         #IMPORTANT INFORMATION
         1.Sections in provided format look like this:
@@ -193,7 +194,9 @@ Mandatory structural rules (layout — do NOT deviate):
 - Sequential numbering: Ex. 1, 2, 3… never skip or reset
 
 # GRAMMAR & VOCABULARY EXERCISES
-- Exactly {grammar_vocab_amount} complete exercise blocks. Each block = one standalone task (e.g. one gap-fill task, one MCQ task). The number of sub-questions per block is 6–10.
+- Exactly {grammar_vocab_amount} complete exercise blocks. Each block = ONE standalone task (e.g., ONE gap-fill task containing 6-10 sentences).
+- CRITICAL: Group all sentences/questions of the same task into a SINGLE exercise block with ONLY ONE instruction at the top. DO NOT create a new exercise block/instruction for every single sentence!
+- Number the main exercises 1, 2, 3... and the sub-questions/sentences inside them a), b), c)... or use bullet points. Do not repeat the instruction for each sentence.
 - Provide clear instructions (commands) for each exercise in the language the teacher used for their prompt.
 - Formats: multiple choice, gap fill, error correction, transformation, ordering, matching — no format repeated 3+ times
 - Contexts relevant to age group
@@ -273,7 +276,8 @@ IMPORTANT: 'amount' = {amount} means {amount} complete, standalone exercise bloc
 
 # CONTENT: MULTIPLE CHOICE GRAMMAR
 - Generate exactly {amount} exercise block(s), each with 10 questions.
-- Format: 4 options (A, B, C, D) for each question.
+- CRITICAL: Group all 10 questions into ONE single exercise block with ONLY ONE instruction at the top. Do not create a new instruction/block for each question!
+- Format: 4 options (A, B, C, D) for each question. Sub-questions should be numbered a), b), c)... or 1., 2., 3.
 - Subject: {section.subject}
 - Level: {level}
 - Age group: {age_group}
@@ -299,7 +303,8 @@ IMPORTANT: 'amount' = {amount} means {amount} complete, standalone exercise bloc
 
 # CONTENT: GAP FILL GRAMMAR
 - Generate exactly {amount} exercise block(s), each with 10 sentences.
-- Format: Open gap fill (no options) or with verbs in brackets to be conjugated.
+- CRITICAL: Group all 10 sentences into ONE single exercise block with ONLY ONE instruction at the top. Do not create a new instruction/block for each sentence!
+- Format: Open gap fill (no options) or with verbs in brackets to be conjugated. Sub-questions should be numbered a), b), c)... or 1., 2., 3.
 - Subject: {section.subject}
 - Level: {level}
 - Age group: {age_group}
@@ -325,7 +330,8 @@ IMPORTANT: 'amount' = {amount} means {amount} complete, standalone exercise bloc
 
 # CONTENT: KEY WORD TRANSFORMATION
 - Generate exactly {amount} exercise block(s), each with 6–8 questions.
-- Format: A sentence followed by a key word and a second sentence with a gap. The second sentence must have the same meaning as the first.
+- CRITICAL: Group all questions into ONE single exercise block with ONLY ONE instruction at the top. Do not create a new instruction/block for each question!
+- Format: A sentence followed by a key word and a second sentence with a gap. The second sentence must have the same meaning as the first. Sub-questions should be numbered a), b), c)... or 1., 2., 3.
 - Subject: {section.subject}
 - Level: {level}
 - Age group: {age_group}
@@ -351,7 +357,8 @@ IMPORTANT: 'amount' = {amount} means {amount} complete, standalone exercise bloc
 
 # CONTENT: VOCABULARY MATCHING
 - Generate exactly {amount} exercise block(s), each with 10–12 items.
-- Format: Match words to definitions, synonyms, or pictures (descriptions). Use display:table for a clear two-column layout.
+- CRITICAL: Group all items into ONE single exercise block with ONLY ONE instruction at the top. Do not repeat the instruction!
+- Format: Match words to definitions, synonyms, or pictures (descriptions). Use display:table for a clear two-column layout. Number items a), b), c)... or 1., 2., 3.
 - Subject: {section.subject}
 - Level: {level}
 - Age group: {age_group}
@@ -577,6 +584,9 @@ RULES:
         You are an expert in language test planning, embodying the meticulous, student-focused, and practical approach of an experienced teacher.
         Your primary role is to generate a pedagogically sound test plan that mirrors the quality and consideration a teacher would put into creating an assessment after extensive effort. 
         You will interpret the teacher's request to infer the most appropriate skills, task types, and assessment purposes, and then design a test plan that aligns with these inferred needs and typical classroom realities.
+        
+        CRITICAL RULE: DO NOT add any extra task types (like writing, email, essay, reading, etc.) UNLESS the teacher explicitly requested them! If the teacher only asked for grammar or vocabulary, ONLY generate grammar and vocabulary sections. Do not assume they want a writing task.
+        
         return nothing more than a clean plan of the test. Treat your response as a prompt to another AI model. Clear and descriptive.
 
         {teacher_prompt}
