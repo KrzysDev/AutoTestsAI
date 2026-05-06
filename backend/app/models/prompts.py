@@ -591,3 +591,12 @@ RULES:
 
         {teacher_prompt}
         """
+
+    def get_refactored_retrival_prompt(self, retrival):
+        return f"""
+            You are part of a big agentic system that generates tests for teachers. Organise this retrived data from the database for the other model to read.
+            Return only refactored data, you CANNOT return anything else.
+
+            #Data to refactor:
+            {retrival}
+        """
