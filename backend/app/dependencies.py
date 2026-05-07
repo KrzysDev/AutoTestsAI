@@ -14,6 +14,14 @@ from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
 
 
+from backend.app.services.auth_service import AuthService
+
+
+@lru_cache
+def get_auth_service() -> AuthService:
+    return AuthService()
+
+
 @lru_cache
 def get_ai_service() -> AiService:
     return AiService()
