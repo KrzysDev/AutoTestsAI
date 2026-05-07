@@ -31,7 +31,7 @@ class AuthService:
             "premium": False
         }
 
-        response = self.supabase.table("users").insert(data).execute()
+        response = self.supabase.table("Users").insert(data).execute()
 
         return response
 
