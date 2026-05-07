@@ -42,7 +42,7 @@ class TestGeneratorService:
         # 1. Classification
         classification_prompt = self.prompts.get_classification_prompts(prompt)
         total_tokens += self.__count_tokens(classification_prompt)
-        classification : str = self.ai_service.ask(classification_prompt, "google/gemma-4-26b-a4b-it")
+        classification : str = self.ai_service.ask(classification_prompt, "deepseek/deepseek-v4-flash")
         total_tokens += self.__count_tokens(classification)
 
         if "request" in classification.lower():
@@ -69,12 +69,12 @@ class TestGeneratorService:
 
             total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask(combined_prompt, "google/gemma-4-26b-a4b-it")
+            generated_test_raw = self.ai_service.ask(combined_prompt, "deepseek/deepseek-v4-flash")
             total_tokens += self.__count_tokens(generated_test_raw)
 
             # 6. Checking Stage
             checking_prompt = self.prompts.get_checking_prompt(generated_test_raw, prompt)
-            check_result = self.ai_service.ask(checking_prompt, "google/gemma-4-26b-a4b-it")
+            check_result = self.ai_service.ask(checking_prompt, "deepseek/deepseek-v4-flash")
             print(f"Pedagogical Check Result:\n{check_result}")
             total_tokens += self.__count_tokens(check_result)
             
@@ -86,7 +86,7 @@ class TestGeneratorService:
             )
         else:
             gen_prompt = self.prompts.get_general_question_prompt(prompt)
-            res = self.ai_service.ask(self.prompts.get_general_question_prompt(gen_prompt), "google/gemma-4-26b-a4b-it")
+            res = self.ai_service.ask(self.prompts.get_general_question_prompt(gen_prompt), "deepseek/deepseek-v4-flash")
             
             timer = time.time() - start
             average_time = self.__get_and_update_average_time(timer)
@@ -130,7 +130,7 @@ class TestGeneratorService:
         total_tokens += self.__count_tokens(generated_test_raw)
 
         checking_prompt = self.prompts.get_checking_prompt(generated_test_raw, "Survey Generated HTML Test")
-        check_result = self.ai_service.ask(checking_prompt, "google/gemma-4-26b-a4b-it")
+        check_result = self.ai_service.ask(checking_prompt, "deepseek/deepseek-v4-flash")
         print(f"Pedagogical Check Result (Survey):\n{check_result}")
         total_tokens += self.__count_tokens(check_result)
         
@@ -143,7 +143,7 @@ class TestGeneratorService:
 
     # --- Sub-methods for Refactoring ---
 
-    def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3, model: str = "google/gemma-4-26b-a4b-it") -> tuple:
+    def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3, model: str = "deepseek/deepseek-v4-flash") -> tuple:
         total_tokens = self.__count_tokens(prompt)
         for i in range(max_tries):
             raw_response = self.ai_service.ask(prompt, model)
