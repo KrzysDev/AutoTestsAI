@@ -77,6 +77,13 @@ class TestGeneratorService:
             check_result = self.ai_service.ask(checking_prompt, "deepseek/deepseek-v4-flash")
             print(f"Pedagogical Check Result:\n{check_result}")
             total_tokens += self.__count_tokens(check_result)
+
+            # 7. Fixing Stage (if needed)
+            if not check_result.strip().upper().startswith("OK"):
+                print("Fixing test based on pedagogical feedback...")
+                fixing_prompt = self.prompts.get_fixing_prompt(generated_test_raw, check_result)
+                generated_test_raw = self.ai_service.ask(fixing_prompt, "deepseek/deepseek-v4-flash")
+                total_tokens += self.__count_tokens(generated_test_raw)
             
             metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
 
@@ -129,10 +136,18 @@ class TestGeneratorService:
         generated_test_raw = self.ai_service.ask(combined_prompt, "anthropic/claude-sonnet-4")
         total_tokens += self.__count_tokens(generated_test_raw)
 
+        # 6. Checking Stage
         checking_prompt = self.prompts.get_checking_prompt(generated_test_raw, "Survey Generated HTML Test")
         check_result = self.ai_service.ask(checking_prompt, "deepseek/deepseek-v4-flash")
         print(f"Pedagogical Check Result (Survey):\n{check_result}")
         total_tokens += self.__count_tokens(check_result)
+
+        # 7. Fixing Stage (if needed)
+        if not check_result.strip().upper().startswith("OK"):
+            print("Fixing test based on pedagogical feedback (Survey)...")
+            fixing_prompt = self.prompts.get_fixing_prompt(generated_test_raw, check_result)
+            generated_test_raw = self.ai_service.ask(fixing_prompt, "anthropic/claude-sonnet-4")
+            total_tokens += self.__count_tokens(generated_test_raw)
         
         metadata = self.__build_metadata(start, "Survey Generated HTML Test", form.model_dump_json(), total_tokens, retrival_metadata)
 
