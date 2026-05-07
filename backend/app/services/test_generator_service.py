@@ -69,7 +69,7 @@ class TestGeneratorService:
 
             total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask(combined_prompt, "anthropic/claude-sonnet-4")
+            generated_test_raw = self.ai_service.ask(combined_prompt, "google/gemma-4-26b-a4b-it")
             total_tokens += self.__count_tokens(generated_test_raw)
 
             # 6. Checking Stage
