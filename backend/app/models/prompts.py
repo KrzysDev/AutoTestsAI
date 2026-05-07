@@ -147,9 +147,10 @@ class SystemPrompts:
 3. Teacher input overrides everything. RAG data is inspiration only.
 4. Must be convertible to PDF via WeasyPrint.
 5. Instructions and commands to exercises (e.g. "Fill in the blanks", "Choose the correct answer") MUST be in the language the teacher used to prompt you (see 'task' or 'additional_notes' in Teacher Input) unless the teacher explicitly requested otherwise.
-6. DO NOT generate section divider bars (no "SECTION A — GRAMMAR & VOCABULARY" banners or similar). Exercises flow continuously without section headers.
-7. DO NOT repeat the same questions, answers, or texts. Ensure correct, continuous sequential numbering (1, 2, 3...) without resetting or repeating numbers.
-8. Make the layout highly economical on paper. Avoid excessive padding, margins, and blank spaces.
+6. DO NOT use multiple <br> tags for vertical spacing. Use CSS margins on block elements instead.
+7. DO NOT generate section divider bars (no "SECTION A — GRAMMAR & VOCABULARY" banners or similar). Exercises flow continuously without section headers.
+8. DO NOT repeat the same questions, answers, or texts. Ensure correct, continuous sequential numbering (1, 2, 3...) without resetting or repeating numbers.
+9. Make the layout highly economical on paper. Use compact margins (max 8px between elements) and avoid large blank areas.
 
 # WEASYPRINT CSS
 Required @page rule:
@@ -162,11 +163,11 @@ FORBIDDEN CSS (breaks WeasyPrint): display:flex, display:grid, vw/vh units, max-
 USE INSTEAD: display:table/table-cell for multi-column layouts. Use %, cm, pt, px for widths.
 
 Page break rules:
-- .answer-key-section: page-break-before: always (ONLY element with this)
-- .exercise: page-break-inside: avoid
-- .exercise-title: page-break-after: avoid
+- .answer-key-section {{ page-break-before: always; }}
+- .exercise {{ page-break-inside: auto; margin-bottom: 12px; }}
+- .exercise-header {{ page-break-after: avoid; margin-bottom: 4px; }}
+- .question-item, .mcq-option {{ page-break-inside: avoid; }}
 - Never use page-break-before:always except on .answer-key-section
-- Never use page-break-after:always anywhere
 
 # VISUAL DESIGN
 You have full creative freedom over colors, fonts, and aesthetic style. Design a professional, visually appealing printed exam. Choose a coherent color palette, readable fonts, and a polished look that fits the teacher's request.
@@ -237,8 +238,9 @@ Use these criteria to ensure the complexity of the content (vocabulary, sentence
 3. Teacher input overrides everything. RAG data is inspiration only.
 4. Must be convertible to PDF via WeasyPrint.
 5. ALL instructions and commands MUST be in the same language the teacher used to prompt you.
-6. DO NOT repeat the same questions, answers, or texts. Ensure correct, continuous sequential numbering (1, 2, 3...) without resetting or repeating numbers.
-7. Make the layout highly economical on paper (reduce empty spaces, use compact formatting)."""
+6. DO NOT use multiple <br> tags for spacing. Use CSS margins on block elements.
+7. DO NOT repeat the same questions, answers, or texts. Ensure correct, continuous sequential numbering (1, 2, 3...) without resetting or repeating numbers.
+8. Make the layout highly economical on paper (compact margins, line-height: 1.2, small paddings)."""
 
     def _get_weasyprint_css(self):
         return """# WEASYPRINT CSS
@@ -246,20 +248,22 @@ Required @page rule:
 @page { size: A4; margin: 1cm 1.5cm; @bottom-center { content: "— " counter(page) " —"; font-size: 9pt; color: #999; } }
 
 Required reset:
-* { box-sizing: border-box; } body { margin:0; padding:0; background:#fff; } .test-container { width:100%; }
+* { box-sizing: border-box; } body { margin:0; padding:0; background:#fff; font-family: sans-serif; } .test-container { width:100%; }
 
 FORBIDDEN CSS (breaks WeasyPrint): display:flex, display:grid, vw/vh units, max-width on .test-container, JS-dependent CSS.
-USE INSTEAD: display:table/table-cell for multi-column layouts. Use %, cm, pt, px for widths."""
+USE INSTEAD: display:table/table-cell for multi-column layouts. Use %, cm, pt, px for widths.
+- .exercise { page-break-inside: auto; margin-bottom: 12px; }
+- .question-item { page-break-inside: avoid; margin-bottom: 4px; }"""
 
     def _get_visual_design_rules(self, level: str):
         return f"""# VISUAL DESIGN
 You have full creative freedom over colors, fonts, and aesthetic style. Design a professional, visually appealing exercise.
-- Body font-size: 10–11pt, line-height: 1.3
+- Body font-size: 10–11pt, line-height: 1.2
 - Header: small bar with exercise title and level: {level}
 - Student info: Name / Date / Class
-- Exercise block: padding: 5px 0, margin-bottom: 10px. Must show score "( X pts )". Make it highly economical on paper.
-- Gap fill blanks: border-bottom underline, min-width ≥ 100px
-- MCQ options: A) B) C) format"""
+- Exercise block: padding: 2px 0, margin-bottom: 8px. Must show score "( X pts )".
+- Gap fill blanks: border-bottom underline, min-width ≥ 80px
+- MCQ options: A) B) C) format, compact layout"""
 
     def get_grammar_mcq_prompt(self, section: Union[PromptTestSection, FormSection], level: str, age_group: str, language: str = "English", retrieval: str = None):
         rag_line = f"\nGrammar RAG context (Tense definitions/Inspiration): {retrieval}" if retrieval else ""
