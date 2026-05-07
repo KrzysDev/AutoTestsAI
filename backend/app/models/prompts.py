@@ -172,14 +172,14 @@ Page break rules:
 You have full creative freedom over colors, fonts, and aesthetic style. Design a professional, visually appealing printed exam. Choose a coherent color palette, readable fonts, and a polished look that fits the teacher's request.
 
 Mandatory structural rules (layout — do NOT deviate):
-- Body font-size: 10–11pt, line-height: 1.3 to be economical with space
+- Body font-size: 10–11pt, line-height: 1.2
 - Header: full-width bar with test title centered, below it: Level | Age Group | Total Score
-- Student info: 3-col layout using display:table/table-cell, label + underline for each field, padding: 4px
-- Exercise blocks: padding: 5px 0, margin-bottom: 10px, page-break-inside:avoid. Must show score "( X pts )" and exercise number. Reduce empty spaces to save paper.
-- MCQ options: A) B) C) format
-- Gap fill blanks: border-bottom underline, min-width ≥ 100px
-- Reading passage: visually distinct container (e.g. background or border), padding ≥ 12px
-- Writing box: bordered, width:100%, min-height:200px
+- Student info: 3-col layout using display:table/table-cell, label + underline for each field, padding: 2px
+- Exercise blocks: padding: 2px 0, margin-bottom: 8px. Each question/item inside should be a .question-item.
+- MCQ options: A) B) C) format, compact layout
+- Gap fill blanks: border-bottom underline, min-width ≥ 80px
+- Reading passage: visually distinct container (e.g. light background or thin border), padding: 8px
+- Writing box: bordered, width:100%, min-height:150px
 - Answer Key: page-break-before:always, answers in multi-column table layout (display:table), clearly labeled per exercise
 - All answers in the solution key MUST strictly follow the transformation type requested in the task. Do not introduce alternative grammatical moods unless explicitly required.
 - never use special sighns like '$\rightarrow$' or any other. Simple keyboard text and sighns.
