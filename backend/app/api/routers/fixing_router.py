@@ -25,7 +25,7 @@ def fix_test_html(
         fixing_prompt = prompts.get_fixing_prompt(request.html, request.feedback)
         
         # 2. Ask AI to fix the HTML
-        fixed_html = ai_service.ask(fixing_prompt, "gpt-5-mini")
+        fixed_html = ai_service.ask(fixing_prompt, "google/gemma-4-26b-a4b-it")
         
         if not fixed_html:
             logger.error("AI returned empty string for fixed HTML")

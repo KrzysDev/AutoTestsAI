@@ -16,7 +16,7 @@ class AiService:
             host="http://localhost:11434"
         )
 
-    def ask(self, text: str, model: str):
+    def ask(self, text: str, model: str = None):
         is_testing = os.getenv("AI_TESTING", "false").lower() == "true"
 
         if is_testing:
@@ -36,7 +36,7 @@ class AiService:
                 api_key=os.getenv("OPENROUTER_API_KEY", ""),
                 ) as client:
                 response = client.chat.send(
-                    model="openai/gpt-5-mini",
+                    model=f"{"anthropic/claude-sonnet-4" if model == None else model}",
                     messages=[
                     {
                         "role": "user",
