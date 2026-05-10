@@ -7,6 +7,7 @@ import ast
 from typing import Literal
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
+from backend.app.services.html_cleaner_service import HtmlCleanerService
 from backend.app.models.schemas import ParsedPrompt, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival, Form, TestGeneratorHTMLResponse
 import re
 import os
@@ -23,12 +24,15 @@ class TestGeneratorService:
         search_service: SearchService,
         classification_service: "ClassificationService",
         prompt_parser_service: "PromptParserService",
+        html_cleaner_service: HtmlCleanerService
     ):
         self.ai_service = ai_service
         self.search_service = search_service
         self.prompts = SystemPrompts()
         self.classification_service = classification_service
         self.prompt_parser_service = prompt_parser_service
+        self.cleaner_service = html_cleaner_service
+        
 
 
 
@@ -54,7 +58,7 @@ class TestGeneratorService:
             planning_start = time.time()
             print("planning...")
             planning_prompt = self.prompts.get_test_plan_prompt(prompt)
-            planned_response = self.ai_service.ask(planning_prompt, "anthropic/claude-sonnet-4")
+            planned_response = self.ai_service.ask(planning_prompt, "deepseek/deepseek-v4-pro")
             print("planned. Time: ", time.time() - planning_start)
 
             # 3. Parsing
@@ -88,7 +92,7 @@ class TestGeneratorService:
 
             total_tokens += self.__count_tokens(combined_prompt)
             
-            generated_test_raw = self.ai_service.ask(combined_prompt, "deepseek/deepseek-v4-flash")
+            generated_test_raw = self.ai_service.ask(combined_prompt, "deepseek/deepseek-v4-pro")
             total_tokens += self.__count_tokens(generated_test_raw)
             print("generated. Time: ", time.time() - generation_start)
 
@@ -111,6 +115,8 @@ class TestGeneratorService:
                 print("fixed. Time: ", time.time() - fixing_start)
             
             metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
+            
+            generated_test_raw = self.cleaner_service.clean(generated_test_raw)
 
             return TestGeneratorHTMLResponse(
                 response=generated_test_raw,
