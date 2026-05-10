@@ -40,24 +40,43 @@ class TestGeneratorService:
         total_tokens = 0
 
         # 1. Classification
+        classification_time = time.time()
+        print("classifying...")
         classification_prompt = self.prompts.get_classification_prompts(prompt)
         total_tokens += self.__count_tokens(classification_prompt)
         classification : str = self.ai_service.ask(classification_prompt, "deepseek/deepseek-v4-flash")
         total_tokens += self.__count_tokens(classification)
 
+        print("classified. Time: ", time.time() - classification_time)
+        
         if "request" in classification.lower():
+            # 2. Planning
+            planning_start = time.time()
+            print("planning...")
             planning_prompt = self.prompts.get_test_plan_prompt(prompt)
             planned_response = self.ai_service.ask(planning_prompt, "anthropic/claude-sonnet-4")
+            print("planned. Time: ", time.time() - planning_start)
 
+            # 3. Parsing
+            parsing_start = time.time()
+            print("parsing...")
             parsing_prompt = self.prompts.get_parsing_prompt(planned_response)
             parsed_prompt, tokens_used = self.__ask_model_for_json(parsing_prompt, ParsedPrompt)
             total_tokens += tokens_used
+            print("parsed. Time: ", time.time() - parsing_start)
 
+            # 4. Retrieval
+            retrieval_start = time.time()
+            print("retrieving data...")
             data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(
                 parsed_prompt.sections, language=parsed_prompt.language
             )
+            print("retrieved. Time: ", time.time() - retrieval_start)
             print("retrived_data: ", data)
 
+            # 5. Generation
+            generation_start = time.time()
+            print("generating test...")
             combined_prompt = self.prompts.get_combined_html_generation_prompt(
                 retrieval=data,
                 reading_data=reading_data,
@@ -71,19 +90,25 @@ class TestGeneratorService:
             
             generated_test_raw = self.ai_service.ask(combined_prompt, "deepseek/deepseek-v4-flash")
             total_tokens += self.__count_tokens(generated_test_raw)
+            print("generated. Time: ", time.time() - generation_start)
 
             # 6. Checking Stage
+            checking_start = time.time()
+            print("pedagogical checking...")
             checking_prompt = self.prompts.get_checking_prompt(generated_test_raw, prompt)
             check_result = self.ai_service.ask(checking_prompt, "deepseek/deepseek-v4-flash")
             print(f"Pedagogical Check Result:\n{check_result}")
             total_tokens += self.__count_tokens(check_result)
+            print("checked. Time: ", time.time() - checking_start)
 
             # 7. Fixing Stage (if needed)
-            if not check_result.strip().upper().startswith("OK"):
+            if not check_result.strip().upper() == "OK":
+                fixing_start = time.time()
                 print("Fixing test based on pedagogical feedback...")
                 fixing_prompt = self.prompts.get_fixing_prompt(generated_test_raw, check_result)
                 generated_test_raw = self.ai_service.ask(fixing_prompt, "deepseek/deepseek-v4-flash")
                 total_tokens += self.__count_tokens(generated_test_raw)
+                print("fixed. Time: ", time.time() - fixing_start)
             
             metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
 
@@ -92,8 +117,11 @@ class TestGeneratorService:
                 metadata=metadata
             )
         else:
+            general_start = time.time()
+            print("generating general response...")
             gen_prompt = self.prompts.get_general_question_prompt(prompt)
-            res = self.ai_service.ask(self.prompts.get_general_question_prompt(gen_prompt), "deepseek/deepseek-v4-flash")
+            res = self.ai_service.ask(gen_prompt, "deepseek/deepseek-v4-flash")
+            print("general response generated. Time: ", time.time() - general_start)
             
             timer = time.time() - start
             average_time = self.__get_and_update_average_time(timer)
@@ -119,10 +147,17 @@ class TestGeneratorService:
         start = time.time()
         total_tokens = 0
 
+        # 4. Retrieval
+        retrieval_start = time.time()
+        print("retrieving data (Survey)...")
         data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = self.__perform_retrieval(
             form.sections, language=form.language
         )
+        print("retrieved (Survey). Time: ", time.time() - retrieval_start)
 
+        # 5. Generation
+        generation_start = time.time()
+        print("generating test (Survey)...")
         combined_prompt = self.prompts.get_combined_html_generation_prompt(
             retrieval=data,
             reading_data=reading_data,
@@ -135,19 +170,25 @@ class TestGeneratorService:
         
         generated_test_raw = self.ai_service.ask(combined_prompt, "anthropic/claude-sonnet-4")
         total_tokens += self.__count_tokens(generated_test_raw)
+        print("generated (Survey). Time: ", time.time() - generation_start)
 
         # 6. Checking Stage
+        checking_start = time.time()
+        print("pedagogical checking (Survey)...")
         checking_prompt = self.prompts.get_checking_prompt(generated_test_raw, "Survey Generated HTML Test")
         check_result = self.ai_service.ask(checking_prompt, "deepseek/deepseek-v4-flash")
         print(f"Pedagogical Check Result (Survey):\n{check_result}")
         total_tokens += self.__count_tokens(check_result)
+        print("checked (Survey). Time: ", time.time() - checking_start)
 
         # 7. Fixing Stage (if needed)
         if not check_result.strip().upper().startswith("OK"):
+            fixing_start = time.time()
             print("Fixing test based on pedagogical feedback (Survey)...")
             fixing_prompt = self.prompts.get_fixing_prompt(generated_test_raw, check_result)
             generated_test_raw = self.ai_service.ask(fixing_prompt, "anthropic/claude-sonnet-4")
             total_tokens += self.__count_tokens(generated_test_raw)
+            print("fixed (Survey). Time: ", time.time() - fixing_start)
         
         metadata = self.__build_metadata(start, "Survey Generated HTML Test", form.model_dump_json(), total_tokens, retrival_metadata)
 

@@ -52,11 +52,12 @@ def generate_html_test_with_prompt(
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
 ):
-
+    print("Request received: generate_html_test_with_prompt")
     if len(request.prompt) > 10000:
         raise TooManyCharactersError()
         return None
     try:
+        print("generating test....")
         result = test_generator_service.generate_html_test_from_prompt(request.prompt)
         return result
     except HTTPException:
@@ -74,6 +75,7 @@ def generate_html_test_with_survey(
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
 ):
+    logger.info("Request received: generate_html_test_with_survey")
     try:
         result = test_generator_service.generate_html_test_from_survey(request.form)
         return result
