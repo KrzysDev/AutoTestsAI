@@ -12,7 +12,7 @@ router = APIRouter()
 prompts = SystemPrompts()
 
 @router.post("/v1/rag/test/fix", response_model=TestGeneratorHTMLResponse)
-def fix_test_html(
+async def fix_test_html(
     request: FixingRequest,
     ai_service: AiService = Depends(get_ai_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
@@ -25,7 +25,7 @@ def fix_test_html(
         fixing_prompt = prompts.get_fixing_prompt(request.html, request.feedback)
         
         # 2. Ask AI to fix the HTML
-        fixed_html = ai_service.ask(fixing_prompt, "deepseek/deepseek-v4-flash")
+        fixed_html = await ai_service.ask(fixing_prompt, "deepseek/deepseek-v4-flash")
         
         if not fixed_html:
             logger.error("AI returned empty string for fixed HTML")

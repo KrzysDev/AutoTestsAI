@@ -9,7 +9,7 @@ from backend.app.config.language_configs import (
 router = APIRouter(prefix="/v1/stats", tags=["stats"])
 
 @router.get("/v1/rag/stats/languages")
-def get_language_statistics():
+async def get_language_statistics():
     """
     Returns statistics and configuration data for all supported languages.
     """
@@ -24,7 +24,7 @@ def get_language_statistics():
     }
 
 @router.get("/v1/rag/stats/{language}/grammar_subjects")
-def get_language_grammar_subjects(language: str):
+async def get_language_grammar_subjects(language: str):
     config = get_language_config(language)
     code = config.get("code", language)
     return get_language_subjects(code)

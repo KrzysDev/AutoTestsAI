@@ -24,12 +24,13 @@ router = APIRouter()
 
 
 @router.post("/v1/rag/test/convert/html")
-def convert_html_to_pdf(
+async def convert_html_to_pdf(
     request: HtmlRequest,
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
 ):
+    from fastapi.concurrency import run_in_threadpool
     html_content = request.html
-    pdf_bytes = html_converting_service.convert_html_to_pdf(html_content)
+    pdf_bytes = await run_in_threadpool(html_converting_service.convert_html_to_pdf, html_content)
 
     if not pdf_bytes:
         logger.error("HTML to PDF conversion returned no bytes")
@@ -47,7 +48,7 @@ class TooManyCharactersError(Exception):
 
 
 @router.post("/v1/rag/test/generate_html/by_prompt")
-def generate_html_test_with_prompt(
+async def generate_html_test_with_prompt(
     request: PromptRequest,
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
@@ -58,7 +59,7 @@ def generate_html_test_with_prompt(
         return None
     try:
         print("generating test....")
-        result = test_generator_service.generate_html_test_from_prompt(request.prompt)
+        result = await test_generator_service.generate_html_test_from_prompt(request.prompt)
         return result
     except HTTPException:
         raise 
@@ -69,15 +70,17 @@ def generate_html_test_with_prompt(
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
+
+
 @router.post("/v1/rag/test/generate_html/by_survey")
-def generate_html_test_with_survey(
+async def generate_html_test_with_survey(
     request: TestSurveyRequest,
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
 ):
     logger.info("Request received: generate_html_test_with_survey")
     try:
-        result = test_generator_service.generate_html_test_from_survey(request.form)
+        result = await test_generator_service.generate_html_test_from_survey(request.form)
         return result
     except HTTPException:
         raise

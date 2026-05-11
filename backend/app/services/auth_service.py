@@ -1,4 +1,4 @@
-from supabase import create_client
+from supabase import create_client, AsyncClient
 import os
 from dotenv import load_dotenv
 import bcrypt
@@ -12,17 +12,20 @@ class AuthService:
         self.url = os.getenv("SUPABASE_URL")
         self.key = os.getenv("SUPABASE_KEY")
 
-        self.supabase = create_client(self.url, self.key)
+        # Note: Using AsyncClient for async support
+        self.supabase: AsyncClient = create_client(self.url, self.key)
 
     def __hash_password(self, password: str):
+        # bcrypt is blocking, but for password hashing it's usually acceptable 
+        # unless it's a very high-load system.
         return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
     def __verify_password(self, password: str, hashed: str):
         return bcrypt.checkpw(password.encode(), hashed.encode())
 
-    def register(self, username, email, password):
-
-        hashed_password = self.__hash_password(password)
+    async def register(self, username, email, password):
+        from fastapi.concurrency import run_in_threadpool
+        hashed_password = await run_in_threadpool(self.__hash_password, password)
 
         data = {
             "username": username,
@@ -31,13 +34,13 @@ class AuthService:
             "premium": False
         }
 
-        response = self.supabase.table("Users").insert(data).execute()
+        response = await self.supabase.table("Users").insert(data).execute()
 
         return response
 
-    def login(self, email, password):
+    async def login(self, email, password):
 
-        response = (
+        response = await (
             self.supabase
             .table("Users")
             .select("*")
@@ -52,7 +55,8 @@ class AuthService:
 
         user = users[0]
 
-        if self.__verify_password(password, user["password"]):
+        from fastapi.concurrency import run_in_threadpool
+        if await run_in_threadpool(self.__verify_password, password, user["password"]):
             return True
 
         return False

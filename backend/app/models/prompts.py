@@ -16,7 +16,7 @@ class SystemPrompts:
 
             Your task is to classify the user's message into ONE of two labels:
 
-            * "general" → casual conversation, questions, anything NOT asking to create a test or something very imprecise.
+            * "general" → casual conversation, questions, anything NOT asking to create a test or something very imprecise (does not suggest CEFR level, target age group etc. ).
             * "request" → user wants to create/generate/make an English test or exam
 
             ---

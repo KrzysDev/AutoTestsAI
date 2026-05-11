@@ -30,7 +30,7 @@ app.include_router(auth_router)
 
 
 @app.get("/")
-def read_root():
+async def read_root():
     print("Root endpoint hit!")
     return {"Hello": "World"}
 
