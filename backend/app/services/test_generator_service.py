@@ -8,7 +8,7 @@ from typing import Literal
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
 from backend.app.services.html_cleaner_service import HtmlCleanerService
-from backend.app.models.schemas import ParsedPrompt, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival, Form, TestGeneratorHTMLResponse
+from backend.app.models.schemas import ParsedPrompt, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival, Form, TestGeneratorHTMLResponse, GeneratedParsedSection
 import re
 import os
 import time
@@ -66,22 +66,19 @@ class TestGeneratorService:
             # 3. Retrieval
             retrieval_start = time.time()
             print("retrieving data...")
-            data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = await self.__perform_retrieval(
+            retrieval_list = await self.__perform_retrieval(
                 parsed_prompt.sections, language=parsed_prompt.language
             )
+            data_str = "\n---\n".join(retrieval_list)
             print("retrieved. Time: ", time.time() - retrieval_start)
-            print("retrived_data: ", data)
+            print("retrived_data: ", data_str)
 
             # 4. Generation
             generation_start = time.time()
             print("generating test...")
             combined_prompt = self.prompts.get_combined_html_generation_prompt(
-                retrieval=data,
-                reading_data=reading_data,
-                writing_data=writing_data,
-                parsed_prompt=parsed_prompt,
-                reading_enabled=reading_enabled,
-                writing_enabled=writing_enabled
+                retrieval=data_str,
+                parsed_prompt=parsed_prompt
             )
 
             total_tokens += self.__count_tokens(combined_prompt)
@@ -108,7 +105,7 @@ class TestGeneratorService:
                 total_tokens += self.__count_tokens(generated_test_raw)
                 print("fixed. Time: ", time.time() - fixing_start)
             
-            metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, retrival_metadata)
+            metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, data_str)
             
             generated_test_raw = self.cleaner_service.clean(generated_test_raw)
 
@@ -148,24 +145,21 @@ class TestGeneratorService:
         start = time.time()
         total_tokens = 0
 
-        # 4. Retrieval
+        # 3. Retrieval (Renumbered from 4)
         retrieval_start = time.time()
         print("retrieving data (Survey)...")
-        data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata = await self.__perform_retrieval(
+        retrieval_list = await self.__perform_retrieval(
             form.sections, language=form.language
         )
+        data_str = "\n---\n".join(retrieval_list)
         print("retrieved (Survey). Time: ", time.time() - retrieval_start)
 
-        # 5. Generation
+        # 4. Generation (Renumbered from 5)
         generation_start = time.time()
         print("generating test (Survey)...")
         combined_prompt = self.prompts.get_combined_html_generation_prompt(
-            retrieval=data,
-            reading_data=reading_data,
-            writing_data=writing_data,
-            parsed_prompt=form,
-            reading_enabled=reading_enabled,
-            writing_enabled=writing_enabled
+            retrieval=data_str,
+            parsed_prompt=form
         )
         total_tokens += self.__count_tokens(combined_prompt)
         
@@ -191,7 +185,7 @@ class TestGeneratorService:
             total_tokens += self.__count_tokens(generated_test_raw)
             print("fixed (Survey). Time: ", time.time() - fixing_start)
         
-        metadata = self.__build_metadata(start, "Survey Generated HTML Test", form.model_dump_json(), total_tokens, retrival_metadata)
+        metadata = self.__build_metadata(start, form.model_dump_json(), form.model_dump_json(), total_tokens, data_str)
 
         return TestGeneratorHTMLResponse(
             response=generated_test_raw,
@@ -216,34 +210,24 @@ class TestGeneratorService:
                     raise ValueError(f"Model returned invalid json: {e}")
         return None, total_tokens
 
-    async def __perform_retrieval(self, sections, language: str = "en") -> tuple[list, list, list, bool, bool, TestGeneratorResponseMetadataRetrival]:
-        data, reading_data, writing_data = [], [], []
-        reading_enabled, writing_enabled = False, False
-        retrival_metadata = TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
+    async def __perform_retrieval(self, sections, language: str = "en") -> list:
+        retrieval_data = []
 
         for section in sections:
             query = section.retrival_subject
+            # search_service.search is an async method
+            result = await self.search_service.search(subject=query, language=language)
             
-            if section.task_type == "reading":
-                res = await self.search_service.search(query, language=language)
-                reading_data.append(res)
-                retrival_metadata.reading += json.dumps(res) + "\n"
-                reading_enabled = True
-            elif section.task_type == "writing":
-                res = await self.search_service.search(query, language=language)
-                writing_data.append(res)
-                retrival_metadata.writing += json.dumps(res) + "\n"
-                writing_enabled = True
-            else:
-                res = await self.search_service.search(query, language=language)
-                data.append(res)
-                retrival_metadata.regular += json.dumps(res) + "\n"
+            if result:
+                # result is a list of payloads, let's join them into a string for the prompt
+                retrieval_data.append(json.dumps(result))
 
-        return data, reading_data, writing_data, reading_enabled, writing_enabled, retrival_metadata
+        return retrieval_data
 
 
 
-    def __build_metadata(self, start_time: float, prompt: str, parsed_prompt_json: str, total_tokens: int, retrival_metadata: TestGeneratorResponseMetadataRetrival) -> TestGeneratorResponseMetadata:
+
+    def __build_metadata(self, start_time: float, prompt: str, parsed_prompt_json: str, total_tokens: int, retrieval_data: str) -> TestGeneratorResponseMetadata:
         elapsed_time = time.time() - start_time
         average_time = self.__get_and_update_average_time(elapsed_time)
         return TestGeneratorResponseMetadata(
@@ -253,7 +237,7 @@ class TestGeneratorService:
             tokens=total_tokens,
             time=elapsed_time,
             average_time=average_time,
-            retrival=retrival_metadata
+            retrieval=retrieval_data
         )
 
 
