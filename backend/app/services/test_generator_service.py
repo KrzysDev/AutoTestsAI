@@ -8,10 +8,11 @@ from typing import Literal
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
 from backend.app.services.html_cleaner_service import HtmlCleanerService
-from backend.app.models.schemas import ParsedPrompt, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival, Form, TestGeneratorHTMLResponse
+from backend.app.models.schemas import ParsedPrompt, TestGeneratorResponseMetadata, Form, TestGeneratorHTMLResponse
 import re
 import os
 import time
+import asyncio
 
 """
 # Service responsible for generating educational tests by orchestrating AI and search components.
@@ -38,106 +39,94 @@ class TestGeneratorService:
 
     async def generate_html_test_from_prompt(self, prompt: str):
         """
-        Generates an HTML test based on the user prompt. Includes AI classification.
+        Generates an HTML test based on the user prompt. Includes AI classification and planning.
         """
         start = time.time()
         total_tokens = 0
 
-        # 1. Classification
-        classification_time = time.time()
+        # 1. Classification (Fast)
+        classification_start = time.time()
         print("classifying...")
         classification_prompt = self.prompts.get_classification_prompts(prompt)
-        print("classification_prompt", classification_prompt)
-        total_tokens += self.__count_tokens(classification_prompt)
-        classification : str = await self.ai_service.ask(classification_prompt, "meta-llama/llama-3.2-1b-instruct")
-        total_tokens += self.__count_tokens(classification)
+        # Deepseek flash is very fast and reliable for classification
+        classification: str = await self.ai_service.ask(classification_prompt, "google/gemini-3.1-flash-lite")
+        total_tokens += self.__count_tokens(classification_prompt) + self.__count_tokens(classification)
+        print(f"classified: '{classification}'. Time: {time.time() - classification_start}")
 
-        print("classified. Time: ", time.time() - classification_time)
-        
         if "request" in classification.lower():
-            # 2. Planning and Parsing
+            # 2. Planning and Parsing (Fast)
             planning_parsing_start = time.time()
             print("planning and parsing...")
             planning_parsing_prompt = self.prompts.get_test_planning_and_parsing_prompt(prompt)
-            parsed_prompt, tokens_used = await self.__ask_model_for_json(planning_parsing_prompt, ParsedPrompt, model="deepseek/deepseek-v4-pro")
+            parsed_prompt, tokens_used = await self.__ask_model_for_json(planning_parsing_prompt, ParsedPrompt, model="anthropic/claude-sonnet-4.6")
             total_tokens += tokens_used
-            print("planned and parsed. Time: ", time.time() - planning_parsing_start)
+            print(f"planned and parsed. Time: {time.time() - planning_parsing_start}")
 
-            # 3. Retrieval
+            if not parsed_prompt or not parsed_prompt.sections:
+                return await self.__handle_general_response(prompt, start, total_tokens)
+
+            # 3. Retrieval (Parallelized)
             retrieval_start = time.time()
             print("retrieving data...")
-            retrieval_list = await self.__perform_retrieval(
-                parsed_prompt.sections, language=parsed_prompt.language
-            )
+            retrieval_list = await self.__perform_retrieval(parsed_prompt.sections, language=parsed_prompt.language)
             data_str = "\n---\n".join(retrieval_list)
-            print("retrieved. Time: ", time.time() - retrieval_start)
-            print("retrived_data: ", data_str)
+            print(f"retrieved. Time: {time.time() - retrieval_start}")
 
-            # 4. Generation
+            # 4. Consolidated Generation (Fast & One-shot)
             generation_start = time.time()
             print("generating test...")
             combined_prompt = self.prompts.get_combined_html_generation_prompt(
                 retrieval=data_str,
                 parsed_prompt=parsed_prompt
             )
-
             total_tokens += self.__count_tokens(combined_prompt)
-            
-            generated_test_raw = await self.ai_service.ask(combined_prompt, "deepseek/deepseek-v4-pro")
-            total_tokens += self.__count_tokens(generated_test_raw)
-            print("generated. Time: ", time.time() - generation_start)
+            generated_test = await self.ai_service.ask(combined_prompt, "google/gemini-3.1-flash-lite")
+            total_tokens += self.__count_tokens(generated_test)
+            print(f"generated. Time: {time.time() - generation_start}")
 
-            # 5. Checking Stage
+            # 5. Fast Checking
             checking_start = time.time()
-            print("pedagogical checking...")
-            checking_prompt = self.prompts.get_checking_prompt(generated_test_raw, prompt)
-            check_result = await self.ai_service.ask(checking_prompt, "deepseek/deepseek-v4-flash")
-            print(f"Pedagogical Check Result:\n{check_result}")
+            print("checking...")
+            checking_prompt = self.prompts.get_checking_prompt(generated_test, prompt)
+            check_result = await self.ai_service.ask(checking_prompt, "anthropic/claude-sonnet-4.6")
             total_tokens += self.__count_tokens(check_result)
-            print("checked. Time: ", time.time() - checking_start)
+            print(f"checked. Time: {time.time() - checking_start}")
 
-            # 6. Fixing Stage (if needed)
-            if not check_result.strip().upper() == "OK":
+            # 6. Optional Fixing
+            if check_result.strip().upper() != "OK":
                 fixing_start = time.time()
-                print("Fixing test based on pedagogical feedback...")
-                fixing_prompt = self.prompts.get_fixing_prompt(generated_test_raw, check_result)
-                generated_test_raw = await self.ai_service.ask(fixing_prompt, "deepseek/deepseek-v4-flash")
-                total_tokens += self.__count_tokens(generated_test_raw)
-                print("fixed. Time: ", time.time() - fixing_start)
+                print("fixing...")
+                fixing_prompt = self.prompts.get_fixing_prompt(generated_test, check_result)
+                generated_test = await self.ai_service.ask(fixing_prompt, "google/gemini-3.1-pro-preview")
+                total_tokens += self.__count_tokens(generated_test)
+                print(f"fixed. Time: {time.time() - fixing_start}")
             
+            generated_test = self.cleaner_service.clean(generated_test)
             metadata = self.__build_metadata(start, prompt, parsed_prompt.model_dump_json(), total_tokens, data_str)
             
-            generated_test_raw = self.cleaner_service.clean(generated_test_raw)
-
-            return TestGeneratorHTMLResponse(
-                response=generated_test_raw,
-                metadata=metadata
-            )
+            return TestGeneratorHTMLResponse(response=generated_test, metadata=metadata)
         else:
-            general_start = time.time()
-            print("generating general response...")
-            gen_prompt = self.prompts.get_general_question_prompt(prompt)
-            res = await self.ai_service.ask(gen_prompt, "deepseek/deepseek-v4-flash")
-            print("general response generated. Time: ", time.time() - general_start)
-            
-            timer = time.time() - start
-            average_time = self.__get_and_update_average_time(timer)
-            metadata = TestGeneratorResponseMetadata(
-                response_type = "general",
-                prompt=prompt,
-                parsed_prompt="general",
-                tokens=total_tokens + self.__count_tokens(res) + self.__count_tokens(gen_prompt),
-                time=timer,
-                average_time=average_time,
-                retrival=TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
-            )
-            
-            return TestGeneratorHTMLResponse(
-                response=res,
-                metadata=metadata
-            )
+            return await self.__handle_general_response(prompt, start, total_tokens)
+
+    async def __handle_general_response(self, prompt: str, start: float, total_tokens: int):
+        print("generating general response...")
+        gen_prompt = self.prompts.get_general_question_prompt(prompt)
+        res = await self.ai_service.ask(gen_prompt, "google/gemini-3.1-flash-lite")
+        
+        timer = time.time() - start
+        metadata = TestGeneratorResponseMetadata(
+            response_type = "general",
+            prompt=prompt,
+            parsed_prompt="general",
+            tokens=total_tokens + self.__count_tokens(res) + self.__count_tokens(gen_prompt),
+            time=timer,
+            average_time=self.__get_and_update_average_time(timer),
+            retrieval=""
+        )
+        return TestGeneratorHTMLResponse(response=res, metadata=metadata)
 
     async def generate_html_test_from_survey(self, form: Form) -> TestGeneratorHTMLResponse:
+
         """
         Generates an HTML test based on the structured survey form.
         """
@@ -154,7 +143,7 @@ class TestGeneratorService:
         data_str = "\n---\n".join(retrieval_list)
         print("retrieved (Survey). Time: ", time.time() - retrieval_start)
 
-        # 4. Generation (Renumbered from 5)
+        # 4. Generation (Fast & One-shot)
         generation_start = time.time()
         print("generating test (Survey)...")
         combined_prompt = self.prompts.get_combined_html_generation_prompt(
@@ -163,27 +152,30 @@ class TestGeneratorService:
         )
         total_tokens += self.__count_tokens(combined_prompt)
         
-        generated_test_raw = await self.ai_service.ask(combined_prompt, "deepseek/deepseek-v4-pro")
+        # Using flash for survey generation too
+        generated_test_raw = await self.ai_service.ask(combined_prompt, "google/gemini-3.1-pro-preview")
         total_tokens += self.__count_tokens(generated_test_raw)
-        print("generated (Survey). Time: ", time.time() - generation_start)
+        print(f"generated (Survey). Time: {time.time() - generation_start}")
 
-        # 6. Checking Stage
+        # 5. Fast Checking
         checking_start = time.time()
         print("pedagogical checking (Survey)...")
         checking_prompt = self.prompts.get_checking_prompt(generated_test_raw, "Survey Generated HTML Test")
-        check_result = await self.ai_service.ask(checking_prompt, "deepseek/deepseek-v4-flash")
-        print(f"Pedagogical Check Result (Survey):\n{check_result}")
+        check_result = await self.ai_service.ask(checking_prompt, "anthropic/claude-sonnet-4.6")
         total_tokens += self.__count_tokens(check_result)
-        print("checked (Survey). Time: ", time.time() - checking_start)
+        print(f"checked (Survey). Time: {time.time() - checking_start}")
 
-        # 7. Fixing Stage (if needed)
+        # 6. Optional Fixing
         if not check_result.strip().upper().startswith("OK"):
             fixing_start = time.time()
             print("Fixing test based on pedagogical feedback (Survey)...")
             fixing_prompt = self.prompts.get_fixing_prompt(generated_test_raw, check_result)
-            generated_test_raw = await self.ai_service.ask(fixing_prompt, "deepseek/deepseek-v4-pro")
+            generated_test_raw = await self.ai_service.ask(fixing_prompt, "anthropic/claude-sonnet-4.6")
             total_tokens += self.__count_tokens(generated_test_raw)
-            print("fixed (Survey). Time: ", time.time() - fixing_start)
+            print(f"fixed (Survey). Time: {time.time() - fixing_start}")
+        
+        generated_test_raw = self.cleaner_service.clean(generated_test_raw)
+
         
         metadata = self.__build_metadata(start, form.model_dump_json(), form.model_dump_json(), total_tokens, data_str)
 
@@ -194,7 +186,7 @@ class TestGeneratorService:
 
     # --- Sub-methods for Refactoring ---
 
-    async def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3, model: str = "deepseek/deepseek-v4-flash") -> tuple:
+    async def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3, model: str = "google/gemini-3.1-flash-lite") -> tuple:
         total_tokens = self.__count_tokens(prompt)
         for i in range(max_tries):
             raw_response = await self.ai_service.ask(prompt, model)
@@ -211,18 +203,20 @@ class TestGeneratorService:
         return None, total_tokens
 
     async def __perform_retrieval(self, sections, language: str = "en") -> list:
+        tasks = [
+            self.search_service.search(subject=section.retrival_subject, language=language)
+            for section in sections
+        ]
+        
+        results = await asyncio.gather(*tasks)
+        
         retrieval_data = []
-
-        for section in sections:
-            query = section.retrival_subject
-            # search_service.search is an async method
-            result = await self.search_service.search(subject=query, language=language)
-            
+        for result in results:
             if result:
-                # result is a list of payloads, let's join them into a string for the prompt
                 retrieval_data.append(json.dumps(result))
-
+        
         return retrieval_data
+
 
 
 

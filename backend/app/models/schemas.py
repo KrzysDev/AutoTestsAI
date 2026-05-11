@@ -78,12 +78,6 @@ class GeneratedParsedSection(BaseModel):
     instruction: str
     body: str
 
-class TestGeneratorResponseMetadataRetrival(BaseModel):
-    regular: str
-    writing: str
-    reading: str
-
-
 class TestGeneratorResponseMetadata(BaseModel):
     response_type: Literal["general", "request"]
     prompt: str

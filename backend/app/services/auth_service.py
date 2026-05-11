@@ -1,4 +1,4 @@
-from supabase import create_client, AsyncClient
+from supabase import create_client, create_async_client, AsyncClient
 import os
 from dotenv import load_dotenv
 import bcrypt
@@ -13,7 +13,7 @@ class AuthService:
         self.key = os.getenv("SUPABASE_KEY")
 
         # Note: Using AsyncClient for async support
-        self.supabase: AsyncClient = create_client(self.url, self.key)
+        self.supabase: AsyncClient = AsyncClient(self.url, self.key)
 
     def __hash_password(self, password: str):
         # bcrypt is blocking, but for password hashing it's usually acceptable 

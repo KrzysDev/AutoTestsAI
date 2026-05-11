@@ -16,8 +16,8 @@ class SystemPrompts:
 
             Your task is to classify the user's message into ONE of two labels:
 
-            * "general" → casual conversation, questions, anything NOT asking to create a test or something very imprecise (does not suggest CEFR level, target age group etc. ).
-            * "request" → user wants to create/generate/make an English test or exam
+            * "general" → casual conversation, questions, anything NOT asking to create a test.
+            * "request" → user wants to create/generate/make an test or exam
 
             ---
 
@@ -32,10 +32,10 @@ class SystemPrompts:
             Message: "Create a B2 English test about travel"
             Answer: request
 
-            Message: "Generate exam with grammar and reading tasks"
+            Message: "Generate german exam with grammar and reading tasks about nature on B2 level"
             Answer: request
 
-            Message: "Make a test for teenagers"
+            Message: "Make a test for teenagers about Present Simple and Present Continous"
             Answer: request
 
             ---
@@ -45,7 +45,7 @@ class SystemPrompts:
             * Output ONLY one word: general OR request
             * No explanations
             * No extra text
-            * you can only generate {get_supported_languages()} exercises. If teacher demands something diffrent than english output general.
+            * you can only generate {get_supported_languages()} exercises. If teacher demands a language not in this list, output "general".
 
             ---
 
@@ -87,6 +87,23 @@ class SystemPrompts:
 
         #Teacher's request:
         {teacher_prompt}
+        """
+
+    def generate_test_from_sections(self, sections: list[str], language: str = "English"):
+        return f"""
+        You specialize in generating {language} tests from given data. Your goal is to generate a test from the provided sections.
+        Each section in the list below is a JSON object containing an 'instruction' and a 'body'. 
+        Your task is to organize them into a clean, professional HTML structure that looks like a school test.
+
+        Follow these constraints:
+        - ALWAYS RETURN ONLY HTML STRUCTURE. DO NOT PRINT ANYTHING BEFORE OR AFTER THE HTML.
+        - NO MARKDOWN FENCES (like ```html).
+        - YOU MUST INCLUDE EVERY SECTION PROVIDED.
+        - NEVER CHANGE THE CONTENT OF THE SECTIONS. Just format them into pretty HTML.
+        - USE ONLY CSS AND HTML. NO JAVASCRIPT.
+        
+        # YOUR SECTIONS (JSON):
+        {sections}
         """
 
     def get_combined_html_generation_prompt(self, retrieval, parsed_prompt: Union[ParsedPrompt, Form]):
@@ -610,18 +627,21 @@ RULES:
         
         Keep your feedback concise and professional.
         """
-    def get_section_generation_prompt(self, section):
+    def get_section_generation_prompt(self, section: PromptTestSection, language: str, level: str):
         return f"""
-            You specialize in generating language tests for teachjers. Your goal is to generate this sections just as teacher would generate them.
+            You are an expert language test designer. Your goal is to generate a specific test section based on the teacher's requirements.
+            
+            Language: {language}
+            Level: {level}
 
-            #RULES:
-            - OUTPUT IN THIS FORMAT ONLY. NEVER RETURN ANYTHING ELSE. ONLY THIS JSON. NOTHING BEFORE OR AFTER THIS FORMAT INCLUDING MARKDOWN SIGNS LIKE ```json OR ```
+            # RULES:
+            - OUTPUT IN THIS JSON FORMAT ONLY.
+            - NO EXTRA TEXT, NO MARKDOWN FENCES.
             {json.dumps(GeneratedParsedSection.model_json_schema())}
             
-            - in instruction field you MUST generate a instruction to the exercise
-            - in body field generate everything that is under the instruction.
+            - 'instruction': student-facing instruction for this exercise (in {language}).
+            - 'body': the actual content of the exercise (sentences, gaps, options, etc.).
 
-            #SECTION YOU DO EXERCISE BASED ON:
+            # SECTION REQUIREMENTS:
             {section}
-        
         """
