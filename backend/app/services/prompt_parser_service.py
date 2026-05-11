@@ -18,4 +18,4 @@ class PromptParserService:
 
     def parse_prompt(self, text: str):
 
-        return self.ai_service.ask(self.prompts.get_parsing_prompt(text), "deepseek/deepseek-v4-flash")
+        return self.ai_service.ask(self.prompts.get_parsing_prompt(text), "google/gemini-3.1-flash-lite")

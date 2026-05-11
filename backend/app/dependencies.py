@@ -12,7 +12,7 @@ from backend.app.services.test_generator_service import TestGeneratorService
 from backend.app.services.html_test_converter_service import HtmlConvertingService
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
-
+from backend.app.services.html_cleaner_service import HtmlCleanerService
 
 from backend.app.services.auth_service import AuthService
 
@@ -36,8 +36,9 @@ def get_search_service() -> SearchService:
 def get_html_converting_service() -> HtmlConvertingService:
     return HtmlConvertingService()
 
-
-
+@lru_cache
+def get_html_cleaner_service() -> HtmlCleanerService:
+    return HtmlCleanerService()
 
 
 @lru_cache
@@ -57,6 +58,7 @@ def get_test_generator_service() -> TestGeneratorService:
         search_service=get_search_service(),
         classification_service=get_classification_service(),
         prompt_parser_service=get_prompt_parser_service(),
+        html_cleaner_service=get_html_cleaner_service()
     )
 
 

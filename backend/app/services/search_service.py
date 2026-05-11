@@ -1,4 +1,4 @@
-from qdrant_client import QdrantClient
+from qdrant_client import AsyncQdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue, Filter
 import os
 from dotenv import load_dotenv
@@ -12,18 +12,12 @@ load_dotenv()
 # </summary>
 class SearchService:
     def __init__(self):
-        self.client = QdrantClient(
+        self.client = AsyncQdrantClient(
             url=os.getenv("CLUSTER_ENDPOINT"),
             api_key=os.getenv("QDRANT_API_KEY")
         )
-        self.client.create_payload_index(
-            collection_name="Grammar Collection",
-            field_name="subject",
-            field_schema="keyword"
-        )
         
-
-    def search(self, subject: str, collection: str = "Grammar Collection", language: str = None):
+    async def search(self, subject: str, collection: str = "Grammar Collection", language: str = None):
         # Build filter conditions dynamically
         must_conditions = [
             {
@@ -45,7 +39,7 @@ class SearchService:
                 }
             )
 
-        result = self.client.scroll(
+        result = await self.client.scroll(
             collection_name=collection,
             limit=100,
             with_payload=True,

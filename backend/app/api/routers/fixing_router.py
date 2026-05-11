@@ -5,14 +5,14 @@ from fastapi.responses import StreamingResponse
 from backend.app.services.ai_service import AiService
 from backend.app.services.html_test_converter_service import HtmlConvertingService
 from backend.app.models.prompts import SystemPrompts
-from backend.app.models.schemas import FixingRequest, TestGeneratorHTMLResponse, TestGeneratorResponseMetadata, TestGeneratorResponseMetadataRetrival
+from backend.app.models.schemas import FixingRequest, TestGeneratorHTMLResponse, TestGeneratorResponseMetadata
 from backend.app.dependencies import get_ai_service, get_html_converting_service
 logger = logging.getLogger(__name__)
 router = APIRouter()
 prompts = SystemPrompts()
 
 @router.post("/v1/rag/test/fix", response_model=TestGeneratorHTMLResponse)
-def fix_test_html(
+async def fix_test_html(
     request: FixingRequest,
     ai_service: AiService = Depends(get_ai_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
@@ -25,7 +25,7 @@ def fix_test_html(
         fixing_prompt = prompts.get_fixing_prompt(request.html, request.feedback)
         
         # 2. Ask AI to fix the HTML
-        fixed_html = ai_service.ask(fixing_prompt, "deepseek/deepseek-v4-flash")
+        fixed_html = await ai_service.ask(fixing_prompt, "google/gemini-3.1-flash-lite")
         
         if not fixed_html:
             logger.error("AI returned empty string for fixed HTML")
@@ -33,12 +33,13 @@ def fix_test_html(
 
         # Mock metadata for the fixed response
         metadata = TestGeneratorResponseMetadata(
+            response_type="request",
             prompt=request.feedback,
             parsed_prompt="Modified version based on feedback",
             tokens=0, # AiService doesn't return tokens directly yet
             time=0.0,
             average_time=0.0,
-            retrival=TestGeneratorResponseMetadataRetrival(regular="", writing="", reading="")
+            retrieval=""
         )
 
         return TestGeneratorHTMLResponse(response=fixed_html, metadata=metadata)

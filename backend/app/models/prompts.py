@@ -1,4 +1,4 @@
-from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS
+from backend.app.models.schemas import ParsedPrompt, PromptTestSection, Form, FormSection, CEFR_LEVEL_DESCRIPTIONS, GeneratedParsedSection
 from backend.app.config.language_configs import get_supported_languages, get_possible_language_codes
 from typing import Union
 import json
@@ -16,8 +16,8 @@ class SystemPrompts:
 
             Your task is to classify the user's message into ONE of two labels:
 
-            * "general" → casual conversation, questions, or anything NOT asking to create a test
-            * "request" → user wants to create/generate/make an English test or exam
+            * "general" → casual conversation, questions, anything NOT asking to create a test.
+            * "request" → user wants to create/generate/make an test or exam
 
             ---
 
@@ -32,10 +32,10 @@ class SystemPrompts:
             Message: "Create a B2 English test about travel"
             Answer: request
 
-            Message: "Generate exam with grammar and reading tasks"
+            Message: "Generate german exam with grammar and reading tasks about nature on B2 level"
             Answer: request
 
-            Message: "Make a test for teenagers"
+            Message: "Make a test for teenagers about Present Simple and Present Continous"
             Answer: request
 
             ---
@@ -45,7 +45,7 @@ class SystemPrompts:
             * Output ONLY one word: general OR request
             * No explanations
             * No extra text
-            * you can only generate {get_supported_languages()} exercises. If teacher demands something diffrent than english output general.
+            * you can only generate {get_supported_languages()} exercises. If teacher demands a language not in this list, output "general".
 
             ---
 
@@ -55,24 +55,26 @@ class SystemPrompts:
         
         """
 
-    def get_parsing_prompt(self, text: str):
+    def get_test_planning_and_parsing_prompt(self, teacher_prompt: str):
         return f"""
-        You are processing a teacher's request for test generation. You have to iterate through it and extract all necessary data, then return it in provided format.
-
+        You are an expert in language test planning, embodying the meticulous, student-focused, and practical approach of an experienced teacher.
+        Your primary role is to generate a pedagogically sound test plan and return it in a strictly structured JSON format. 
+        You will interpret the teacher's request to infer the most appropriate skills, task types, and assessment purposes, and then design a test plan that aligns with these inferred needs and typical classroom realities.
+        
         #PROVIDED FORMAT
         {json.dumps(ParsedPrompt.model_json_schema(), indent=2)}
 
         #RULES
-         - you MUST ALWAYS return ANSWER IN PROVIDED FORMAT. Never return answer diffrently 
-         - you must ALWAYS return valid json. No mistakes, no markdown sighns like ``` or ```json
+         - you MUST ALWAYS return ANSWER IN PROVIDED FORMAT. Never return answer differently 
+         - you must ALWAYS return valid json. No mistakes, no markdown signs like ``` or ```json
          - YOU MUST return ONLY valid JSON. NO markdown. NO code fences. NO extra text before or after the JSON.
          - YOU MUST follow this EXACT schema — any deviation WILL result in rejection
-         - MUST FOLLOW: only possible language filed values are in this list: {get_possible_language_codes()}. YOU CAN NEVER PRINT IN THE 'language' FIELD ANYTHING ELSE. YOU HAVE TO CHOOSE ONE FROM THE LIST.
+         - MUST FOLLOW: only possible language field values are in this list: {get_possible_language_codes()}. YOU CAN NEVER PRINT IN THE 'language' FIELD ANYTHING ELSE. YOU HAVE TO CHOOSE ONE FROM THE LIST.
          - the task field has to ALWAYS be written in language user was prompting.
-         - CRITICAL: DO NOT create sections for 'writing' (emails, essays) or 'reading' unless EXPLICITLY requested by the user. Do not assume they are needed.
+         - CRITICAL RULE: DO NOT add any extra task types (like writing, email, essay, reading, etc.) UNLESS the teacher explicitly requested them! If the teacher only asked for grammar or vocabulary, ONLY generate grammar and vocabulary sections. Do not assume they want a writing task.
          
         #IMPORTANT INFORMATION
-        1.Sections in provided format look like this:
+        1. Sections in provided format look like this:
             {json.dumps(PromptTestSection.model_json_schema(), indent=2)}
 
         2. They represent sections of a test. Possible values:
@@ -82,20 +84,41 @@ class SystemPrompts:
                 retrival_subject: subject that will be searched in the database to retrive relevant data. Use ONLY grammar types. For example for english use only Present Simple For german only Perfekt, Prateritum. There must be only ONE retrival_subject per section. NEVER multiple like lists. ALWAYS one
                 visuals: string -> description of how exercise has to look visually.
                 amount : int -> number of complete exercises (tasks) to generate. Each exercise is a standalone task block, NOT individual questions or sub-items within a task.
-        
-        #Teacher's request:
-        {text}
 
+        #Teacher's request:
+        {teacher_prompt}
         """
 
-    def get_combined_html_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: Union[ParsedPrompt, Form], reading_enabled: bool, writing_enabled: bool):
+    def generate_test_from_sections(self, sections: list[str], language: str = "English"):
+        return f"""
+        You specialize in generating {language} tests from given data. Your goal is to generate a test from the provided sections.
+        Each section in the list below is a JSON object containing an 'instruction' and a 'body'. 
+        Your task is to organize them into a clean, professional HTML structure that looks like a school test.
+
+        Follow these constraints:
+        - ALWAYS RETURN ONLY HTML STRUCTURE. DO NOT PRINT ANYTHING BEFORE OR AFTER THE HTML.
+        - NO MARKDOWN FENCES (like ```html).
+        - YOU MUST INCLUDE EVERY SECTION PROVIDED.
+        - NEVER CHANGE THE CONTENT OF THE SECTIONS. Just format them into pretty HTML.
+        - USE ONLY CSS AND HTML. NO JAVASCRIPT.
+        
+        # YOUR SECTIONS (JSON):
+        {sections}
+        """
+
+    def get_combined_html_generation_prompt(self, retrieval, parsed_prompt: Union[ParsedPrompt, Form]):
         language = getattr(parsed_prompt, 'language', 'English')
         grammar_vocab_sections = [s for s in parsed_prompt.sections if s.task_type not in ("reading", "writing")]
         grammar_vocab_amount = sum(s.amount for s in grammar_vocab_sections)
 
+        reading_sections = [s for s in parsed_prompt.sections if s.task_type == "reading"]
+        writing_sections = [s for s in parsed_prompt.sections if s.task_type == "writing"]
+
+        reading_enabled = len(reading_sections) > 0
+        writing_enabled = len(writing_sections) > 0
+
         reading_block = ""
         if reading_enabled:
-            rag_line = f"\nReading RAG context (inspiration only): {reading_data}" if reading_data else ""
             reading_block = f"""
 ## READING COMPREHENSION (mandatory)
 - Generate 1–2 reading exercises (each exercise = one passage + its questions)
@@ -105,12 +128,11 @@ class SystemPrompts:
 - No grammar exercises in this section
 - Paraphrase in questions — never copy exact phrases from passage into answers
 - Create plausible incorrect distractors for MCQ
-- Passage length by level: A2: 300-400w | B1/B2: 500-700w | C1: 700+w{rag_line}
+- Passage length by level: A2: 300-400w | B1/B2: 500-700w | C1: 700+w
 """
 
         writing_block = ""
         if writing_enabled:
-            rag_line = f"\nWriting RAG context (inspiration only): {writing_data}" if writing_data else ""
             writing_block = f"""
 ## WRITING (mandatory)
 - Generate 1 writing exercise (email, letter, or essay). This counts as 1 exercise block.
@@ -118,10 +140,10 @@ class SystemPrompts:
 - Word count: A1-A2: 50–80w | B1: 100–120w | B2: 300–350w | C1: 400–600w
 - State formal/informal tone clearly
 - Render writing box as bordered box (min-height: 150px)
-- Level: {parsed_prompt.level}{rag_line}
+- Level: {parsed_prompt.level}
 """
 
-        rag_grammar_line = f"\nGrammar/Vocabulary RAG context (inspiration only): {retrieval}" if retrieval else ""
+        rag_grammar_line = f"\nRAG context (Inspiration/Context for all sections): {retrieval}" if retrieval else ""
 
         # Build numbered structure list (no section dividers)
         structure_items = [
@@ -141,70 +163,70 @@ class SystemPrompts:
 
         combined_prompt = f"""You are an expert {language} test designer and web designer. Generate a complete, print-ready HTML test file. The content of the exercises (sentences, passages, options) must be in {language}.
 
-# ABSOLUTE RULES (violation = rejection)
-1. Output ONLY raw HTML starting with <!DOCTYPE html>. No markdown, no code fences, no explanations.
-2. CSS+HTML only — zero JavaScript.
-3. Teacher input overrides everything. RAG data is inspiration only.
-4. Must be convertible to PDF via WeasyPrint.
-5. Instructions and commands to exercises (e.g. "Fill in the blanks", "Choose the correct answer") MUST be in the language the teacher used to prompt you (see 'task' or 'additional_notes' in Teacher Input) unless the teacher explicitly requested otherwise.
-6. DO NOT use multiple <br> tags for vertical spacing. Use CSS margins on block elements instead.
-7. DO NOT generate section divider bars (no "SECTION A — GRAMMAR & VOCABULARY" banners or similar). Exercises flow continuously without section headers.
-8. DO NOT repeat the same questions, answers, or texts. Ensure correct, continuous sequential numbering (1, 2, 3...) without resetting or repeating numbers.
-9. Make the layout highly economical on paper. Use compact margins (max 8px between elements) and avoid large blank areas.
+            # ABSOLUTE RULES (violation = rejection)
+            1. Output ONLY raw HTML starting with <!DOCTYPE html>. No markdown, no code fences, no explanations.
+            2. CSS+HTML only — zero JavaScript.
+            3. Teacher input overrides everything. RAG data is inspiration only.
+            4. Must be convertible to PDF via WeasyPrint.
+            5. Instructions and commands to exercises (e.g. "Fill in the blanks", "Choose the correct answer") MUST be in the language the teacher used to prompt you (see 'task' or 'additional_notes' in Teacher Input) unless the teacher explicitly requested otherwise.
+            6. DO NOT use multiple <br> tags for vertical spacing. Use CSS margins on block elements instead.
+            7. DO NOT generate section divider bars (no "SECTION A — GRAMMAR & VOCABULARY" banners or similar). Exercises flow continuously without section headers.
+            8. DO NOT repeat the same questions, answers, or texts. Ensure correct, continuous sequential numbering (1, 2, 3...) without resetting or repeating numbers.
+            9. Make the layout highly economical on paper. Use compact margins (max 8px between elements) and avoid large blank areas.
 
-# WEASYPRINT CSS
-Required @page rule:
-@page {{ size: A4; margin: 1cm 1.5cm; @bottom-center {{ content: "— " counter(page) " —"; font-size: 9pt; color: #999; }} }}
+            # WEASYPRINT CSS
+            Required @page rule:
+            @page {{ size: A4; margin: 1cm 1.5cm; @bottom-center {{ content: "— " counter(page) " —"; font-size: 9pt; color: #999; }} }}
 
-Required reset:
-* {{ box-sizing: border-box; }} body {{ margin:0; padding:0; background:#fff; }} .test-container {{ width:100%; }}
+            Required reset:
+            * {{ box-sizing: border-box; }} body {{ margin:0; padding:0; background:#fff; }} .test-container {{ width:100%; }}
 
-FORBIDDEN CSS (breaks WeasyPrint): display:flex, display:grid, vw/vh units, max-width on .test-container, JS-dependent CSS.
-USE INSTEAD: display:table/table-cell for multi-column layouts. Use %, cm, pt, px for widths.
+            FORBIDDEN CSS (breaks WeasyPrint): display:flex, display:grid, vw/vh units, max-width on .test-container, JS-dependent CSS.
+            USE INSTEAD: display:table/table-cell for multi-column layouts. Use %, cm, pt, px for widths.
 
-Page break rules:
-- .answer-key-section {{ page-break-before: always; }}
-- .exercise {{ page-break-inside: auto; margin-bottom: 12px; }}
-- .exercise-header {{ page-break-after: avoid; margin-bottom: 4px; }}
-- .question-item, .mcq-option {{ page-break-inside: avoid; }}
-- Never use page-break-before:always except on .answer-key-section
+            Page break rules:
+            - .answer-key-section {{ page-break-before: always; }}
+            - .exercise {{ page-break-inside: auto; margin-bottom: 12px; }}
+            - .exercise-header {{ page-break-after: avoid; margin-bottom: 4px; }}
+            - .question-item, .mcq-option {{ page-break-inside: avoid; }}
+            - Never use page-break-before:always except on .answer-key-section
 
-# VISUAL DESIGN
-You have full creative freedom over colors, fonts, and aesthetic style. Design a professional, visually appealing printed exam. Choose a coherent color palette, readable fonts, and a polished look that fits the teacher's request.
+            # VISUAL DESIGN
+            You have full creative freedom over colors, fonts, and aesthetic style. Design a professional, visually appealing printed exam. Choose a coherent color palette, readable fonts, and a polished look that fits the teacher's request.
 
-Mandatory structural rules (layout — do NOT deviate):
-- Body font-size: 10–11pt, line-height: 1.2
-- Header: full-width bar with test title centered, below it: Level | Age Group | Total Score
-- Student info: 3-col layout using display:table/table-cell, label + underline for each field, padding: 2px
-- Exercise blocks: padding: 2px 0, margin-bottom: 8px. Each question/item inside should be a .question-item.
-- MCQ options: A) B) C) format, compact layout
-- Gap fill blanks: border-bottom underline, min-width ≥ 80px
-- Reading passage: visually distinct container (e.g. light background or thin border), padding: 8px
-- Writing box: bordered, width:100%, min-height:150px
-- Answer Key: page-break-before:always, answers in multi-column table layout (display:table), clearly labeled per exercise
-- All answers in the solution key MUST strictly follow the transformation type requested in the task. Do not introduce alternative grammatical moods unless explicitly required.
-- never use special sighns like '$\rightarrow$' or any other. Simple keyboard text and sighns.
+            Mandatory structural rules (layout — do NOT deviate):
+            - Body font-size: 10–11pt, line-height: 1.2
+            - Header: full-width bar with test title centered, below it: Level | Age Group | Total Score
+            - Student info: 3-col layout using display:table/table-cell, label + underline for each field, padding: 2px
+            - Exercise blocks: padding: 2px 0, margin-bottom: 8px. Each question/item inside should be a .question-item.
+            - MCQ options: A) B) C) format, compact layout
+            - Gap fill blanks: border-bottom underline, min-width ≥ 80px
+            - Reading passage: visually distinct container (e.g. light background or thin border), padding: 8px
+            - Writing box: bordered, width:100%, min-height:150px
+            - Answer Key: page-break-before:always, answers in multi-column table layout (display:table), clearly labeled per exercise
+            - All answers in the solution key MUST strictly follow the transformation type requested in the task. Do not introduce alternative grammatical moods unless explicitly required.
+            - never use special sighns like '$\rightarrow$' or any other. Simple keyboard text and sighns.
 
-# CONTENT STRUCTURE (follow this exact order)
-{structure_block}
+            # CONTENT STRUCTURE (follow this exact order)
+            {structure_block}
 
-# SCORING
-- Every exercise shows score: "( X pts )" float right
-- Sum of scores = total score in header
-- Grammar/vocab: 1pt/question | Reading: 2pts/question | Writing: 15pts flat
-- Sequential numbering: Ex. 1, 2, 3… never skip or reset
+            # SCORING
+            - Every exercise shows score: "( X pts )" float right
+            - Sum of scores = total score in header
+            - Grammar/vocab: 1pt/question | Reading: 2pts/question | Writing: 15pts flat
+            - Sequential numbering: Ex. 1, 2, 3… never skip or reset
 
-# GRAMMAR & VOCABULARY EXERCISES
-- Exactly {grammar_vocab_amount} complete exercise blocks. Each block = ONE standalone task (e.g., ONE gap-fill task containing 6-10 sentences).
-- CRITICAL: Group all sentences/questions of the same task into a SINGLE exercise block with ONLY ONE instruction at the top. DO NOT create a new exercise block/instruction for every single sentence!
-- Number the main exercises 1, 2, 3... and the sub-questions/sentences inside them a), b), c)... or use bullet points. Do not repeat the instruction for each sentence.
-- Provide clear instructions (commands) for each exercise in the language the teacher used for their prompt.
-- Formats: multiple choice, gap fill, error correction, transformation, ordering, matching — no format repeated 3+ times
-- Contexts relevant to age group
-- Difficulty: {parsed_prompt.level}
-{reading_block}{writing_block}
-# INPUT DATA
-Teacher input (primary source of truth): {parsed_prompt}{rag_grammar_line}"""
+            # GRAMMAR & VOCABULARY EXERCISES
+            - Exactly {grammar_vocab_amount} complete exercise blocks. Each block = ONE standalone task (e.g., ONE gap-fill task containing 6-10 sentences).
+            - CRITICAL: Group all sentences/questions of the same task into a SINGLE exercise block with ONLY ONE instruction at the top. DO NOT create a new exercise block/instruction for every single sentence!
+            - Number the main exercises 1, 2, 3... and the sub-questions/sentences inside them a), b), c)... or use bullet points. Do not repeat the instruction for each sentence.
+            - Provide clear instructions (commands) for each exercise in the language the teacher used for their prompt.
+            - Formats: multiple choice, gap fill, error correction, transformation, ordering, matching — no format repeated 3+ times
+            - Contexts relevant to age group
+            - Difficulty: {parsed_prompt.level}
+            {reading_block}{writing_block}
+            # INPUT DATA
+            Teacher input (primary source of truth): {parsed_prompt}{rag_grammar_line}"""
 
         return combined_prompt
 
@@ -560,10 +582,10 @@ RULES:
 
     def get_general_question_prompt(self, prompt: str):
         return f""" 
-        You are a test designer assistant. You can generate english tests on various topics in various styles.
+        You are a test designer assistant. You can generate language tests ({get_supported_languages()}) on various topics in various styles.
         Your task is to respond to user general question.
 
-        Do not answer any questions not related with your task. You are a english test designer. Remember that.
+        Do not answer any questions not related with your task. You are a {get_supported_languages()} test designer. Remember that.
 
         Answer very shortly, do not talk to much. Direct answers only.
         
@@ -576,24 +598,11 @@ RULES:
                 -THERE MUST BE total_amount (how many exercises teacher wants to have on exam)
                 -Tell teacher what information is missing.
                 - if THERE IS NOT probably such data provided so ask teacher to clarify.
-            - if he is requesting something diffrent than english, tell him that you only generate english exercises.
+            - if he is requesting something diffrent than {get_supported_languages()}, tell him that you only generate {get_supported_languages()} exercises.
 
         question : {prompt}
         
         
-        """
-
-    def get_test_plan_prompt(self, teacher_prompt: str):
-        return f"""
-        You are an expert in language test planning, embodying the meticulous, student-focused, and practical approach of an experienced teacher.
-        Your primary role is to generate a pedagogically sound test plan that mirrors the quality and consideration a teacher would put into creating an assessment after extensive effort. 
-        You will interpret the teacher's request to infer the most appropriate skills, task types, and assessment purposes, and then design a test plan that aligns with these inferred needs and typical classroom realities.
-        
-        CRITICAL RULE: DO NOT add any extra task types (like writing, email, essay, reading, etc.) UNLESS the teacher explicitly requested them! If the teacher only asked for grammar or vocabulary, ONLY generate grammar and vocabulary sections. Do not assume they want a writing task.
-        
-        return nothing more than a clean plan of the test. Treat your response as a prompt to another AI model. Clear and descriptive.
-
-        {teacher_prompt}
         """
 
     def get_checking_prompt(self, test_html: str, teacher_request: str):
@@ -617,4 +626,22 @@ RULES:
         If there are issues, list them clearly so they can be fixed.
         
         Keep your feedback concise and professional.
+        """
+    def get_section_generation_prompt(self, section: PromptTestSection, language: str, level: str):
+        return f"""
+            You are an expert language test designer. Your goal is to generate a specific test section based on the teacher's requirements.
+            
+            Language: {language}
+            Level: {level}
+
+            # RULES:
+            - OUTPUT IN THIS JSON FORMAT ONLY.
+            - NO EXTRA TEXT, NO MARKDOWN FENCES.
+            {json.dumps(GeneratedParsedSection.model_json_schema())}
+            
+            - 'instruction': student-facing instruction for this exercise (in {language}).
+            - 'body': the actual content of the exercise (sentences, gaps, options, etc.).
+
+            # SECTION REQUIREMENTS:
+            {section}
         """

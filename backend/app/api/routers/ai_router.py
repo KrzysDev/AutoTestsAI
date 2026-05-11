@@ -12,7 +12,7 @@ router = APIRouter()
 last_requests_cloud = defaultdict(lambda: datetime.min)
 
 @router.post("/v1/rag/ask")
-def ask_ollama_cloud(
+async def ask_ollama_cloud(
     request: Request,
     text: str = Body(..., description="Query for the cloud AI"),
     ai_service: AiService = Depends(get_ai_service),
@@ -29,7 +29,7 @@ def ask_ollama_cloud(
     if not text.strip():
         raise HTTPException(status_code=400, detail="Input text cannot be empty")
     try:
-        return ai_service.ask(text, "deepseek/deepseek-v4-flash")
+        return await ai_service.ask(text, "google/gemini-3.1-flash-lite")
     except ollama.ResponseError as e:
         raise HTTPException(status_code=e.status_code, detail=f"Ollama error: {e.error}")
     except Exception as e:
