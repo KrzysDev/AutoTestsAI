@@ -55,24 +55,26 @@ class SystemPrompts:
         
         """
 
-    def get_parsing_prompt(self, text: str):
+    def get_test_planning_and_parsing_prompt(self, teacher_prompt: str):
         return f"""
-        You are processing a teacher's request for test generation. You have to iterate through it and extract all necessary data, then return it in provided format.
-
+        You are an expert in language test planning, embodying the meticulous, student-focused, and practical approach of an experienced teacher.
+        Your primary role is to generate a pedagogically sound test plan and return it in a strictly structured JSON format. 
+        You will interpret the teacher's request to infer the most appropriate skills, task types, and assessment purposes, and then design a test plan that aligns with these inferred needs and typical classroom realities.
+        
         #PROVIDED FORMAT
         {json.dumps(ParsedPrompt.model_json_schema(), indent=2)}
 
         #RULES
-         - you MUST ALWAYS return ANSWER IN PROVIDED FORMAT. Never return answer diffrently 
-         - you must ALWAYS return valid json. No mistakes, no markdown sighns like ``` or ```json
+         - you MUST ALWAYS return ANSWER IN PROVIDED FORMAT. Never return answer differently 
+         - you must ALWAYS return valid json. No mistakes, no markdown signs like ``` or ```json
          - YOU MUST return ONLY valid JSON. NO markdown. NO code fences. NO extra text before or after the JSON.
          - YOU MUST follow this EXACT schema — any deviation WILL result in rejection
-         - MUST FOLLOW: only possible language filed values are in this list: {get_possible_language_codes()}. YOU CAN NEVER PRINT IN THE 'language' FIELD ANYTHING ELSE. YOU HAVE TO CHOOSE ONE FROM THE LIST.
+         - MUST FOLLOW: only possible language field values are in this list: {get_possible_language_codes()}. YOU CAN NEVER PRINT IN THE 'language' FIELD ANYTHING ELSE. YOU HAVE TO CHOOSE ONE FROM THE LIST.
          - the task field has to ALWAYS be written in language user was prompting.
-         - CRITICAL: DO NOT create sections for 'writing' (emails, essays) or 'reading' unless EXPLICITLY requested by the user. Do not assume they are needed.
+         - CRITICAL RULE: DO NOT add any extra task types (like writing, email, essay, reading, etc.) UNLESS the teacher explicitly requested them! If the teacher only asked for grammar or vocabulary, ONLY generate grammar and vocabulary sections. Do not assume they want a writing task.
          
         #IMPORTANT INFORMATION
-        1.Sections in provided format look like this:
+        1. Sections in provided format look like this:
             {json.dumps(PromptTestSection.model_json_schema(), indent=2)}
 
         2. They represent sections of a test. Possible values:
@@ -82,10 +84,9 @@ class SystemPrompts:
                 retrival_subject: subject that will be searched in the database to retrive relevant data. Use ONLY grammar types. For example for english use only Present Simple For german only Perfekt, Prateritum. There must be only ONE retrival_subject per section. NEVER multiple like lists. ALWAYS one
                 visuals: string -> description of how exercise has to look visually.
                 amount : int -> number of complete exercises (tasks) to generate. Each exercise is a standalone task block, NOT individual questions or sub-items within a task.
-        
-        #Teacher's request:
-        {text}
 
+        #Teacher's request:
+        {teacher_prompt}
         """
 
     def get_combined_html_generation_prompt(self, retrieval, reading_data, writing_data, parsed_prompt: Union[ParsedPrompt, Form], reading_enabled: bool, writing_enabled: bool):
@@ -581,19 +582,6 @@ RULES:
         question : {prompt}
         
         
-        """
-
-    def get_test_plan_prompt(self, teacher_prompt: str):
-        return f"""
-        You are an expert in language test planning, embodying the meticulous, student-focused, and practical approach of an experienced teacher.
-        Your primary role is to generate a pedagogically sound test plan that mirrors the quality and consideration a teacher would put into creating an assessment after extensive effort. 
-        You will interpret the teacher's request to infer the most appropriate skills, task types, and assessment purposes, and then design a test plan that aligns with these inferred needs and typical classroom realities.
-        
-        CRITICAL RULE: DO NOT add any extra task types (like writing, email, essay, reading, etc.) UNLESS the teacher explicitly requested them! If the teacher only asked for grammar or vocabulary, ONLY generate grammar and vocabulary sections. Do not assume they want a writing task.
-        
-        return nothing more than a clean plan of the test. Treat your response as a prompt to another AI model. Clear and descriptive.
-
-        {teacher_prompt}
         """
 
     def get_checking_prompt(self, test_html: str, teacher_request: str):
