@@ -619,12 +619,3 @@ RULES:
         Keep your feedback concise and professional.
         """
     
-    def transforming_conversation_into_test_generation_prompt(self, conversation: str):
-        return f"""
-            Based on given conversation between user and AI chatbot that generates pedagocial tests, your goal is to create a prompt which this AI will read and generate great test.
-
-            NEVER return anything else than prompt AI has to read.
-
-            #CONVERSATION:
-            {conversation}
-        """
