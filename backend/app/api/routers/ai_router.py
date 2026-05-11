@@ -29,7 +29,7 @@ async def ask_ollama_cloud(
     if not text.strip():
         raise HTTPException(status_code=400, detail="Input text cannot be empty")
     try:
-        return await ai_service.ask(text, "deepseek/deepseek-v4-flash")
+        return await ai_service.ask(text, "google/gemini-3.1-flash-lite")
     except ollama.ResponseError as e:
         raise HTTPException(status_code=e.status_code, detail=f"Ollama error: {e.error}")
     except Exception as e:

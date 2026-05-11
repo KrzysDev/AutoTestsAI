@@ -16,11 +16,6 @@ class SearchService:
             url=os.getenv("CLUSTER_ENDPOINT"),
             api_key=os.getenv("QDRANT_API_KEY")
         )
-        # Note: create_payload_index is also a coroutine in AsyncQdrantClient, 
-        # but we can't await it in __init__. 
-        # In a real app, we might want an async setup method.
-        # For now, I'll remove it from __init__ or leave it if it's not critical to run every time.
-        # Actually, it's better to run it once.
         
     async def search(self, subject: str, collection: str = "Grammar Collection", language: str = None):
         # Build filter conditions dynamically

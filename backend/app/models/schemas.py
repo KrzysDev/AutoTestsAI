@@ -74,14 +74,9 @@ class ParsedPrompt(BaseModel):
 class RetrivalQueries(BaseModel):
     queries : list[TASK_TYPES]
 
-
-
-
-class TestGeneratorResponseMetadataRetrival(BaseModel):
-    regular: str
-    writing: str
-    reading: str
-
+class GeneratedParsedSection(BaseModel):
+    instruction: str
+    body: str
 
 class TestGeneratorResponseMetadata(BaseModel):
     response_type: Literal["general", "request"]
@@ -90,7 +85,7 @@ class TestGeneratorResponseMetadata(BaseModel):
     tokens: int
     time: float
     average_time: float
-    retrival: TestGeneratorResponseMetadataRetrival
+    retrieval: str
 
 
 

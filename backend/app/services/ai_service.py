@@ -32,13 +32,6 @@ class AiService:
             )
             return response["message"]["content"]
         else:
-            # Note: OpenRouter class from 'openrouter' package might not be async-native.
-            # If it blocks, we should use run_in_threadpool or a direct httpx async call.
-            # Assuming OpenRouter is a wrapper around httpx, but let's check if there's an async way.
-            # For now, if it's sync, we use run_in_threadpool to not block the loop.
-            from fastapi.concurrency import run_in_threadpool
-            
-            def sync_ask():
                 with OpenRouter(
                     api_key=os.getenv("OPENROUTER_API_KEY", ""),
                 ) as client:
@@ -56,12 +49,11 @@ class AiService:
                         }
                         ]
                     )
+
                     return response.choices[0].message.content
             
-            return await run_in_threadpool(sync_ask)
-
-    async def ask_local(self, text: str):
-        response = await self.local_ollama_client.chat(
+    def ask_local(self, text: str):
+        response = self.local_ollama_client.chat(
             model="gemma4:latest",
             messages=[
                 {
