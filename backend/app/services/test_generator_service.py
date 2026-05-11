@@ -13,10 +13,10 @@ import re
 import os
 import time
 
-# <summary>
+"""
 # Service responsible for generating educational tests by orchestrating AI and search components.
 # Includes classification, prompt parsing, retrieval, and final test generation.
-# </summary>
+"""
 class TestGeneratorService:
     def __init__(
         self,
@@ -47,6 +47,7 @@ class TestGeneratorService:
         classification_time = time.time()
         print("classifying...")
         classification_prompt = self.prompts.get_classification_prompts(prompt)
+        print("classification_prompt", classification_prompt)
         total_tokens += self.__count_tokens(classification_prompt)
         classification : str = self.ai_service.ask(classification_prompt, "deepseek/deepseek-v4-flash")
         total_tokens += self.__count_tokens(classification)
@@ -132,6 +133,7 @@ class TestGeneratorService:
             timer = time.time() - start
             average_time = self.__get_and_update_average_time(timer)
             metadata = TestGeneratorResponseMetadata(
+                response_type = "general",
                 prompt=prompt,
                 parsed_prompt="general",
                 tokens=total_tokens + self.__count_tokens(res) + self.__count_tokens(gen_prompt),
@@ -252,6 +254,7 @@ class TestGeneratorService:
         elapsed_time = time.time() - start_time
         average_time = self.__get_and_update_average_time(elapsed_time)
         return TestGeneratorResponseMetadata(
+            response_type = "request",
             prompt=prompt,
             parsed_prompt=parsed_prompt_json,
             tokens=total_tokens,

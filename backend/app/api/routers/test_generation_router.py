@@ -61,7 +61,7 @@ def generate_html_test_with_prompt(
         result = test_generator_service.generate_html_test_from_prompt(request.prompt)
         return result
     except HTTPException:
-        raise  # nie łap własnych HTTPException
+        raise 
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:

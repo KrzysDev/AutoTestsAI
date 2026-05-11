@@ -84,6 +84,7 @@ class TestGeneratorResponseMetadataRetrival(BaseModel):
 
 
 class TestGeneratorResponseMetadata(BaseModel):
+    response_type: Literal["general", "request"]
     prompt: str
     parsed_prompt: str
     tokens: int

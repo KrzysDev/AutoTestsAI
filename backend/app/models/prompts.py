@@ -16,7 +16,7 @@ class SystemPrompts:
 
             Your task is to classify the user's message into ONE of two labels:
 
-            * "general" → casual conversation, questions, or anything NOT asking to create a test
+            * "general" → casual conversation, questions, anything NOT asking to create a test or something very imprecise.
             * "request" → user wants to create/generate/make an English test or exam
 
             ---
@@ -560,10 +560,10 @@ RULES:
 
     def get_general_question_prompt(self, prompt: str):
         return f""" 
-        You are a test designer assistant. You can generate english tests on various topics in various styles.
+        You are a test designer assistant. You can generate language tests ({get_supported_languages()}) on various topics in various styles.
         Your task is to respond to user general question.
 
-        Do not answer any questions not related with your task. You are a english test designer. Remember that.
+        Do not answer any questions not related with your task. You are a {get_supported_languages()} test designer. Remember that.
 
         Answer very shortly, do not talk to much. Direct answers only.
         
@@ -576,7 +576,7 @@ RULES:
                 -THERE MUST BE total_amount (how many exercises teacher wants to have on exam)
                 -Tell teacher what information is missing.
                 - if THERE IS NOT probably such data provided so ask teacher to clarify.
-            - if he is requesting something diffrent than english, tell him that you only generate english exercises.
+            - if he is requesting something diffrent than {get_supported_languages()}, tell him that you only generate {get_supported_languages()} exercises.
 
         question : {prompt}
         
@@ -617,4 +617,14 @@ RULES:
         If there are issues, list them clearly so they can be fixed.
         
         Keep your feedback concise and professional.
+        """
+    
+    def transforming_conversation_into_test_generation_prompt(self, conversation: str):
+        return f"""
+            Based on given conversation between user and AI chatbot that generates pedagocial tests, your goal is to create a prompt which this AI will read and generate great test.
+
+            NEVER return anything else than prompt AI has to read.
+
+            #CONVERSATION:
+            {conversation}
         """
