@@ -116,3 +116,7 @@ class TestSurveyRequest(BaseModel):
 class FixingRequest(BaseModel):
     html: str
     feedback: str
+
+class CheckUsersTableRequest(BaseModel):
+    email: str
+
