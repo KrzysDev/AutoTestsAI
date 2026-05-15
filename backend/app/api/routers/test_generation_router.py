@@ -16,7 +16,9 @@ from backend.app.services.html_test_converter_service import HtmlConvertingServi
 from backend.app.dependencies import (
     get_test_generator_service,
     get_html_converting_service,
+    get_credit_service,
 )
+from backend.app.services.credit_service import CreditService
 
 logger = logging.getLogger(__name__)
 
@@ -52,12 +54,15 @@ async def generate_html_test_with_prompt(
     request: PromptRequest,
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
+    credit_service: CreditService = Depends(get_credit_service),
 ):
     print("Request received: generate_html_test_with_prompt")
     if len(request.prompt) > 10000:
         raise TooManyCharactersError()
         return None
     try:
+        print("deducting credit....")
+        credit_service.deduct_credit(request.email)
         print("generating test....")
         result = await test_generator_service.generate_html_test_from_prompt(request.prompt)
         return result
@@ -77,9 +82,11 @@ async def generate_html_test_with_survey(
     request: TestSurveyRequest,
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
+    credit_service: CreditService = Depends(get_credit_service),
 ):
     logger.info("Request received: generate_html_test_with_survey")
     try:
+        credit_service.deduct_credit(request.email)
         result = await test_generator_service.generate_html_test_from_survey(request.form)
         return result
     except HTTPException:

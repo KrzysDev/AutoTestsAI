@@ -48,6 +48,7 @@ CEFR_LEVEL_DESCRIPTIONS = {
 
 class PromptRequest(BaseModel):
     prompt: str
+    email: str
 
 
 class HtmlRequest(BaseModel):
@@ -112,10 +113,12 @@ class Form(BaseModel):
 
 class TestSurveyRequest(BaseModel):
     form: Form
+    email: str
 
 class FixingRequest(BaseModel):
     html: str
     feedback: str
+    email: str
 
 class CheckUsersTableRequest(BaseModel):
     email: str

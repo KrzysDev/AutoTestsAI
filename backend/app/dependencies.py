@@ -13,6 +13,7 @@ from backend.app.services.html_test_converter_service import HtmlConvertingServi
 from backend.app.services.classification_service import ClassificationService
 from backend.app.services.prompt_parser_service import PromptParserService
 from backend.app.services.html_cleaner_service import HtmlCleanerService
+from backend.app.services.credit_service import CreditService
 
 from backend.app.services.html_cleaner_service import HtmlCleanerService
 
@@ -56,5 +57,6 @@ def get_test_generator_service() -> TestGeneratorService:
         html_cleaner_service=get_html_cleaner_service()
     )
 
-
-
+@lru_cache
+def get_credit_service() -> CreditService:
+    return CreditService()
