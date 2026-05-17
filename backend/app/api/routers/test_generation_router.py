@@ -17,6 +17,7 @@ from backend.app.dependencies import (
     get_test_generator_service,
     get_html_converting_service,
     get_credit_service,
+    get_current_user_id,
 )
 from backend.app.services.credit_service import CreditService
 
@@ -55,6 +56,7 @@ async def generate_html_test_with_prompt(
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
     credit_service: CreditService = Depends(get_credit_service),
+    user_id: str = Depends(get_current_user_id),
 ):
     print("Request received: generate_html_test_with_prompt")
     if len(request.prompt) > 10000:
@@ -62,7 +64,7 @@ async def generate_html_test_with_prompt(
         return None
     try:
         print("deducting credit....")
-        credit_service.deduct_credit(request.email)
+        credit_service.deduct_credit(user_id)
         print("generating test....")
         result = await test_generator_service.generate_html_test_from_prompt(request.prompt)
         return result
@@ -83,10 +85,11 @@ async def generate_html_test_with_survey(
     test_generator_service: TestGeneratorService = Depends(get_test_generator_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
     credit_service: CreditService = Depends(get_credit_service),
+    user_id: str = Depends(get_current_user_id),
 ):
     logger.info("Request received: generate_html_test_with_survey")
     try:
-        credit_service.deduct_credit(request.email)
+        credit_service.deduct_credit(user_id)
         result = await test_generator_service.generate_html_test_from_survey(request.form)
         return result
     except HTTPException:

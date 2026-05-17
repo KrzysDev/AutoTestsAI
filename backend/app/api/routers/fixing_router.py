@@ -6,7 +6,7 @@ from backend.app.services.ai_service import AiService
 from backend.app.services.html_test_converter_service import HtmlConvertingService
 from backend.app.models.prompts import SystemPrompts
 from backend.app.models.schemas import FixingRequest, TestGeneratorHTMLResponse, TestGeneratorResponseMetadata
-from backend.app.dependencies import get_ai_service, get_html_converting_service, get_credit_service
+from backend.app.dependencies import get_ai_service, get_html_converting_service, get_credit_service, get_current_user_id
 from backend.app.services.credit_service import CreditService
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -18,19 +18,20 @@ async def fix_test_html(
     ai_service: AiService = Depends(get_ai_service),
     html_converting_service: HtmlConvertingService = Depends(get_html_converting_service),
     credit_service: CreditService = Depends(get_credit_service),
+    user_id: str = Depends(get_current_user_id),
 ):
     """
     Fixes an existing HTML test based on teacher feedback and returns the result as HTML and metadata.
     """
     try:
         # Deduct credit
-        credit_service.deduct_credit(request.email)
+        credit_service.deduct_credit(user_id)
 
         # 1. Generate the fixing prompt
         fixing_prompt = prompts.get_fixing_prompt(request.html, request.feedback)
         
         # 2. Ask AI to fix the HTML
-        fixed_html = await ai_service.ask(fixing_prompt, "google/gemini-3.1-flash-lite")
+        fixed_html = await ai_service.ask(fixing_prompt, "google/gemini-3-flash-preview")
         
         if not fixed_html:
             logger.error("AI returned empty string for fixed HTML")
