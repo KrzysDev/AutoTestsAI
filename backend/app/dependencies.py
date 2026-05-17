@@ -5,7 +5,12 @@ All service instances are created here and injected into routers via Depends().
 Using @lru_cache ensures that stateless services are created once (singleton pattern)
 but in a controlled, testable way — not as module-level side effects.
 """
+import os
 from functools import lru_cache
+
+from fastapi import Depends, HTTPException, Request
+from supabase import Client, create_client
+
 from backend.app.services.ai_service import AiService
 from backend.app.services.search_service import SearchService
 from backend.app.services.test_generator_service import TestGeneratorService
@@ -56,6 +61,33 @@ def get_test_generator_service() -> TestGeneratorService:
         prompt_parser_service=get_prompt_parser_service(),
         html_cleaner_service=get_html_cleaner_service()
     )
+
+def get_current_user_id(request: Request) -> str:
+    """
+    Extract user ID (UUID) from the Supabase JWT token in the Authorization header.
+    Uses supabase.auth.get_user() for server-side token verification.
+    """
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing or invalid Authorization header")
+
+    token = auth_header.split("Bearer ")[1]
+
+    try:
+        supabase_client: Client = create_client(
+            os.environ.get("SUPABASE_URL"),
+            os.environ.get("SUPABASE_SERVICE_KEY")
+        )
+        user_response = supabase_client.auth.get_user(token)
+        user_id = user_response.user.id
+        if not user_id:
+            raise HTTPException(status_code=401, detail="User ID not found in token")
+        return user_id
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid or expired token: {str(e)}")
+
 
 @lru_cache
 def get_credit_service() -> CreditService:

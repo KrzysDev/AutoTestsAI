@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 import os
 
 from supabase import Client, create_client
-from backend.app.models.schemas import CheckUsersTableRequest
+from backend.app.dependencies import get_current_user_id
 
 from dotenv import load_dotenv, find_dotenv
 
@@ -12,28 +12,31 @@ router = APIRouter()
 
 supabase: Client = create_client(
     os.environ.get("SUPABASE_URL"),
-    os.environ.get("SUPABASE_KEY")
+    os.environ.get("SUPABASE_SERVICE_KEY")
 )
 
 
 @router.post("/v1/auth/check_account_table")
-def check_account_table(request: CheckUsersTableRequest):
-
+def check_account_table(user_id: str = Depends(get_current_user_id)):
+    """
+    Ensures the authenticated user has an entry in the Credits table.
+    If not, creates one with 0 credits. Uses JWT token for user identification.
+    """
     try:
         response = (
-            supabase.table("Account")
+            supabase.table("Credits")
             .select("*")
-            .eq("email", request.email)
+            .eq("id", user_id)
             .execute()
         )
 
         if len(response.data) == 0:
 
             insert_response = (
-                supabase.table("Account")
+                supabase.table("Credits")
                 .insert({
-                    "email": request.email,
-                    "credits": 3
+                    "id": user_id,
+                    "credits": 0
                 })
                 .execute()
             )

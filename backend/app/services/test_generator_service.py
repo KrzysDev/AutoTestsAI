@@ -49,7 +49,7 @@ class TestGeneratorService:
         print("classifying...")
         classification_prompt = self.prompts.get_classification_prompts(prompt)
         # Deepseek flash is very fast and reliable for classification
-        classification: str = await self.ai_service.ask(classification_prompt, "google/gemini-3.1-flash-lite")
+        classification: str = await self.ai_service.ask(classification_prompt, "google/gemini-3-flash-preview")
         total_tokens += self.__count_tokens(classification_prompt) + self.__count_tokens(classification)
         print(f"classified: '{classification}'. Time: {time.time() - classification_start}")
 
@@ -58,7 +58,7 @@ class TestGeneratorService:
             planning_parsing_start = time.time()
             print("planning and parsing...")
             planning_parsing_prompt = self.prompts.get_test_planning_and_parsing_prompt(prompt)
-            parsed_prompt, tokens_used = await self.__ask_model_for_json(planning_parsing_prompt, ParsedPrompt, model="anthropic/claude-sonnet-4.6")
+            parsed_prompt, tokens_used = await self.__ask_model_for_json(planning_parsing_prompt, ParsedPrompt, model="google/gemini-3-flash-preview")
             total_tokens += tokens_used
             print(f"planned and parsed. Time: {time.time() - planning_parsing_start}")
 
@@ -80,7 +80,7 @@ class TestGeneratorService:
                 parsed_prompt=parsed_prompt
             )
             total_tokens += self.__count_tokens(combined_prompt)
-            generated_test = await self.ai_service.ask(combined_prompt, "google/gemini-3.1-flash-lite")
+            generated_test = await self.ai_service.ask(combined_prompt, "google/gemini-3-flash-preview")
             total_tokens += self.__count_tokens(generated_test)
             print(f"generated. Time: {time.time() - generation_start}")
 
@@ -88,7 +88,7 @@ class TestGeneratorService:
             checking_start = time.time()
             print("checking...")
             checking_prompt = self.prompts.get_checking_prompt(generated_test, prompt)
-            check_result = await self.ai_service.ask(checking_prompt, "anthropic/claude-sonnet-4.6")
+            check_result = await self.ai_service.ask(checking_prompt, "google/gemini-3-flash-preview")
             total_tokens += self.__count_tokens(check_result)
             print(f"checked. Time: {time.time() - checking_start}")
 
@@ -97,7 +97,7 @@ class TestGeneratorService:
                 fixing_start = time.time()
                 print("fixing...")
                 fixing_prompt = self.prompts.get_fixing_prompt(generated_test, check_result)
-                generated_test = await self.ai_service.ask(fixing_prompt, "google/gemini-3.1-pro-preview")
+                generated_test = await self.ai_service.ask(fixing_prompt, "google/gemini-3-flash-preview")
                 total_tokens += self.__count_tokens(generated_test)
                 print(f"fixed. Time: {time.time() - fixing_start}")
             
@@ -111,7 +111,7 @@ class TestGeneratorService:
     async def __handle_general_response(self, prompt: str, start: float, total_tokens: int):
         print("generating general response...")
         gen_prompt = self.prompts.get_general_question_prompt(prompt)
-        res = await self.ai_service.ask(gen_prompt, "google/gemini-3.1-flash-lite")
+        res = await self.ai_service.ask(gen_prompt, "google/gemini-3-flash-preview")
         
         timer = time.time() - start
         metadata = TestGeneratorResponseMetadata(
@@ -153,7 +153,7 @@ class TestGeneratorService:
         total_tokens += self.__count_tokens(combined_prompt)
         
         # Using flash for survey generation too
-        generated_test_raw = await self.ai_service.ask(combined_prompt, "google/gemini-3.1-pro-preview")
+        generated_test_raw = await self.ai_service.ask(combined_prompt, "google/gemini-3-flash-preview")
         total_tokens += self.__count_tokens(generated_test_raw)
         print(f"generated (Survey). Time: {time.time() - generation_start}")
 
@@ -161,7 +161,7 @@ class TestGeneratorService:
         checking_start = time.time()
         print("pedagogical checking (Survey)...")
         checking_prompt = self.prompts.get_checking_prompt(generated_test_raw, "Survey Generated HTML Test")
-        check_result = await self.ai_service.ask(checking_prompt, "anthropic/claude-sonnet-4.6")
+        check_result = await self.ai_service.ask(checking_prompt, "google/gemini-3-flash-preview")
         total_tokens += self.__count_tokens(check_result)
         print(f"checked (Survey). Time: {time.time() - checking_start}")
 
@@ -170,7 +170,7 @@ class TestGeneratorService:
             fixing_start = time.time()
             print("Fixing test based on pedagogical feedback (Survey)...")
             fixing_prompt = self.prompts.get_fixing_prompt(generated_test_raw, check_result)
-            generated_test_raw = await self.ai_service.ask(fixing_prompt, "anthropic/claude-sonnet-4.6")
+            generated_test_raw = await self.ai_service.ask(fixing_prompt, "google/gemini-3-flash-preview")
             total_tokens += self.__count_tokens(generated_test_raw)
             print(f"fixed (Survey). Time: {time.time() - fixing_start}")
         
@@ -186,7 +186,7 @@ class TestGeneratorService:
 
     # --- Sub-methods for Refactoring ---
 
-    async def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3, model: str = "google/gemini-3.1-flash-lite") -> tuple:
+    async def __ask_model_for_json(self, prompt: str, schema, max_tries: int = 3, model: str = "google/gemini-3-flash-preview") -> tuple:
         total_tokens = self.__count_tokens(prompt)
         for i in range(max_tries):
             raw_response = await self.ai_service.ask(prompt, model)
