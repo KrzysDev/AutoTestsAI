@@ -33,3 +33,25 @@ class CreditService:
         except Exception as e:
             logger.error(f"Error deducting credit for {user_id}: {e}")
             raise HTTPException(status_code=500, detail=str(e))
+
+    def add_credits(self, user_id: str, amount: int):
+        try:
+            logger.info(f"Adding {amount} credits for user: {user_id}")
+            response = self.supabase.table("Credits").select("credits").eq("id", user_id).execute()
+            
+            if not response.data or len(response.data) == 0:
+                logger.info(f"User credit record not found. Initializing with {amount} credits.")
+                update_response = self.supabase.table("Credits").insert({
+                    "id": user_id,
+                    "credits": amount
+                }).execute()
+                return update_response.data
+            
+            current_credits = response.data[0].get("credits", 0)
+            new_credits = current_credits + amount
+            update_response = self.supabase.table("Credits").update({"credits": new_credits}).eq("id", user_id).execute()
+            return update_response.data
+        except Exception as e:
+            logger.error(f"Error adding credits for {user_id}: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
+

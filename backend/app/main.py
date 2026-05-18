@@ -7,7 +7,7 @@ from backend.app.api.routers.ai_router import router as ai_router
 from backend.app.api.routers.stats_router import router as stats_router
 from backend.app.api.routers.fixing_router import router as fixing_router
 from backend.app.api.routers.auth_router import router as auth_router
-
+from backend.app.api.routers.payment_router import router as payment_router
 
 app = FastAPI()
 
@@ -26,6 +26,7 @@ app.include_router(ai_router)
 app.include_router(stats_router)
 app.include_router(fixing_router)
 app.include_router(auth_router)
+app.include_router(payment_router)
 
 
 @app.get("/")
